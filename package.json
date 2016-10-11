@@ -1,0 +1,11 @@
+{
+  "name": "html",
+  "version": "1.0.0",
+  "description": "chaton",
+  "main": "app.js",
+  "scripts": {
+	"start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
