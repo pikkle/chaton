@@ -1,0 +1,20 @@
+<body>
+	<div class="listContainer">
+		<ul>
+			<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList">
+				<!--<img class="profilePic" src={{contact.avatar}}>-->
+				<h1>{{contact.name}}</h1>
+				{{contact.conversations[0].messages[contact.conversations[0].messages.length - 1].content}}
+			</li>
+		</ul>
+	</div>
+	<div class="selectedConversation" *ngIf="selectedContact">
+		<div class="bubble" *ngFor="let message of selectedContact.conversations[0].messages">
+			{{message.content}}
+		</div>
+	</div>
+	<div class="userInput">
+		<input type="text" placeholder="Enter message...">
+		<a class="sendMessage" (click)="sendMessage()">Send</a>
+	</div>
+</body>
