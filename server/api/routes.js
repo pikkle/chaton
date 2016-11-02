@@ -2,16 +2,17 @@
 This file contains the routes for the api. It basically redirects GET/POST requests to controllers.
  */
 module.exports = function(app){
-    var startingTime = new Date().getSeconds();
-    var users = require('./controllers/userController');
+    var startingTime = Math.floor(Date.now()/1000);
     var pjson = require('./package.json');
+    var users = require('./controllers/userController').userController;
+
 
     app.get('/', function(req, res) {
     	res.json(
     	    {
                 "version" : pjson.version,
                 "timestamp" : new Date(),
-                "uptime_seconds" : new Date().getSeconds() - startingTime
+                "uptime_seconds" : Math.floor(Date.now()/1000) - startingTime
     	    }
     	);
     });

@@ -1,10 +1,11 @@
 "use strict";
-var user = require('../models/user');
+var users = require('../models/user');
+var mongoClient = require('mongodb').MongoClient;
 
-module.exports = {
-    findByID: function(id) {
-        return user.findByID(id);
+class UserController {
+    static findByID(id) {
+        return users.findByID(id);
     }
-};
+}
 
-
+module.exports.userController = UserController;
