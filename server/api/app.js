@@ -1,9 +1,7 @@
+
 var express = require('express');
 var app = express();
 
-app.get('/', function(req, res) {
-	console.log("Got a request !");
-	res.json({"timestamp" : new Date()}); 
-});
+require('./routes')(app);
 
 app.listen(9000);
