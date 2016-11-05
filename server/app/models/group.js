@@ -10,7 +10,7 @@ var mongoose = require("mongoose"),
 
 var GroupSchema = new Schema({
     name: { type: String, trim: true },
-    members: [Schema.Types.ObjectId]
+    members: [{ type: Schema.Types.ObjectId, ref: "Profile" }]
 });
 
 module.exports = mongoose.model("Group", GroupSchema);

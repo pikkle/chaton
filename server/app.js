@@ -7,12 +7,14 @@
 
 var express = require("express"),
     app = express(),
+    bodyParser = require('body-parser'),
     mongoose = require("mongoose");
 
 // server configuration
 var config = require("./config/config");
 
 // connect to database
+mongoose.Promise = global.Promise;
 console.log("Connecting to database...");
 mongoose.connect(config.db_url);
 
@@ -25,6 +27,7 @@ db.once("open", function() {
 });
 
 // initialize routes
+app.use(bodyParser.json());
 require("./app/routes/index")(app);
 
 // start listening for client requests
