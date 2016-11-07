@@ -1,0 +1,9 @@
+{
+  "name": "chaton_db",
+  "version": "1.0.0",
+  "description": "database init",
+  "main": "init.js",
+  "dependencies": {
+    "mongodb": "^2.2.11"
+  }
+}
