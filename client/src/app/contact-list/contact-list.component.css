@@ -76,7 +76,7 @@ ul {
     max-width: inherit;
 }
 .selectedConversation {    
-    background-image: url('../../assets/backgrounds/energy-efficiency-background.jpg');
+    background-image: url('../../assets/backgrounds/cyan-wallpaper-2.jpg');
     width: 80%;
     float: right;
     height: 94%;
@@ -119,8 +119,8 @@ ul {
     cursor:pointer;    
 }
 .selected {
-    background-color: #BDBDBD;
-    color: black;
+    background-color: #006064;
+    color: white;
 }
 .contactList:hover:after {
     transition: 0.2s;
