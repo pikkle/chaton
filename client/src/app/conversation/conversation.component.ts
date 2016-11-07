@@ -11,7 +11,7 @@ export class ConversationComponent implements OnInit {
   members: number[]; // ids
   messages: MessageComponent[];
 
-  constructor(name: string, members: number[], messages: MessageComponent[]) { 
+  constructor(name: string, members: number[], messages: MessageComponent[]) {
     this.name = name;
     this.members = members;
     this.messages = messages;

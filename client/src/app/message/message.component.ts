@@ -10,7 +10,6 @@ export class MessageComponent {
   type: string; // should contain for example "txt", "image", "file" etc
   content: string;
   extension: string;
-
   constructor(param_timestamp: number, param_type: string, param_content: string, param_extension: string) {
     this.timestamp = param_timestamp;
     this.type = param_type;

@@ -2,19 +2,24 @@
 	<div class="listContainer">
 		<ul>
 			<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList">
-				<!--<img class="profilePic" src={{contact.avatar}}>-->
+				<img class="profilePic" src={{contact.avatar}}>
 				<h1>{{contact.name}}</h1>
-				{{contact.conversations[0].messages[contact.conversations[0].messages.length - 1].content}}
+				<p class="lastMessage">{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>
 			</li>
 		</ul>
 	</div>
 	<div class="selectedConversation" *ngIf="selectedContact">
-		<div class="bubble" *ngFor="let message of selectedContact.conversations[0].messages">
-			{{message.content}}
+		<div class="bubble" *ngFor="let message of selectedContact.conversation.messages">
+			<div *ngIf="message.type==='image'">
+				<img src={{message.content}}>
+			</div>
+			<div *ngIf="message.type==='text'">
+				{{ message.content }}
+			</div>
 		</div>
-	</div>
-	<div class="userInput">
-		<input type="text" placeholder="Enter message...">
-		<a class="sendMessage" (click)="sendMessage()">Send</a>
+		<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
+			<input [(ngModel)]="nextMessage" placeholder="Enter message..." (keyup.enter)="sendMessage()" autofocus>
+			<img src="../../assets/emojis/1f60a.png" class="emoji" onClick="console.log('smiley clicked')">
+		</div>
 	</div>
 </body>

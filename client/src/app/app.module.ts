@@ -8,20 +8,24 @@ import { ContactComponent } from './contact/contact.component';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { MessageComponent } from './message/message.component';
-import { ContactService } from './contact.service'
+import { ContactService } from './contact.service';
+import { EmojiComponent } from './emoji/emoji.component'
+
+// Angular-modal
 
 @NgModule({
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpModule,
+  ],
   declarations: [
     AppComponent,
     ContactComponent,
     ContactListComponent,
     ConversationComponent,
-    MessageComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule
+    MessageComponent,
+    EmojiComponent
   ],
   providers: [ContactService],
   bootstrap: [AppComponent]
