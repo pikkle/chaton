@@ -1,25 +1,45 @@
-<body>
-	<div class="listContainer">
-		<ul>
-			<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList">
-				<img class="profilePic" src={{contact.avatar}}>
-				<h1>{{contact.name}}</h1>
-				<p class="lastMessage">{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>
-			</li>
-		</ul>
-	</div>
-	<div class="selectedConversation" *ngIf="selectedContact">
-		<div class="bubble" *ngFor="let message of selectedContact.conversation.messages">
-			<div *ngIf="message.type==='image'">
-				<img src={{message.content}}>
-			</div>
-			<div *ngIf="message.type==='text'">
-				{{ message.content }}
-			</div>
+<router-outlet>
+
+	<body>
+		<div class=chaton>
+			<img class="logo" src="../assets/logo.png">
 		</div>
-		<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
-			<input [(ngModel)]="nextMessage" placeholder="Enter message..." (keyup.enter)="sendMessage()" autofocus>
-			<img src="../../assets/emojis/1f60a.png" class="emoji" onClick="console.log('smiley clicked')">
+		<div class="listContainer">
+			<ul>
+				<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList">
+					<img class="profilePic" src={{contact.avatar}}>
+					<h1>{{contact.name}}</h1>
+					<p class="lastMessage">{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>
+				</li>
+			</ul>
 		</div>
-	</div>
-</body>
+		<div class="selectedConversation" *ngIf="selectedContact">
+			<div class="bubble" *ngFor="let message of selectedContact.conversation.messages">
+				<div *ngIf="message.type==='image'">
+					<img src={{message.content}}>
+				</div>
+				<div *ngIf="message.type==='text'">
+					{{ message.content }}
+				</div>
+			</div>
+			<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
+				<input [(ngModel)]="nextMessage" placeholder="Enter message..." (keyup.enter)="sendMessage()" autofocus>
+				<img src="../../assets/emojis/1f60a.png" class="emoji" (click)="firstModal.open()">
+			</div>
+			<modal #firstModal>
+				<modal-header>
+					<h1>Choose emoji</h1>
+				</modal-header>
+				<modal-content>
+					<div *ngFor="let emoji of this.emojis">
+						<img src={{emoji.path}} style="width: 20px">
+					</div>
+				</modal-content>
+				<modal-footer>
+					<button class="btn btn-primary" (click)="firstModal.close()">okay!</button>
+				</modal-footer>
+			</modal>
+		</div>
+	</body>
+
+</router-outlet>
