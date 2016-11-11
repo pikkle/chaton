@@ -5,6 +5,7 @@ import { MessageComponent } from '../message/message.component'
 import { ContactService } from '../contact.service'
 import { EmojiService } from '../emoji.service'
 import { EmojiComponent } from '../emoji/emoji.component'
+import { Router } from '@angular/router'
 
 // Angular-modal
 
@@ -45,7 +46,7 @@ export class ContactListComponent implements OnInit {
     this.emojiService.getEmojis().then(emojis => this.emojis = emojis);
   }
   // Initializing contactService
-  constructor(private contactService: ContactService, private emojiService: EmojiService) {
+  constructor(private contactService: ContactService, private emojiService: EmojiService, private router: Router) {
     this.contactService = contactService;
     this.emojiService = emojiService;
   }

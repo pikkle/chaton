@@ -15,12 +15,13 @@ html, body {
     left: 500;
     top: 500;
     overflow: auto; /* Enable scroll if needed */
-    background-color: transparent; /* Fallback color */
+    background-color: transparent; /* Fallback color */ 
+    animation: intro .2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 /* Modal Content/Box */
 .modal-content {
-    margin: 15% auto; /* 15% from the top and centered */
+    margin: 50% auto; /* 15% from the top and centered */
     padding: 20px;
     border: 1px solid #888;
     width: 80%; /* Could be more or less, depending on screen size */

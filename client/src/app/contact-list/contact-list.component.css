@@ -114,12 +114,14 @@ ul {
     padding: 20px;
     list-style: none;
 }
-
-.contactList:hover {
+.listContainer li {
+    cursor: pointer;
+}
+/*.contactList:hover {
     background-color: #f5f5f5;
     transition: 0.2s;
     cursor: pointer;
-}
+}*/
 
 .selected {
     background-color: #006064;
