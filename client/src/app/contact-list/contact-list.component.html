@@ -13,32 +13,43 @@
 				</li>
 			</ul>
 		</div>
-		<div class="selectedConversation" *ngIf="selectedContact">
-			<div class="bubble" *ngFor="let message of selectedContact.conversation.messages">
-				<div *ngIf="message.type==='image'">
-					<img src={{message.content}}>
-				</div>
-				<div *ngIf="message.type==='text'">
-					{{ message.content }}
-				</div>
-			</div>
-			<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
-				<input [(ngModel)]="nextMessage" placeholder="Enter message..." (keyup.enter)="sendMessage()" autofocus>
-				<img src="../../assets/emojis/1f60a.png" class="emoji" (click)="firstModal.open()">
-			</div>
-			<modal #firstModal>
-				<modal-header>
-					<h1>Choose emoji</h1>
-				</modal-header>
-				<modal-content>
-					<div *ngFor="let emoji of this.emojis">
-						<img src={{emoji.path}} style="width: 20px" (click)="changeMessage(emoji.text); firstModal.close();">
+		<div class="conversationCanvas">
+			<div class="selectedConversation" *ngIf="selectedContact">
+				<div class="message" *ngFor="let message of selectedContact.conversation.messages">
+					<div *ngIf="message.type==='image'">
+						<img class="imageMessage" src={{message.content}}>
 					</div>
-				</modal-content>
-				<modal-footer>
-					<button class="btn btn-primary" (click)="firstModal.close()">okay!</button>
-				</modal-footer>
-			</modal>
+					<div class="bubble" *ngIf="message.type==='text'">
+						{{ message.content }}
+					</div>
+				</div>
+				<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
+					<input [(ngModel)]="nextMessage" placeholder="Enter message..." (keyup.enter)="sendMessage()" autofocus>
+					<img src="../../assets/emojis/1f60a.png" class="emoji" (click)="firstModal.open()">
+					<img src="../../assets/attach.jpg" class="attach" (click)="secondModal.open()">
+				</div>
+				<modal #firstModal>
+					<modal-header>
+						<h1>Choose emoji</h1>
+					</modal-header>
+					<modal-content>
+						<img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji" (click)="changeMessage(emoji.text); firstModal.close();">
+					</modal-content>
+					<modal-footer>
+						<button class="btn btn-primary" (click)="firstModal.close()">Changed my mind</button>
+					</modal-footer>
+				</modal>
+				<modal #secondModal>
+					<modal-header>
+						<h1>Upload file</h1>
+					</modal-header>
+					<modal-content>
+					</modal-content>
+					<modal-footer>
+						<button class="btn btn-primary" (click)="secondModal.close()">Changed my mind</button>
+					</modal-footer>
+				</modal>
+			</div>
 		</div>
 	</body>
 

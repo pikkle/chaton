@@ -50,6 +50,7 @@ html, body {
     width: 100%;
 }
 .chaton .logo {
+    cursor: pointer;
     margin-top: -6px;
     height: 65px;
 }

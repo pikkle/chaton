@@ -1,5 +1,51 @@
 <router-outlet>
-  <p>
-    Register view here
-  </p>
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
+
+
+  <link rel="stylesheet" href="./register.component.css">
+
+  <body>
+
+    <div class=chaton>
+      <img class="logo" src="../assets/logo.png" (click)="this.router.navigateByUrl('');">
+    </div>
+    <!--Google Font - Work Sans-->
+    <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
+
+    <div class="container">
+      <div class="profile">
+        <div class="profile__form">
+          <div class="profile__fields">
+            <div class="field">
+              <input type="text" [(ngModel)]="email" class="input" required autofocus/>
+              <label for="fieldEmail" class="label">Email address</label>
+            </div>
+            <div class="field">
+              <input type="text" [(ngModel)]="username" class="input" required/>
+              <label for="fieldUsername" class="label">Username</label>
+            </div>
+            <div class="field">
+              <input type="password" [(ngModel)]="password" class="input" required/>
+              <label for="fieldPassword" class="label">Password</label>
+            </div>
+            <div class="field">
+              <input type="password" [(ngModel)]="repeatPassword" class="input" required/>
+              <label for="fieldPassword" class="label">Repeat password</label>
+            </div>
+            <div class="profile__footer" style="margin-bottom: 10px;">
+              <button class="btn" (click)="register()">Register</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <modal #waitingModal>
+      <modal-header>
+        <h1>Please wait</h1>
+      </modal-header>
+      <modal-content>
+        Registering...
+      </modal-content>
+    </modal>
+  </body>
 </router-outlet>

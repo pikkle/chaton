@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import { ContactComponent } from '../contact/contact.component'
 import { ConversationComponent } from '../conversation/conversation.component'
 import { MessageComponent } from '../message/message.component'
 import { ContactService } from '../contact.service'
 import { EmojiService } from '../emoji.service'
 import { EmojiComponent } from '../emoji/emoji.component'
+
 // Angular-modal
 
 @Component({
@@ -15,11 +16,10 @@ import { EmojiComponent } from '../emoji/emoji.component'
   providers: [
     ContactService,
     EmojiService
-  ]
+  ],
 })
 
 export class ContactListComponent implements OnInit {
-
   selectedContact: ContactComponent;
   contacts: ContactComponent[];
   emojis: EmojiComponent[];
@@ -66,13 +66,8 @@ export class ContactListComponent implements OnInit {
       });
     }
   }
-
   ngOnInit(): void {
     this.getContacts();
     this.getEmojis();
-  } 
-
-  showEmoji() {
-
   }
 }

@@ -23,8 +23,10 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     //if (this.authenticated) {
-      this.router.navigateByUrl('authenticated');
+    this.router.navigateByUrl('authenticated');
     //}
   }
-
+  redirectToRegister(): void {
+    this.router.navigateByUrl('register');
+  }
 }
