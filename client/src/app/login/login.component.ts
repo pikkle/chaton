@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.authentified = false;
     if (this.authentified) {
-      this.router.navigateByUrl('authentified');
+      this.router.navigateByUrl('authenticated');
     }
     document.getElementById('toggleProfile').addEventListener('click', function () {
       [].map.call(document.querySelectorAll('.profile'), function (el) {
@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
   }
 
   login(): void {
-    //if (this.authentified) {
-      this.router.navigateByUrl('authentified');
+    //if (this.authenticated) {
+      this.router.navigateByUrl('authenticated');
     //}
   }
 

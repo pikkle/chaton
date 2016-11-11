@@ -14,7 +14,7 @@ body {
     position:absolute;
     background-color: white;
     height: 400px;
-    width:400px; 
+    width:400px;
     left: 50%;
     top: 50%;
     margin-top: -200px;
@@ -40,10 +40,10 @@ body {
 #login {
     top: 60%;
 }
-input {
+/*input {
     font-size: 30px;
     font-family: 'Roboto', sans-serif;
-}
+}*/
 
 /* Base styles */
 *, *:after, *:before {
@@ -62,6 +62,7 @@ body {
   min-height: 100%;
   background: linear-gradient(to bottom, #80CBC4 0%, #E0F2F1 100%);
   color: #777;
+  font-size: 20px;
 }
 img {
   vertical-align: middle;
@@ -77,7 +78,8 @@ button {
 /* Container */
 .container {
   position: absolute;
-  width: 48em;
+  width: 800px;
+  max-height: 800px;
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
@@ -104,6 +106,9 @@ button {
 .profile--open .profile__avatar {
   transform: translate(-50%, -1.5em);
   border-radius: 50%;
+  padding: 10px;
+  height: 4.5em;
+  width: 4.5em;
 }
 .profile__form {
   position: relative;
@@ -111,8 +116,8 @@ button {
   visibility: hidden;
   opacity: 0;
   height: 0;
-  padding: 3em;
-  border-radius: .25em;
+  padding: 6em;
+  border-radius: .5em;
   -webkit-filter: drop-shadow(0 0 2em rgba(0,0,0,0.2));
   transition: 
     opacity .4s ease-in-out,
@@ -130,10 +135,10 @@ button {
   z-index: 1;
   left: 50%;
   transform: translateX(-50%);
-  border-radius: 1.25em;
+  border-radius: 2.5em;
   overflow: hidden;
-  width: 4.5em;
-  height: 4.5em;
+  width: 9em;
+  height: 9em;
   display: block;
   transition: transform .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   will-change: transform;
@@ -142,31 +147,30 @@ button {
   outline: 0;
 }
 .profile__footer {
-  padding-top: 1em;
+  padding-top: 2em;
 }
 
 
 /* Form */
 .field {
   position: relative;
-  margin-bottom: 2em;
+  margin-bottom: 4em;
 }
 .label {
   position: absolute;
-  height: 2rem;
-  line-height: 2rem;
+  height: 4rem;
+  line-height: 4rem;
   bottom: 0;
   color: #999;
   transition: all .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .input {
   width: 100%;
-  font-size: 100%;
   border: 0;
   padding: 0;
   background-color: transparent;
-  height: 2rem;
-  line-height: 2rem;
+  height: 4rem;
+  line-height: 4rem;
   border-bottom: 1px solid #eee;
   color: #777;
   transition: all .2s ease-in;
@@ -187,16 +191,18 @@ input:valid + .label {
 /* Button */
 .btn {
   border: 0;
-  font-size: 0.75rem;
-  height: 2.5rem;
-  line-height: 2.5rem;
-  padding: 0 1.5rem;
+  font-size: 1.5rem;
+  height: 8rem;
+  width: 20rem;
+  line-height: 5rem;
+  padding: 0 3rem;
   background-color: black;
   color: white;
   text-transform: uppercase;
-  border-radius: .25rem;
-  letter-spacing: .2em;
+  border-radius: .5rem;
+  letter-spacing: .4em;
   transition: background .2s;
+  left: 50%;
 }
 .btn:focus {
   outline: 0;

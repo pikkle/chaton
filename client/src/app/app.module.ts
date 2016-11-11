@@ -31,7 +31,7 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
     RouterModule.forRoot([
       { path: 'register', component: RegisterComponent },
       { path: '', component: LoginComponent},
-      { path: 'authentified', component: ContactListComponent }
+      { path: 'authenticated', component: ContactListComponent }
     ]),
     AlertModule
   ],
