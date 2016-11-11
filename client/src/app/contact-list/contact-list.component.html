@@ -32,7 +32,7 @@
 				</modal-header>
 				<modal-content>
 					<div *ngFor="let emoji of this.emojis">
-						<img src={{emoji.path}} style="width: 20px">
+						<img src={{emoji.path}} style="width: 20px" (click)="changeMessage(emoji.text); firstModal.close();">
 					</div>
 				</modal-content>
 				<modal-footer>

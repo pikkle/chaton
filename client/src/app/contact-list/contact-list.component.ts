@@ -25,7 +25,10 @@ export class ContactListComponent implements OnInit {
   emojis: EmojiComponent[];
   // Typed message
   nextMessage: string;
-
+  changeMessage(newMess: string) {
+    this.nextMessage = newMess;
+    this.sendMessage();
+  }
   // Selecting a contact in the list
   onSelect(contact: ContactComponent): void {
     this.selectedContact = contact;

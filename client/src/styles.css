@@ -15,7 +15,7 @@ html, body {
     left: 500;
     top: 500;
     overflow: auto; /* Enable scroll if needed */
-    background-color: white; /* Fallback color */
+    background-color: transparent; /* Fallback color */
 }
 
 /* Modal Content/Box */
