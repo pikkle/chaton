@@ -81,7 +81,7 @@ button {
   width: 800px;
   max-height: 800px;
   left: 50%;
-  top: 50%;
+  top: 50%; 
   transform: translate(-50%,-50%);
   animation: intro .7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
@@ -96,8 +96,9 @@ button {
   visibility: visible;
   height: auto;
   opacity: 1;
-  transform: translateY(-6em);
+  transform: translateY(-2em);
   padding-top: 12em;
+  padding-bottom: 12em;
 }
 .profile--open .profile__fields {
   opacity: 1;
