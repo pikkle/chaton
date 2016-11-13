@@ -21,7 +21,7 @@ MongoClient.connect(url, function(err, db) {
 			{
 				"_id": profileId1,
 				"email": "john.doe@gmail.com",
-				"login": "john",
+				"username": "john",
 				"password": "sooo secret",
 				"public_key": "1234567890",
 				"avatar": "0x1234",
@@ -32,7 +32,7 @@ MongoClient.connect(url, function(err, db) {
 			{
 				"_id": profileId2,
 				"email": "mary.jane@gmail.com",
-				"login": "mary",
+				"username": "mary",
 				"password": "sooo secret",
 				"public_key": "9876543210",
 				"avatar": "0x56789",
