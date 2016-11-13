@@ -17,6 +17,11 @@ module.exports = {
     server_listen_port: 80,
 
     /**
+     * Time available for a new client to authenticate
+     */
+    auth_timeout: 5000,
+
+    /**
      * Database URL
      */
     db_url: "mongodb://192.168.99.100/chaton"

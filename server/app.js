@@ -30,7 +30,12 @@ db.once("open", function() {
 app.use(bodyParser.json());
 require("./app/routes/index")(app);
 
+// open web socket
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+require("./app/socket")(io);
+
 // start listening for client requests
-app.listen(config.server_listen_port, function () {
+http.listen(config.server_listen_port, function () {
     console.log("Server is listening...");
 });
