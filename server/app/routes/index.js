@@ -11,8 +11,16 @@ var expressJWT = require("express-jwt");
 
 module.exports = function (app) {
     
-    // all routes need token authentication, except authentication endpoint
-    app.use(expressJWT({ secret: config.secret }).unless({ path: ["/api/auth"] }));
+    // all routes need token authentication, except
+    // - authentication endpoint
+    // - profile creation endpoint
+    // - todo: check if email available endpoint
+    app.use(expressJWT({ secret: config.secret }).unless(function(req) {
+        return (
+            req.originalUrl === '/api/auth' && req.method === 'POST' ||
+            req.originalUrl === '/api/profile' && req.method === 'POST'
+        );
+    }));
 
     // authentication
     var authRouter = express.Router();
