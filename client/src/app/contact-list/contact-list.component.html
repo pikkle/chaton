@@ -14,42 +14,57 @@
 			</ul>
 		</div>
 		<div class="conversationCanvas">
-			<div class="selectedConversation" *ngIf="selectedContact">
+			<div id="selectedConversation" *ngIf="selectedContact">
 				<div class="message" *ngFor="let message of selectedContact.conversation.messages">
-					<div *ngIf="message.type==='image'">
-						<img class="imageMessage" src={{message.content}}>
-					</div>
-					<div class="bubble" *ngIf="message.type==='text'">
-						{{ message.content }}
+
+					<div [ngSwitch]="message.sender">
+						<div *ngSwitchCase="'test@test.com'">
+							<div *ngIf="message.type==='image'" class="thisSender">
+								<img class="imageMessage" src={{message.content}}>
+							</div>
+							<div *ngIf="message.type==='text'" class="bubble thisSender">
+								{{message.content}}
+							</div>
+						</div>
+						<div *ngSwitchCase="'other@other.com'">
+							<div *ngIf="message.type==='image'" class="otherSender">
+								<img class="imageMessage" src={{message.content}}>
+							</div>
+							<div *ngIf="message.type==='text'" class="bubble otherSender">
+								{{message.content}}
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
-					<input [(ngModel)]="nextMessage" placeholder="Enter message..." (keyup.enter)="sendMessage()" autofocus>
-					<img src="../../assets/emojis/1f60a.png" class="emoji" (click)="firstModal.open()">
-					<img src="../../assets/attach.jpg" class="attach" (click)="secondModal.open()">
-				</div>
-				<modal #firstModal>
-					<modal-header>
-						<h1>Choose emoji</h1>
-					</modal-header>
-					<modal-content>
-						<img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji" (click)="changeMessage(emoji.text); firstModal.close();">
-					</modal-content>
-					<modal-footer>
-						<button class="btn btn-primary" (click)="firstModal.close()">Changed my mind</button>
-					</modal-footer>
-				</modal>
-				<modal #secondModal>
-					<modal-header>
-						<h1>Upload file</h1>
-					</modal-header>
-					<modal-content>
-					</modal-content>
-					<modal-footer>
-						<button class="btn btn-primary" (click)="secondModal.close()">Changed my mind</button>
-					</modal-footer>
-				</modal>
+
 			</div>
+			<div class="userInput" ng-submit="sendMessage()" *ngIf="selectedContact">
+				<textarea autosize id="userTextArea" [(ngModel)]="nextMessage" (keyup.enter)="sendMessage()" autofocus placeholder="Enter message...">
+					</textarea>
+				<img src="../../assets/emojis/1f60a.png" class="emoji" (click)="firstModal.open()">
+				<img src="../../assets/attach.jpg" class="attach" (click)="secondModal.open()">
+			</div>
+			<modal #firstModal>
+				<modal-header>
+					<h1>Choose emoji</h1>
+				</modal-header>
+				<modal-content>
+					<img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji" (click)="changeMessage(emoji.text); firstModal.close();">
+				</modal-content>
+				<modal-footer>
+					<button class="btn btn-primary" (click)="firstModal.close()">Changed my mind</button>
+				</modal-footer>
+			</modal>
+			<modal #secondModal>
+				<modal-header>
+					<h1>Upload file</h1>
+				</modal-header>
+				<modal-content>
+				</modal-content>
+				<modal-footer>
+					<button class="btn btn-primary" (click)="secondModal.close()">Changed my mind</button>
+				</modal-footer>
+			</modal>
 		</div>
 	</body>
 

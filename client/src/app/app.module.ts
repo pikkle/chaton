@@ -22,6 +22,8 @@ import { LoginComponent } from './login/login.component';
 // Bootstrap
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
+import { Autosize } from '../../node_modules/angular2-autosize/angular2-autosize'
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -37,6 +39,7 @@ import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
   ],
   declarations: [
     AppComponent,
+    Autosize,
     ContactComponent,
     ContactListComponent,
     ConversationComponent,
