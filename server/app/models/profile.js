@@ -11,7 +11,7 @@ var mongoose = require("mongoose"),
 var ProfileSchema = new Schema({
     email: { type: String, trim: true },
     validated: Boolean,
-    login: { type: String, trim: true },
+    username: { type: String, trim: true },
     password: { type: String, trim: true },
     public_key: { type: String, trim: true },
     avatar: Buffer,
