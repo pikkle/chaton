@@ -5,7 +5,7 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
-var url = 'mongodb://chaton_mongo:27017';
+var url = 'mongodb://chaton_mongo:27017/test';
 var data = require('./test_data');
 
 MongoClient.connect(url, function(err, db) {
