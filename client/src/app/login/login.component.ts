@@ -53,8 +53,8 @@ export class LoginComponent implements OnInit {
       .toPromise()
       .then(this.extractData)
       .catch(this.handleError).then(data => {
-        console.log("DATA");
         console.log(data);
+        var token = data;
         // this.router.navigateByUrl('authenticated');
       })
   }
