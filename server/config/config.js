@@ -24,5 +24,5 @@ module.exports = {
     /**
      * Database URL
      */
-    db_url: "mongodb://192.168.99.100/chaton"
+    db_url: "mongodb://192.168.99.100:27017"
 }

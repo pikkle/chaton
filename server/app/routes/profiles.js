@@ -29,9 +29,11 @@ module.exports = function (router) {
      */
     router.route("/")
         .post(function (req, res, next) {
+            console.log("Hello");
             var profile = req.body;
             profileController.addProfile(profile, function(err, result) {
                 if (err) {
+                    console.log(err);
                     res.status(500).send(err);
                 }
                 res.status(201).send(result);

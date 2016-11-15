@@ -4,7 +4,6 @@
  */
 
 "use strict";
-
 var express = require("express"),
     app = express(),
     bodyParser = require('body-parser'),
@@ -26,6 +25,10 @@ db.once("open", function() {
     console.log("Connected to database")
 });
 
+var cors = require('cors');
+
+// use it before all route definitions
+app.use(cors({ origin: '*' }));
 // initialize routes
 app.use(bodyParser.json());
 require("./app/routes/index")(app);
@@ -34,6 +37,7 @@ require("./app/routes/index")(app);
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 require("./app/socket")(io);
+
 
 // start listening for client requests
 http.listen(config.server_listen_port, function () {
