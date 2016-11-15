@@ -1,0 +1,24 @@
+[
+	{
+		"_id": null,
+		"email": "john.doe@gmail.com",
+		"username": "john",
+		"password": "sooo secret",
+		"public_key": "1234567890",
+		"avatar": "0x1234",
+		"contacts": [],
+		"blacklist": [],
+		"history": []
+	},
+	{
+		"_id": null,
+		"email": "mary.jane@gmail.com",
+		"username": "mary",
+		"password": "sooo secret",
+		"public_key": "9876543210",
+		"avatar": "0x56789",
+		"contacts": [],
+		"blacklist": [],
+		"history": []
+	}
+]

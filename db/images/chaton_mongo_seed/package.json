@@ -1,0 +1,14 @@
+{
+  "name": "chaton_mongo_seed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "init_test_db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mongodb": "^2.2.11"
+  }
+}
