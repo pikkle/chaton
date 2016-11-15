@@ -9,8 +9,8 @@ var url = 'mongodb://192.168.99.100:27017/chaton';
 
 MongoClient.connect(url, function(err, db) {
 
-	var profileId1 = new ObjectID();
-	var profileId2 = new ObjectID();
+	var profileId1 = new ObjectID("582a1f297f82ce34244d840e");
+	var profileId2 = new ObjectID("582a1f297f82ce34244d840f");
 
 	// clear profiles
 	db.collection('profiles').remove();
