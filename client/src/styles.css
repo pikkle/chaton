@@ -1,11 +1,12 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 html, body {
     width: 100%;
     height: 100%;
     margin: 0px;
-    font-family: 'Roboto', sans-serif; 
+    font-family: 'Open Sans', sans-serif; 
 }
 
 /* The Modal (background) */

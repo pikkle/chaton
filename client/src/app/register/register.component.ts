@@ -20,6 +20,7 @@ export class RegisterComponent implements OnInit {
       el.classList.toggle('profile--open');
     });
   }
+  
   private extractData(res: Response) {
     console.log(res);
     let body = res.json();

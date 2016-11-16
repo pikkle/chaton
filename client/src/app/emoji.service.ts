@@ -8,7 +8,6 @@ export class EmojiService {
     return Promise.resolve(EMOJIS);
   }
   getEmoji(message): Promise<EmojiComponent> {
-    console.log("getEmoji: " + message);
     return this.getEmojis().then(emojis => emojis.find(emoji => emoji.text === message))
   };
 }

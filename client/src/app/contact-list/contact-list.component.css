@@ -3,8 +3,8 @@ html {
 }
 
 body {
-    font-family: Helvetica, sans-serif;
-    font-size: 12px;
+    /*font-family: Helvetica, sans-serif;
+    */font-size: 14px;
     height: 100%;
     margin: 0px;
     box-sizing: border-box;
@@ -88,6 +88,7 @@ ul {
 .lastMessage {
     overflow: hidden;
     max-height: 15px;
+    font-size: 12px;
     max-width: inherit;
 }
 
@@ -192,7 +193,6 @@ p {
     padding-right: 20px;
     padding-top: 10px;
     padding-bottom: 10px;
-    font-family: Helvetica, sans-serif;
     border-radius: 20px;
     word-wrap: break-word;
 }

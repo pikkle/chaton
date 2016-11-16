@@ -9,26 +9,47 @@ import 'rxjs/add/operator/toPromise';
 })
 export class LoginComponent implements OnInit {
 
+  // Input by user through form
   private email: string;
   private password: string;
+
+  // Constructor. Initializes LoginComponent's Router and Http fields
   constructor(private router: Router, private http: Http) { }
-  authentified: boolean;
+
+  authenticated: boolean;
   ngOnInit() {
-    this.authentified = false;
-    if (this.authentified) {
+    this.authenticated = false;//(localStorage["token"] !== undefined); // tmp
+
+    // If user is already authenticated
+    if (this.authenticated) {
       this.router.navigateByUrl('authenticated');
     }
+
+    // Startup screen with only avatar
     document.getElementById('toggleProfile').addEventListener('click', function () {
       [].map.call(document.querySelectorAll('.profile'), function (el) {
         el.classList.toggle('profile--open');
       });
     });
+
   }
-  private extractData(res: Response) {
+
+  /**
+  * Extracts JWT from server response
+  * @param {Response} res: Response sent by server 
+  * @return {string} token
+  */
+  private extractToken(res: Response): string {
     console.log(res);
     let body = res.json();
-    return body.data || {};
+    return body.token;
   }
+
+  /**
+   * Handles error responses
+   * @param { Reponse | any } error: Error response sent by server
+   * @return { Promise } Promisified error message
+   */
   private handleError(error: Response | any) {
     console.log(error);
     // In a real world app, we might use a remote logging infrastructure
@@ -43,6 +64,12 @@ export class LoginComponent implements OnInit {
     console.error(errMsg);
     return Promise.reject(errMsg);
   }
+
+  /**
+   * Called when user presses the login button
+   * 
+   * 
+   */
   login(): void {
     let headers = new Headers({ 'Content-Type': 'application/json' });
     let options = new RequestOptions({ headers: headers });
@@ -51,11 +78,12 @@ export class LoginComponent implements OnInit {
       "password": this.password,
     }), options)
       .toPromise()
-      .then(this.extractData)
-      .catch(this.handleError).then(data => {
-        console.log(data);
-        var token = data;
-        // this.router.navigateByUrl('authenticated');
+      .then(this.extractToken)
+      .catch(this.handleError)
+      .then(token => {
+        console.log(token);
+        localStorage["token"] = token;
+        this.router.navigateByUrl('authenticated');
       })
   }
   redirectToRegister(): void {
