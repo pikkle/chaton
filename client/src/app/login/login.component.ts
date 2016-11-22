@@ -49,7 +49,6 @@ export class LoginComponent implements OnInit {
   * @return {string} token
   */
   private extractData(res: Response): string {
-    console.log(res);
     let body = res.json();
     return body;
   }
@@ -70,7 +69,6 @@ export class LoginComponent implements OnInit {
     this.apiService.post(headers, options, data, url)
       .then(this.extractData)
       .then(data => {
-        console.log(data);
         
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;

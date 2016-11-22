@@ -1,14 +1,15 @@
 import { Component, OnInit, Output } from '@angular/core';
-import { ContactComponent } from '../contact/contact.component'
-import { MessageComponent } from '../message/message.component'
-import { ContactService } from '../contact.service'
-import { EmojiService } from '../emoji.service'
-import { EmojiComponent } from '../emoji/emoji.component'
-import { Router } from '@angular/router'
-import { UserService } from '../user.service'
+import { ContactComponent } from '../contact/contact.component';
+import { ConversationComponent } from '../conversation/conversation.component'
+import { MessageComponent } from '../message/message.component';
+import { ContactService } from '../contact.service';
+import { EmojiService } from '../emoji.service';
+import { EmojiComponent } from '../emoji/emoji.component';
+import { Router } from '@angular/router';
+import { UserService } from '../user.service';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { ApiService } from '../api.service'
-import { SocketService } from '../communication/socket.service'
+import { ApiService } from '../api.service';
+import { SocketService } from '../communication/socket.service';
 
 declare let io: any;
 
@@ -48,7 +49,7 @@ export class ContactListComponent implements OnInit {
   // email
   email: string;
 
-  
+
 
   // Sets the content of "nextMessage" and sends it
   changeMessage(newMess: string) {
@@ -67,17 +68,28 @@ export class ContactListComponent implements OnInit {
 
   // Calls the Contact Service for the contact list
   getContacts(): void {
-    //    this.contactService.getContacts().then(contacts => this.contacts = contacts);
+    //this.contactService.getContacts().then(contacts => this.contacts = contacts);
     let headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + this.token });
     let options = new RequestOptions({ headers: headers });
     let url = '/api/profile/' + this.id;
-
+    this.contacts = [];
     this.apiService.get(headers, options, url).then(data => {
-      console.log("In contact-list");
-      //this.contacts = data.contacts;
-      //console.log(this.contacts);
+      for (let c of data.contacts)  {
+        this.contacts.push(
+          new ContactComponent(
+            c["_id"], 
+            c["username"], 
+            '../assets/default_avatar.png',  // TODO: download avatar as a picture and pick path here
+            new ConversationComponent(
+              c["username"], 
+              [c["_id"]], 
+              []
+            )
+          )
+        );
+      }
     })
-    this.contactService.getContacts().then(contacts => this.contacts = contacts)
+    //this.contactService.getContacts().then(contacts => this.contacts = contacts)
   }
 
   // Calls the Emoji Service for emoji list

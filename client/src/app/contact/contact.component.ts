@@ -6,11 +6,11 @@ import { ConversationComponent } from '../conversation/conversation.component'
   styleUrls: ['./contact.component.css']
 })
 export class ContactComponent {
-  id: number;
+  id: string;
   name: string;
   avatar: string;
   conversation: ConversationComponent;
-  constructor(param_id: number, param_name: string, param_avatar: string, param_conversations: ConversationComponent) {
+  constructor(param_id: string, param_name: string, param_avatar: string, param_conversations: ConversationComponent) {
     this.id = param_id;
     this.name = param_name;
     this.avatar = param_avatar;

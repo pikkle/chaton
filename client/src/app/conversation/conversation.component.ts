@@ -8,10 +8,10 @@ import { ContactService } from '../contact.service'
 })
 export class ConversationComponent implements OnInit {
   name: string;
-  members: number[]; // ids
+  members: string[]; // ids
   messages: MessageComponent[];
 
-  constructor(name: string, members: number[], messages: MessageComponent[]) {
+  constructor(name: string, members: string[], messages: MessageComponent[]) {
     this.name = name;
     this.members = members;
     this.messages = messages;
