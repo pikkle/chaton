@@ -23,7 +23,7 @@ module.exports = function (socketio) {
 
         // handle authentication
         var authenticate = function (data) {
-
+            console.log("Hello");
             // disable timeout
             clearTimeout(auth_timeout);
 
@@ -36,31 +36,33 @@ module.exports = function (socketio) {
 
                     // update socket list
                     console.log("Authenticated: " + data.id);
-                    socket.profileId = data.id; 
+                    socket.profileId = data.id;
                     connected_clients[data.id] = socket;
 
                     socket.connectedAt = new Date();
                     socket.emit("authenticated");
 
-                    // disconnection event
-                    socket.on("disconnect", function () {
-                        console.log("Disconnected: " + socket.profileId);
-                        // todo: remove socket & revoke token? to discuss
-                        delete connected_clients[socket.profileId];
-                    });
 
-                    // message sent event
-                    socket.on("send_message", function (data) {
-                        // todo
-                        socket.emit("message_processed");
-
-                        var receiverSocket = connected_clients[data.receiver];
-                        receiverSocket.emit("new_message", { content: data.content });
-                    });
                 }
             })
         }
+        // disconnection event
+        socket.on("disconnect", function () {
+            console.log("Disconnected: " + socket.profileId);
+            // todo: remove socket & revoke token? to discuss
+            delete connected_clients[socket.profileId];
+        });
 
+        // message sent event
+        socket.on("send_message", function (data) {
+            authenticate(data);
+            console.log(data);
+            // todo
+            socket.emit("message_processed");
+            
+            var receiverSocket = connected_clients[data.receiver];
+            receiverSocket.emit("new_message", { content: data.content });
+        });
         // authentication event
         socket.on("authenticate", authenticate);
     });

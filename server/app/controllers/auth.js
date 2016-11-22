@@ -24,7 +24,7 @@ exports.verify = function(email, password, callback) {
         else {
             // generate and return Json web token
             var token = jwt.sign({}, config.secret);
-            callback(null, token);
+            callback(null, token, profile._id);
         }
     });
 };

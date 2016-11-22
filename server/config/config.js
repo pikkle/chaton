@@ -14,7 +14,7 @@ module.exports = {
     /**
      * Listening port for websocket requests
      */
-    server_listen_port: 80,
+    server_listen_port: 3030,
 
     /**
      * Time available for a new client to authenticate
