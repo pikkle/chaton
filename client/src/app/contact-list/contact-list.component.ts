@@ -8,6 +8,8 @@ import { Router } from '@angular/router'
 import { UserService } from '../user.service'
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ApiService } from '../api.service'
+import { SocketService } from '../communication/socket.service'
+
 declare let io: any;
 
 @Component({
@@ -23,7 +25,7 @@ declare let io: any;
 })
 
 export class ContactListComponent implements OnInit {
-  private socket;
+  private socketService: SocketService;
 
   // Contact that user selects in GUI
   selectedContact: ContactComponent;
@@ -42,6 +44,11 @@ export class ContactListComponent implements OnInit {
 
   // id
   id: number;
+
+  // email
+  email: string;
+
+  
 
   // Sets the content of "nextMessage" and sends it
   changeMessage(newMess: string) {
@@ -82,6 +89,8 @@ export class ContactListComponent implements OnInit {
   constructor(private contactService: ContactService, private emojiService: EmojiService, private router: Router, private http: Http, private apiService: ApiService) {
     this.contactService = contactService;
     this.emojiService = emojiService;
+
+    this.socketService = SocketService.getInstance();
   }
 
 
@@ -98,12 +107,10 @@ export class ContactListComponent implements OnInit {
 
         this.emojiService.getEmoji(this.nextMessage.replace(/^\s+|\s+$/g, "")).then(emoji => {
           if (emoji !== null && emoji !== undefined) {
-            this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "image", emoji.text, ".png", "test@test.com"));
+            this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "image", emoji.text, ".png", this.email));
           } else {
-            this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", this.nextMessage, ".txt", "test@test.com"));
-            var socket = io.connect("http://localhost:3030");
-            // socket.emit("authenticate", { token: localStorage["token"] });
-            socket.emit('send_message', { token: localStorage["token"], receiver: "henrikake@gmail.com", content: this.nextMessage });
+            this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", this.nextMessage, ".txt", this.email));
+            this.socketService.sendMessage(this.nextMessage, this.selectedContact);
           }
         }).then(() => {
           this.nextMessage = "";
@@ -121,7 +128,7 @@ export class ContactListComponent implements OnInit {
     // JWT token and user id, obtained by the LoginComponent
     this.token = localStorage["token"];
     this.id = localStorage["id"];
-
+    this.email = localStorage["email"];
     this.getContacts();
     this.getEmojis();
   }

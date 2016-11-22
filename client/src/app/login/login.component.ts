@@ -3,6 +3,8 @@ import { Router } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import { ApiService } from '../api.service'
+import { SocketService } from '../communication/socket.service'
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -12,13 +14,16 @@ import { ApiService } from '../api.service'
   ]
 })
 export class LoginComponent implements OnInit {
+  private socketService: SocketService;
 
   // Input by user through form
   private email: string;
   private password: string;
 
   // Constructor. Initializes LoginComponent's Router and Http fields
-  constructor(private router: Router, private http: Http, private apiService: ApiService) { }
+  constructor(private router: Router, private http: Http, private apiService: ApiService) { 
+    this.socketService = SocketService.getInstance();
+  }
 
   authenticated: boolean;
   ngOnInit() {
@@ -66,8 +71,12 @@ export class LoginComponent implements OnInit {
       .then(this.extractData)
       .then(data => {
         console.log(data);
+        
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
+        localStorage["email"] = this.email;
+        this.socketService.authenticate(data.token, data.id);
+
         this.router.navigateByUrl('authenticated');
       })
   }
