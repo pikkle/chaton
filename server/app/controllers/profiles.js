@@ -15,7 +15,7 @@ var mongoose = require("../models/profile"),
  */
 exports.findById = function(id, callback) {
     Profile.findById(id)
-        .populate("contacts", "_id email login public_key avatar")
+        .populate("contacts", "_id email username public_key avatar")
         .exec(function(err, profile) {
             if (err) {
                 callback(err);
@@ -68,7 +68,7 @@ exports.getHistory = function(id, callback) {
  */
 exports.getAllContacts = function(id, callback) {
     Profile.findById(id)
-        .populate("contacts", "_id email login public_key avatar")
+        .populate("contacts", "_id email username public_key avatar")
         .exec(function(err, profile) {
             if (err) {
                 callback(err);
@@ -89,7 +89,7 @@ exports.getAllContacts = function(id, callback) {
  */
 exports.getContactById = function(profileId, contactId, callback) {
     Profile.findById(profileId)
-        .populate("contacts", "_id email login public_key avatar")
+        .populate("contacts", "_id email username public_key avatar")
         .exec(function(err, profile) {
             if (err) {
                 callback(err);
