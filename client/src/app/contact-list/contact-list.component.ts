@@ -21,14 +21,14 @@ declare let io: any;
 })
 
 export class ContactListComponent implements OnInit {
-    private socket;
+  private socket;
 
   // Contact that user selects in GUI
   selectedContact: ContactComponent;
 
   // All user's contacts
   contacts: ContactComponent[];
-  
+
   // All emojis
   emojis: EmojiComponent[];
 
@@ -81,7 +81,7 @@ export class ContactListComponent implements OnInit {
       if (/\S/.test(this.nextMessage)) {
         // string is not empty and not just whitespace
 
-        this.emojiService.getEmoji(this.nextMessage.replace(/^\s+|\s+$/g,"")).then(emoji => {
+        this.emojiService.getEmoji(this.nextMessage.replace(/^\s+|\s+$/g, "")).then(emoji => {
           if (emoji !== null && emoji !== undefined) {
             this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "image", emoji.text, ".png", "test@test.com"));
           } else {
@@ -102,7 +102,7 @@ export class ContactListComponent implements OnInit {
   ngOnInit(): void {
     this.getContacts();
     this.getEmojis();
-
+    
     // JWT token, obtained by the LoginComponent
     this.token = localStorage["token"];
   }

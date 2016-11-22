@@ -7,7 +7,7 @@
 module.exports = function (router) {
 
     var authController = require('../controllers/auth');
-    
+
     /**
      * Authenticate credentias
      */
@@ -15,11 +15,11 @@ module.exports = function (router) {
         .post(function (req, res, next) {
             var email = req.body.email;
             var password = req.body.password;
-            authController.verify(email, password, function(err, token) {
+            authController.verify(email, password, function (err, token) {
                 if (err) {
                     res.status(401).send(err);
                 }
-                res.status(200).send(token);
+                res.status(200).send({ "token": token });
             });
         });
 };
