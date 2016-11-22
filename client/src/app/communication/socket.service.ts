@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ContactComponent } from '../contact/contact.component'
+import { ContactComponent } from '../contact/contact.component';
+import { Listener } from './listener';
 
 import * as io from "socket.io-client";
 
@@ -11,6 +12,7 @@ export class SocketService {
     private socket: SocketIOClient.Socket;
     private token: string;
     private id: string;
+    private email: string
 
     /**
      * Singleton constructor
@@ -29,11 +31,13 @@ export class SocketService {
     /**
      * Authenticate the user opening a websocket
      */
-    public authenticate(token: string, id: string): boolean {
+    public authenticate(token: string, id: string, email: string): boolean {
         this.socket = io.connect(this.host);
         this.token = token;
         this.id = id;
+        this.email = email;
         this.socket.emit("authenticate", { token: this.token, id: this.id });
+
         return this.isAuthenticated();
     }
 
@@ -45,7 +49,11 @@ export class SocketService {
     }
 
     public sendMessage(message: string, to: ContactComponent): void {
-        this.socket.emit('send_message', { token: this.token, id: this.id, receiver: to.id, content: message });
+        this.socket.emit('send_message', { token: this.token, id: this.id, sender: this.email, receiver: to.id, content: message });
+    }
+
+    public addListener(type: string, listener: Function): void {
+        this.socket.on(type, listener);
     }
 
 }

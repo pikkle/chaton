@@ -69,11 +69,10 @@ export class LoginComponent implements OnInit {
     this.apiService.post(headers, options, data, url)
       .then(this.extractData)
       .then(data => {
-        
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
         localStorage["email"] = this.email;
-        this.socketService.authenticate(data.token, data.id);
+        this.socketService.authenticate(data.token, data.id, this.email);
 
         this.router.navigateByUrl('authenticated');
       })

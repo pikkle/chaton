@@ -102,7 +102,7 @@ export class ContactListComponent implements OnInit {
     this.contactService = contactService;
     this.emojiService = emojiService;
 
-    this.socketService = SocketService.getInstance();
+    
   }
 
 
@@ -135,6 +135,12 @@ export class ContactListComponent implements OnInit {
     }
   }
 
+  receiveMessage(from: string, message: string): void {
+    // TODO: insert in right conversation...
+    console.log(message);
+    this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from)); 
+  }
+
   // Called on component instanciation
   ngOnInit(): void {
     // JWT token and user id, obtained by the LoginComponent
@@ -143,5 +149,10 @@ export class ContactListComponent implements OnInit {
     this.email = localStorage["email"];
     this.getContacts();
     this.getEmojis();
-  }
+    this.socketService = SocketService.getInstance();
+    this.socketService.addListener("new_message", (data: any) => {
+      console.log(data);
+      this.receiveMessage(data.sender, data.content);
+    });
+  }  
 }

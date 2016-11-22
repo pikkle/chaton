@@ -56,12 +56,13 @@ module.exports = function (socketio) {
         // message sent event
         socket.on("send_message", function (data) {
             authenticate(data);
+            console.log("Received message: ");
             console.log(data);
             // todo
             socket.emit("message_processed");
             
             var receiverSocket = connected_clients[data.receiver];
-            receiverSocket.emit("new_message", { content: data.content });
+            receiverSocket.emit("new_message", { content: data.content, sender: data.sender });
         });
         // authentication event
         socket.on("authenticate", authenticate);
