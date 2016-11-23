@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ContactComponent } from './contact/contact.component'
-import { CONTACTS } from './mock-contacts'
+import { ContactComponent } from '../contact/contact.component'
+import { CONTACTS } from '../mock-contacts'
 @Injectable()
 export class ContactService {
   getContacts(): Promise<ContactComponent[]> {

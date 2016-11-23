@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MessageComponent } from '../message/message.component';
-import { ContactService } from '../contact.service'
+import { ContactService } from '../services/contact.service'
 @Component({
   selector: 'app-conversation',
   templateUrl: './conversation.component.html',

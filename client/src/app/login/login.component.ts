@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { ApiService } from '../api.service'
-import { SocketService } from '../communication/socket.service'
+import { ApiService } from '../services/api.service'
+import { SocketService } from '../services/socket.service'
 
 @Component({
   selector: 'app-login',
@@ -14,16 +14,13 @@ import { SocketService } from '../communication/socket.service'
   ]
 })
 export class LoginComponent implements OnInit {
-  private socketService: SocketService;
 
   // Input by user through form
   private email: string;
   private password: string;
 
   // Constructor. Initializes LoginComponent's Router and Http fields
-  constructor(private router: Router, private http: Http, private apiService: ApiService) { 
-    this.socketService = SocketService.getInstance();
-  }
+  constructor(private router: Router, private http: Http, private apiService: ApiService, private socketService: SocketService) {  }
 
   authenticated: boolean;
   ngOnInit() {
