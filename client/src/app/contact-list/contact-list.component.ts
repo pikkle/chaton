@@ -122,8 +122,8 @@ export class ContactListComponent implements OnInit {
             this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "image", emoji.text, ".png", this.email));
           } else {
             this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", this.nextMessage, ".txt", this.email));
-            this.socketService.sendMessage(this.nextMessage, this.selectedContact);
           }
+          this.socketService.sendMessage(this.nextMessage, this.selectedContact);
         }).then(() => {
           this.nextMessage = "";
           var objDiv = document.getElementById("selectedConversation");
@@ -137,8 +137,26 @@ export class ContactListComponent implements OnInit {
 
   receiveMessage(from: string, message: string): void {
     // TODO: insert in right conversation...
-    console.log(message);
-    this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from)); 
+    if (message !== null && message.length > 0) {
+      if (/\S/.test(message)) {
+        // string is not empty and not just whitespace
+
+        this.emojiService.getEmoji(message.replace(/^\s+|\s+$/g, "")).then(emoji => {
+          if (emoji !== null && emoji !== undefined) {
+            this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "image", emoji.text, ".png", from));
+          } else {
+            this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from));
+          }
+        }).then(() => {
+          message = "";
+          var objDiv = document.getElementById("selectedConversation");
+          objDiv.scrollTop = objDiv.scrollHeight;
+        });
+      } else {
+        message = "";
+      }
+      }
+    //this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from)); 
   }
 
   // Called on component instanciation
