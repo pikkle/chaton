@@ -14,7 +14,7 @@ chai.use(chaiHttp);
 
 var io = require("socket.io-client");
 
-var socketURL = "http://localhost:" + config.server_listen_port;
+var serverURL = "http://localhost:" + config.server_listen_port;
 
 var server,
     options = {
@@ -29,7 +29,7 @@ describe("Web socket tests", function () {
      */
     it("Can connect to socket", function (done) {
 
-        var client = io.connect(socketURL, options);
+        var client = io.connect(serverURL, options);
         client.on("connect", function (data) {
             client.disconnect();
             done();
@@ -41,7 +41,7 @@ describe("Web socket tests", function () {
      */
     it("Authentication timeout works", function (done) {
 
-        var client = io.connect(socketURL, options);
+        var client = io.connect(serverURL, options);
         client.on("connect", function (data) {
 
             client.on("disconnect", function (data) {
@@ -56,15 +56,15 @@ describe("Web socket tests", function () {
     it("Can authenticate to socket", function (done) {
 
         // get token
-        chai.request("http://localhost")
+        chai.request(serverURL)
             .post("/api/auth")
             .send({ email: "john.doe@gmail.com", password: "sooo secret" })
             .end((err, res) => {
                 res.should.have.status(200);
-                var token = res.text;
+                var token = res.body.token;
 
                 // connect to websocket
-                var client = io.connect(socketURL, options);
+                var client = io.connect(serverURL, options);
                 client.on("connect", function (data) {
 
                     // authenticate
@@ -85,15 +85,15 @@ describe("Web socket tests", function () {
     it("Can send a message and get a processed event", function (done) {
 
         // get token
-        chai.request("http://localhost")
+        chai.request(serverURL)
             .post("/api/auth")
             .send({ email: "john.doe@gmail.com", password: "sooo secret" })
             .end((err, res) => {
                 res.should.have.status(200);
-                var token = res.text;
+                var token = res.body.token;
 
                 // connect to websocket
-                var client = io.connect(socketURL, options);
+                var client = io.connect(serverURL, options);
                 client.on("connect", function (data) {
 
                     // authenticate
@@ -122,15 +122,15 @@ describe("Web socket tests", function () {
     it("Can receive a message", function (done) {
 
         // get token for first client
-        chai.request("http://localhost")
+        chai.request(serverURL)
             .post("/api/auth")
             .send({ email: "john.doe@gmail.com", password: "sooo secret" })
             .end((err, res) => {
                 res.should.have.status(200);
-                var token1 = res.text;
+                var token1 = res.body.token;
 
                 // connect to websocket
-                var client1 = io.connect(socketURL, options);
+                var client1 = io.connect(serverURL, options);
                 client1.on("connect", function (data) {
 
                     // authenticate
@@ -140,15 +140,15 @@ describe("Web socket tests", function () {
                     client1.on("authenticated", function () {
 
                         // get token for second client
-                        chai.request("http://localhost")
+                        chai.request(serverURL)
                             .post("/api/auth")
                             .send({ email: "mary.jane@gmail.com", password: "sooo secret" })
                             .end((err, res) => {
                                 res.should.have.status(200);
-                                var token2 = res.text;
+                                var token2 = res.body.token;
 
                                 // connect to websocket
-                                var client2 = io.connect(socketURL, options);
+                                var client2 = io.connect(serverURL, options);
                                 client2.on("connect", function (data) {
 
                                     // authenticate
