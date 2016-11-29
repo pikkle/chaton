@@ -28,7 +28,8 @@ var ProfileSchema = new Schema({
             sender: { type: Schema.Types.ObjectId, ref: "Profile" },
             content: String
         }]
-    }]
+    }],
+    last_connected: Date
 });
 
 module.exports = mongoose.model("Profile", ProfileSchema);

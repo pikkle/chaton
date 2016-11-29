@@ -74,22 +74,21 @@ export class ContactListComponent implements OnInit {
     let url = '/api/profile/' + this.id;
     this.contacts = [];
     this.apiService.get(headers, options, url).then(data => {
-      for (let c of data.contacts)  {
+      for (let c of data.contacts) {
         this.contacts.push(
           new ContactComponent(
-            c["_id"], 
-            c["username"], 
+            c["_id"],
+            c["username"],
             '../assets/default_avatar.png',  // TODO: download avatar as a picture and pick path here
             new ConversationComponent(
-              c["username"], 
-              [c["_id"]], 
+              c["username"],
+              [c["_id"]],
               []
             )
           )
         );
       }
     })
-    //this.contactService.getContacts().then(contacts => this.contacts = contacts)
   }
 
   // Calls the Emoji Service for emoji list
@@ -102,7 +101,7 @@ export class ContactListComponent implements OnInit {
     this.contactService = contactService;
     this.emojiService = emojiService;
 
-    
+
   }
 
 
@@ -155,7 +154,7 @@ export class ContactListComponent implements OnInit {
       } else {
         message = "";
       }
-      }
+    }
     //this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from)); 
   }
 
@@ -172,5 +171,5 @@ export class ContactListComponent implements OnInit {
       console.log(data);
       this.receiveMessage(data.sender, data.content);
     });
-  }  
+  }
 }

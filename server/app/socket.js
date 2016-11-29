@@ -8,7 +8,7 @@
 var config = require("../config/config");
 var authController = require('./controllers/auth');
 var jwt = require("jsonwebtoken");
-
+var profileController = require('./controllers/profiles')
 var connected_clients = {};
 
 module.exports = function (socketio) {
@@ -60,7 +60,15 @@ module.exports = function (socketio) {
             console.log(data);
             // todo
             socket.emit("message_processed");
-            
+
+            profileController.addMessageToConversation(data, function (err, response) {
+                if (err) {
+                    
+                } else {
+                    console.log("Maybe saved");
+                }
+            });
+
             var receiverSocket = connected_clients[data.receiver];
             receiverSocket.emit("new_message", { content: data.content, sender: data.sender });
         });
