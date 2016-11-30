@@ -7,10 +7,9 @@
 		<div class="listContainer">
 			<ul>
 				<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList">
-					<!--<img class="profilePic" src={{contact.avatar}}>
+					<img class="profilePic" src={{contact.avatar}}>
 					<h1>{{contact.username}}</h1>
 					<p *ngIf="contact.conversation.messages.length > 0" class="lastMessage">{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>
--->
 				</li>
 			</ul>
 		</div>

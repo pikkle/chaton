@@ -1,52 +1,71 @@
-import { Injectable } from "@angular/core";
-import { ContactComponent } from '../contact/contact.component';
+import {Injectable} from "@angular/core";
+import {ContactComponent} from '../contact/contact.component';
 
 import * as io from "socket.io-client";
+import {CryptoService} from "./crypto.service";
 
 @Injectable()
 export class SocketService {
-    private host: string = "http://localhost:3030";
-    private socket: SocketIOClient.Socket;
-    private token: string;
-    private id: string;
-    private email: string
+  private host: string = "http://localhost:3030";
+  private socket: SocketIOClient.Socket;
+  private token: string;
+  private id: string;
+  private email: string
 
-    /**
-     * Singleton constructor
-     */
-    constructor() {
-        console.log("Creating a socket service");
-     }
+  /**
+   * Singleton constructor
+   */
+  constructor(private cryptoService: CryptoService) {
+    console.log("Creating a socket service");
+  }
 
-    /**
-     * Authenticate the user opening a websocket
-     */
-    public authenticate(token: string, id: string, email: string): boolean {
-        if (this.isAuthenticated()) {
-            return true;
-        }
-        this.socket = io.connect(this.host);
-        this.token = token;
-        this.id = id;
-        this.email = email;
-        this.socket.emit("authenticate", { token: this.token, id: this.id });
-
-        return this.isAuthenticated();
+  /**
+   * Authenticate the user opening a websocket
+   * @param token the user's token
+   * @param id the user's id
+   * @param email the user's mail
+   * @returns {boolean} whether the user is authenticated or not
+   */
+  public authenticate(token: string, id: string, email: string): boolean {
+    if (this.isAuthenticated()) {
+      return true;
     }
+    this.socket = io.connect(this.host);
+    this.token = token;
+    this.id = id;
+    this.email = email;
+    this.socket.emit("authenticate", {token: this.token, id: this.id});
 
-    /**
-     * Returns whether or not the user is authenticated
-     */
-    public isAuthenticated(): boolean {
-        return this.socket != undefined && this.socket.connected;
-    }
+    return this.isAuthenticated();
+  }
 
-    public sendMessage(message: string, to: ContactComponent): void {
-        this.socket.emit('send_message', { token: this.token, id: this.id, sender: this.email, receiver: to.id, content: message });
-    }
+  /**
+   * @returns {boolean} whether or not the user is authenticated
+   */
+  public isAuthenticated(): boolean {
+    return this.socket != undefined && this.socket.connected;
+  }
 
-    public addListener(type: string, listener: Function): void {
-        this.socket.on(type, listener);
+  /**
+   * Sends a message
+   * @param message the message to be sent
+   * @param to the recipient
+   */
+  public sendMessage(message: string, to: ContactComponent): void {
+    this.socket.emit('send_message', {
+      token: this.token,
+      id: this.id,
+      sender: this.email,
+      receiver: to.id,
+      content: this.cryptoService.cipher(message, to.publickey)
+    });
+  }
+
+  public addListener(type: string, listener: Function): void {
+    if (!this.socket) {
+      throw new Error("Websocket is not opened !");
     }
+    this.socket.on(type, listener);
+  }
 
 }

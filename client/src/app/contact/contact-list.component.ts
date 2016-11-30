@@ -56,7 +56,7 @@ export class ContactListComponent implements OnInit {
     this.contacts = [];
     this.apiService.getContacts(this.id, this.token).then(newContacts => {
       for (let contact of newContacts) {
-        this.contacts.push(new ContactComponent(contact, new ConversationComponent(contact.username, [], [])));
+        this.contacts.push(contact);
       }
     })
 
