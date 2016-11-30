@@ -136,7 +136,7 @@ exports.addContact = function (profileId, contactId, callback) {
  * @param {String} contactId: The contact id
  */
 exports.addMessageToConversation = function (data, callback) {
-    Profile.findById(data.id, function (err, profile) {
+    /*Profile.findById(data.id, function (err, profile) {
         if (err) {
             callback(err);
             return;
@@ -174,7 +174,7 @@ exports.addMessageToConversation = function (data, callback) {
             })
         }
     })
-    callback();
+    callback();*/
 }
 
 /**

@@ -43,6 +43,7 @@ html, body {
     cursor: pointer;
 }
 .chaton {
+    display: inline-block;
     height: 50px;
     background-color: rgba(15,15,15,0.9);    
     position: fixed;
@@ -55,6 +56,18 @@ html, body {
     cursor: pointer;
     margin-top: -6px;
     height: 65px;
+    clear: none;
+}
+.chaton .logout {
+    clear: none;
+    color: #80CBC4;
+    float: right;
+    padding-right: 20px;
+    padding-top: 10px;
+    font-size: 20px;
+    box-sizing: border-box;
+    cursor: pointer;
+    height: 100%;
 }
 .btn-primary {
     background-color: #006064 !important;

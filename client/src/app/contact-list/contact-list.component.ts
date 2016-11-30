@@ -118,6 +118,12 @@ export class ContactListComponent implements OnInit {
     }
   }
 
+  logout(): void {
+    localStorage.removeItem("token");
+    localStorage.removeItem("id");
+    localStorage.removeItem("email");
+    this.router.navigateByUrl('');
+  }
   receiveMessage(from: string, message: string): void {
     // TODO: insert in right conversation...
     if (message !== null && message.length > 0) {
