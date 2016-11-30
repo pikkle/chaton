@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MessageComponent } from '../message/message.component';
-import { ContactService } from '../services/contact.service'
+import {Component, OnInit} from '@angular/core';
+import {MessageComponent} from '../message/message.component';
+
 @Component({
   selector: 'app-conversation',
   templateUrl: './conversation.component.html',
@@ -16,6 +16,7 @@ export class ConversationComponent implements OnInit {
     this.members = members;
     this.messages = messages;
   }
+
   ngOnInit() {
     console.log("Conversation ngOnInit")
   }

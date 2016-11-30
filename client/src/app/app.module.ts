@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+// ConfigService injection
+import { ConfigService } from './services/config.service';
+
 // Routing
 import { RouterModule } from '@angular/router'
 
@@ -11,7 +14,7 @@ import {ModalModule} from "ng2-modal";
 
 import { AppComponent } from './app.component';
 import { ContactComponent } from './contact/contact.component';
-import { ContactListComponent } from './contact-list/contact-list.component';
+import { ContactListComponent } from './contact/contact-list.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { MessageComponent } from './message/message.component';
 import { EmojiComponent } from './emoji/emoji.component'
@@ -26,6 +29,8 @@ import { SocketService } from './services/socket.service';
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
 
 import { Autosize } from '../../node_modules/angular2-autosize/angular2-autosize'
+import {CryptoService} from "./services/crypto.service";
+import {ApiService} from "./services/api.service";
 
 @NgModule({
   imports: [
@@ -51,8 +56,8 @@ import { Autosize } from '../../node_modules/angular2-autosize/angular2-autosize
     RegisterComponent,
     LoginComponent
   ],
-  providers: [ContactService, SocketService],
+  providers: [ApiService, ContactService, SocketService, CryptoService, ConfigService],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
 }

@@ -1,3 +1,4 @@
-<p>
-  contact works!
-</p>
+<img class="profilePic" src={{avatar}}>
+<h1>{{username}}</h1>
+<p *ngIf="conversation.messages.length > 0" class="lastMessage">
+  {{conversation.messages[conversation.messages.length - 1].content}}</p>
