@@ -1,13 +1,10 @@
-import { Component, OnInit, Output } from '@angular/core';
-import { ContactComponent } from '../contact/contact.component';
+import { Component, OnInit } from '@angular/core';
+import { ContactComponent } from './contact.component';
 import { ConversationComponent } from '../conversation/conversation.component'
 import { MessageComponent } from '../message/message.component';
 import { ContactService } from '../services/contact.service';
 import { EmojiService } from '../services/emoji.service';
 import { EmojiComponent } from '../emoji/emoji.component';
-import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import { ApiService } from '../services/api.service';
 import { SocketService } from '../services/socket.service';
 
@@ -20,34 +17,29 @@ declare let io: any;
   styleUrls: ['./contact-list.component.css'],
   providers: [
     ContactService,
-    EmojiService,
-    ApiService
+    EmojiService
   ]
 })
-
 export class ContactListComponent implements OnInit {
   selectedContact: ContactComponent; // Contact that user selects in GUI
   contacts: ContactComponent[]; // All user's contacts
   emojis: EmojiComponent[]; // All emojis
   nextMessage: string; // Typed message
   token: string; // JWT token
-  id: number; // id
+  id: string; // id
   email: string; // email
 
   // Initializing contactService
   constructor(
-    private contactService: ContactService,
     private apiService: ApiService,
     private socketService: SocketService,
-    private emojiService: EmojiService,
-    private router: Router,
-    private http: Http,
+    private emojiService: EmojiService
   ) { }
 
   // Sets the content of "nextMessage" and sends it
   changeMessage(newMess: string) {
     this.nextMessage = newMess;
-    this.sendMessage();
+    this.receiveMessage(newMess, this.id);
   }
 
   // Selecting a contact in the list
@@ -61,28 +53,13 @@ export class ContactListComponent implements OnInit {
 
   // Calls the Contact Service for the contact list
   getContacts(): void {
-    //this.contactService.getContacts().then(contacts => this.contacts = contacts);
-    let headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + this.token });
-    let options = new RequestOptions({ headers: headers });
-    let url = '/api/profile/' + this.id;
     this.contacts = [];
-    this.apiService.get(headers, options, url).then(data => {
-      for (let c of data.contacts) {
-        this.contacts.push(
-          new ContactComponent(
-            c["_id"],
-            c["username"],
-            '../assets/default_avatar.png',  // TODO: download avatar as a picture and pick path here
-            new ConversationComponent(
-              c["username"],
-              [c["_id"]],
-              []
-            )
-          )
-        );
+    this.apiService.getContacts(this.id, this.token).then(newContacts => {
+      for (let contact of newContacts) {
+        this.contacts.push(new ContactComponent(contact, new ConversationComponent(contact.username, [], [])));
       }
     })
-    //this.contactService.getContacts().then(contacts => this.contacts = contacts)
+
   }
 
   // Calls the Emoji Service for emoji list
@@ -93,7 +70,7 @@ export class ContactListComponent implements OnInit {
 
   /**
    * Sends a message to the server"
-   * 
+   *
    * The content of the field "nextMessage" is analyzed and sent
    */
   sendMessage(): void {
@@ -141,7 +118,7 @@ export class ContactListComponent implements OnInit {
         message = "";
       }
     }
-    //this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from)); 
+    //this.selectedContact.conversation.messages.push(new MessageComponent(new Date().getTime(), "text", message, ".txt", from));
   }
 
   // Called on component instanciation

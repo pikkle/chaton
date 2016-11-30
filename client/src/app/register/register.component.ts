@@ -32,19 +32,6 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): Promise<any> {
-    console.log("Calling register");
-    console.log(this.email);
-    console.log(this.username);
-    console.log(this.password);
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-    let url = "/api/profile";
-    let data = {
-      "email": this.email,
-      "username": this.username,
-      "password": this.password,
-      "public_key": "01239019"
-    }
-    return this.apiService.post(headers, options, data, url).then(this.extractData)
+    return this.apiService.register(this.email, this.username, this.password);
   }
 }

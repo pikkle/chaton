@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router'
+import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { ApiService } from '../services/api.service'
-import { SocketService } from '../services/socket.service'
+import {ApiService} from '../services/api.service';
+import {SocketService} from '../services/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -20,9 +20,12 @@ export class LoginComponent implements OnInit {
   private password: string;
 
   // Constructor. Initializes LoginComponent's Router and Http fields
-  constructor(private router: Router, private http: Http, private apiService: ApiService, private socketService: SocketService) {  }
+  constructor(private router: Router,
+              private apiService: ApiService) {
+  }
 
   authenticated: boolean;
+
   ngOnInit() {
     this.authenticated = false;//(localStorage["token"] !== undefined); // tmp
 
@@ -41,40 +44,25 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-  * Extracts JWT from server response
-  * @param {Response} res: Response sent by server 
-  * @return {string} token
-  */
+   * Extracts JWT from server response
+   * @param {Response} res: Response sent by server
+   * @return {string} token
+   */
   private extractData(res: Response): string {
     let body = res.json();
     return body;
   }
 
-  
-
   /**
    * Called when user presses the login button
    */
   login(): void {
-    let headers = new Headers({ 'Content-Type': 'application/json' });
-    let options = new RequestOptions({ headers: headers });
-    let url = '/api/auth';
-    let data = {
-      "email": this.email,
-      "password": this.password
-    }
-    this.apiService.post(headers, options, data, url)
-      .then(this.extractData)
-      .then(data => {
-        localStorage["token"] = data.token;
-        localStorage["id"] = data.id;
-        localStorage["email"] = this.email;
-        this.socketService.authenticate(data.token, data.id, this.email);
-
-        this.router.navigateByUrl('authenticated');
-      })
+    this.apiService.login(this.email, this.password)
+      .then(_ => this.router.navigateByUrl('authenticated'));
   }
+
   redirectToRegister(): void {
     this.router.navigateByUrl('register');
   }
+
 }

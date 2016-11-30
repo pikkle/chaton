@@ -1,8 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
+import {Injectable} from '@angular/core';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {ConfigService} from './config.service';
+import {SocketService} from "./socket.service";
+import {Contact} from "../contact/contact";
+import {CryptoService} from "./crypto.service";
 
 @Injectable()
 export class ApiService {
+  private static readonly jsonHeader = new Headers({'Content-Type': 'application/json'});
+
+  constructor(private http: Http,
+              private config: ConfigService,
+              private socketService: SocketService,
+              private cryptoService: CryptoService) {
+  }
+
   /**
    * Handles error responses
    * @param { Reponse | any } error: Error response sent by server
@@ -23,28 +35,75 @@ export class ApiService {
     return Promise.reject(errMsg);
   }
 
- private extractData(res: Response) {
-    console.log(res);
+  private extractData(res: Response) {
     let body = res.json();
     return body || {};
   }
 
 
-  post(headers, options, data, url): any {
-    return this.http.post("http://localhost:3030" + url, JSON.stringify(data), options)
-      .toPromise()
-      .catch(this.handleError)
-  }
-  get(headers, options, url): any {
-    return this.http.get("http://localhost:3030" + url, options)
+  private post(options, path, data): any {
+    return this.http.post(this.config.server() + path, JSON.stringify(data), options)
       .toPromise()
       .then(response => {
-        console.log("RESPONSE");
+        console.log("POST RESPONSE");
         console.log(response);
         return response;
-      }).then(this.extractData)
-      .catch(this.handleError)
+      })
+      .then(this.extractData)
+      .catch(this.handleError);
   }
-  constructor(private http: Http) { }
+
+  private get(options, path): any {
+    return this.http.get(this.config.server() + path, options)
+      .toPromise()
+      .then(response => {
+        console.log("GET RESPONSE");
+        console.log(response);
+        return response;
+      })
+      .then(this.extractData)
+      .catch(this.handleError);
+  }
+
+  public login(email: string, password: string): Promise<any> {
+    var options = new RequestOptions({headers: ApiService.jsonHeader});
+    var path = '/api/auth';
+    var data = {
+      "email": email,
+      "password": password
+    };
+
+    return this.post(options, path, data)
+      .then(data => { // authenticate to server to open websocket
+        localStorage["token"] = data.token;
+        localStorage["id"] = data.id;
+        localStorage["email"] = email;
+        this.socketService.authenticate(data.token, data.id, email);
+      });
+  }
+
+  public register(email: string, username: string, password: string): Promise<any> {
+    var keypair = this.cryptoService.generateKeypair();
+    localStorage["privateKey"] = keypair.private;
+    localStorage["publicKey"] = keypair.public;
+
+    var options = new RequestOptions({headers: ApiService.jsonHeader});
+    var path = "/api/profile";
+    var data = {
+      "email": email,
+      "username": username,
+      "password": password,
+      "public_key": keypair.public
+    };
+
+    return this.post(options, path, data);
+  }
+
+  public getContacts(userId: string, token: string): Promise<any> {
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + token});
+    var options = new RequestOptions({headers: headers});
+    var path = '/api/profile/' + userId;
+    return this.get(options, path).then(Contact.contactsFromJson);
+  }
 
 }

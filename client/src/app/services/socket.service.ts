@@ -14,7 +14,7 @@ export class SocketService {
     /**
      * Singleton constructor
      */
-    constructor() { 
+    constructor() {
         console.log("Creating a socket service");
      }
 
