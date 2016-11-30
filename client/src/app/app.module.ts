@@ -14,10 +14,13 @@ import { ContactComponent } from './contact/contact.component';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ConversationComponent } from './conversation/conversation.component';
 import { MessageComponent } from './message/message.component';
-import { ContactService } from './contact.service';
 import { EmojiComponent } from './emoji/emoji.component'
 import { RegisterComponent } from './register/register.component';
 import { LoginComponent } from './login/login.component';
+
+// Services injection
+import { ContactService } from './services/contact.service';
+import { SocketService } from './services/socket.service';
 
 // Bootstrap
 import { AlertModule } from 'ng2-bootstrap/ng2-bootstrap';
@@ -48,7 +51,7 @@ import { Autosize } from '../../node_modules/angular2-autosize/angular2-autosize
     RegisterComponent,
     LoginComponent
   ],
-  providers: [ContactService],
+  providers: [ContactService, SocketService],
   bootstrap: [AppComponent]
 })
 export class AppModule { 

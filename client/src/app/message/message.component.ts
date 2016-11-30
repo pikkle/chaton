@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EmojiService } from '../emoji.service';
+import { EmojiService } from '../services/emoji.service';
 @Component({
 
   selector: 'app-message',

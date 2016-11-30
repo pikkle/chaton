@@ -19,7 +19,7 @@ module.exports = {
     /**
      * Time available for a new client to authenticate
      */
-    auth_timeout: 5000,
+    auth_timeout: 2000,
 
     /**
      * Database URL

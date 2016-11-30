@@ -1,14 +1,11 @@
 import { Injectable } from "@angular/core";
 import { ContactComponent } from '../contact/contact.component';
-import { Listener } from './listener';
 
 import * as io from "socket.io-client";
 
 @Injectable()
 export class SocketService {
-    private static _instance: SocketService = new SocketService(); // singleton construction
-
-    private host: string = "http://localhost:3030"
+    private host: string = "http://localhost:3030";
     private socket: SocketIOClient.Socket;
     private token: string;
     private id: string;
@@ -17,21 +14,17 @@ export class SocketService {
     /**
      * Singleton constructor
      */
-    constructor() {
-        if (SocketService._instance) {
-            throw new Error("Error: Instantiation failed: use SocketService.getInstance() instead")
-        }
-        SocketService._instance = this;
-    }
-
-    public static getInstance(): SocketService {
-        return SocketService._instance;
-    }
+    constructor() { 
+        console.log("Creating a socket service");
+     }
 
     /**
      * Authenticate the user opening a websocket
      */
     public authenticate(token: string, id: string, email: string): boolean {
+        if (this.isAuthenticated()) {
+            return true;
+        }
         this.socket = io.connect(this.host);
         this.token = token;
         this.id = id;
@@ -45,7 +38,7 @@ export class SocketService {
      * Returns whether or not the user is authenticated
      */
     public isAuthenticated(): boolean {
-        return this.socket.connected;
+        return this.socket != undefined && this.socket.connected;
     }
 
     public sendMessage(message: string, to: ContactComponent): void {

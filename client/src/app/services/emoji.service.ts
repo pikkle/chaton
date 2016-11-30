@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { EmojiComponent } from './emoji/emoji.component'
-import { EMOJIS } from './emojis';
+import { EmojiComponent } from '../emoji/emoji.component'
+import { EMOJIS } from '../emojis';
 @Injectable()
 export class EmojiService {
   constructor() { }
