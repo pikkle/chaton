@@ -53,23 +53,26 @@ module.exports = function (socketio) {
         });
 
         // message sent event
-        socket.on("send_message", function (data) {
-            authenticate(data);
+        socket.on("send_message", function (message) {
+            authenticate(message);
             
-            // todo
+            // todo : one tick & two ticks
             socket.emit("message_processed");
 
-            profileController.addMessageToConversation(data, function (err, response) {
+            // add message to destination user's history
+            profileController.addToHistory(message.receiver, message, function (err, response) {
                 if (err) {
-                    
-                } else {
-                    console.log("Maybe saved");
+                    console.log(err);
                 }
             });
 
-            var receiverSocket = connected_clients[data.receiver];
-            receiverSocket.emit("new_message", { content: data.content, sender: data.sender });
+            // send message to destination user (if connected)
+            var receiverSocket = connected_clients[message.receiver];
+            if (receiverSocket) {
+                receiverSocket.emit("new_message", message);
+            }
         });
+
         // authentication event
         socket.on("authenticate", authenticate);
     });

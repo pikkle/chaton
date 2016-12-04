@@ -5,8 +5,12 @@
 
 "use strict";
 
-var mongoose = require("../models/profile"),
-    Profile = mongoose.model("Profile");
+var mongooseProfile = require("../models/profile"),
+    Profile = mongooseProfile.model("Profile");
+var mongooseGroup = require("../models/group"),
+    Group = mongooseGroup.model("Group");
+var mongooseMessage = require("../models/message"),
+    Message = mongooseGroup.model("Message");
 
 /**
  * Get profile by id * 
@@ -28,7 +32,7 @@ exports.findById = function (id, callback) {
 
 /**
  * Add new profile
- * @param {Object} profile: The profile
+ * @param {Profile} profile: The profile
  * @param {Function} callback(err, result): called once finished
  */
 exports.addProfile = function (data, callback) {
@@ -40,24 +44,6 @@ exports.addProfile = function (data, callback) {
         }
 
         callback(null, result);
-    });
-};
-
-/**
- * Get a profile's history
- * @param {String} id: The profile id
- * @param {Function} callback(err, history): called once finished
- */
-exports.getHistory = function (id, callback) {
-    Profile.findById(id, function (err, profile) {
-        if (err) {
-            callback(err);
-            return;
-        }
-
-        if (profile) {
-            callback(null, profile.history);
-        }
     });
 };
 
@@ -131,50 +117,100 @@ exports.addContact = function (profileId, contactId, callback) {
 };
 
 /**
+ * Get a profile's history
+ * @param {String} id: The profile id
+ * @param {Function} callback(err, history): called once finished
+ */
+exports.getHistory = function (id, callback) {
+    Profile.findById(id)
+        .exec(function (err, profile) {
+            if (err) {
+                callback(err);
+                return;
+            }
+
+            if (profile) {
+                callback(null, profile.history);
+            }
+        });
+};
+
+/**
+ * Get a profile's history for a specific group
+ * @param {String} profileId: The profile id
+ * @param {String} groupId: The group id
+ * @param {Function} callback(err, history): called once finished
+ */
+exports.getGroupHistory = function (profileId, groupId, callback) {
+    Profile.findById(profileId)
+        .exec(function (err, profile) {
+            if (err) {
+                callback(err);
+                return;
+            }
+            
+            if (profile) {
+                var history = profile.history.find(h => {
+                    return h.group && h.group._id == groupId;
+                });
+
+                if (history) { // no history for this conversation
+                    callback(null, history);
+                } else { // existing history
+                    callback(null, {});
+                }
+            } else {
+                callback("Profile not found");
+            }
+        });
+};
+
+/**
  * Add a message to user's history
  * @param {String} profileId: The profile id
- * @param {String} contactId: The contact id
+ * @param {Message} message: The message to add
+ * @param {Function} callback(err): called once finished
  */
-exports.addMessageToConversation = function (data, callback) {
-    /*Profile.findById(data.id, function (err, profile) {
+exports.addToHistory = function (profileId, message, callback) {
+    // validate new message
+    var m = new Message(message);
+
+    Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
             return;
         }
 
         if (profile) {
-            profile.history.filter(historyObj => {
-                return historyObj.group == data.receiver;
-            }, result => {
-                if (result == null) {
-                    historyObj.push({
-                        group: data.receiver,
-                        messages: [{
-                            id: data.id,
-                            timestamp: new Date(),
-                            state: 1,
-                            type: "txt",
-                            extension: ".txt",
-                            sender: data.sender,
-                            content: data.content
-                        }]
-                    })
-                } else {
-                    result.messages.push({
-                        id: data.id,
-                        timestamp: new Date(),
-                        state: 1,
-                        type: "txt",
-                        extension: ".txt",
-                        sender: data.sender,
-                        content: data.content
-                    })
-                }
-                profile.save();
-            })
+
+            var history = profile.history.find(h => {
+                return h.group && h.group._id == message.group;
+            });
+
+            // existing history
+            if (history) {
+                history.messages.push(m);
+            // no history for this conversation
+            } else {
+                // create new group
+                var group = new Group({
+                    name: message.group,
+                    members: [message.sender, message.receiver]
+                });
+
+                // associate group and message
+                m.group = group;
+
+                // update history
+                profile.history.push({ group: group, messages: [m] });
+            }
+            
+            profile.save();
+            callback();
+        } else {
+            callback("Profile not found");
         }
-    })
-    callback();*/
+    });
 }
 
 /**

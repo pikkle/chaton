@@ -55,6 +55,39 @@ module.exports = function (router) {
         });
 
     /**
+     * Add a message to a profile's history
+     * @param {String} id: The profile id
+     */
+    router.route("/:id/history")
+        .post(function (req, res, next) {
+            var id = req.params.id;
+            var message = req.body;
+            profileController.addToHistory(id, message, function(err) {
+                if (err) {
+                    res.sendStatus(404);
+                }
+                res.sendStatus(201);
+            });
+        });
+
+    /**
+     * Get a profile's history for a specific group
+     * @param {String} profileId: The profile id
+     * @param {String} groupId: The group id
+     */
+    router.route("/:profileId/history/:groupId")
+        .get(function (req, res, next) {
+            var profileId = req.params.profileId;
+            var groupId = req.params.groupId;
+            profileController.getGroupHistory(profileId, groupId, function(err, history) {
+                if (err) {
+                    res.sendStatus(404);
+                }
+                res.send(history);
+            });
+        });
+
+    /**
      * Get all contacts
      * @param {String} id: The profile id
      */
