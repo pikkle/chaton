@@ -1,3 +1,5 @@
+
+
 html {
     box-sizing: border-box;
 }
@@ -87,7 +89,7 @@ ul {
 
 .lastMessage {
     overflow: hidden;
-    max-height: 15px;
+    max-height: 45%;
     font-size: 12px;
     max-width: inherit;
 }

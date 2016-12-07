@@ -6,10 +6,15 @@
 		</div>
 		<div class="listContainer">
 			<ul>
-				<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList">
+				<li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)" class="contactList" style="height:90px">
 					<img class="profilePic" src={{contact.avatar}}>
 					<h1>{{contact.name}}</h1>
-					<p *ngIf="contact.conversation.messages.length > 0" class="lastMessage">{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>
+					<!--<p *ngIf="contact.conversation.messages.length > 0" class="lastMessage">
+						{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p> -->
+					<p *ngIf="contact.conversation.messages.length > 0 && contact.conversation.messages[contact.conversation.messages.length - 1].type != 'image'" class="lastMessage">
+						{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>
+					<img class="lastMessage" *ngIf="contact.conversation.messages.length > 0 && contact.conversation.messages[contact.conversation.messages.length - 1].type === 'image'" 
+						src={{contact.conversation.messages[contact.conversation.messages.length-1].content}} style="width:21px;height:21px;padding:0px;cursor:pointer;" >
 				</li>
 			</ul>
 		</div>
