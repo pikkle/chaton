@@ -1,9 +1,8 @@
 html {
-    box-sizing: border-box;    
+    box-sizing: border-box;
 }
 body {
-    font-family: Helvetica, sans-serif;
-    background-color: #4DB6AC;    
+    background-color: #4DB6AC;
     font-size: 12px;
     height: 100%;
     margin: 0px;
@@ -81,7 +80,7 @@ button {
   width: 800px;
   max-height: 800px;
   left: 50%;
-  top: 50%; 
+  top: 50%;
   transform: translate(-50%,-50%);
   animation: intro .7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
@@ -120,7 +119,7 @@ button {
   padding: 6em;
   border-radius: .5em;
   -webkit-filter: drop-shadow(0 0 2em rgba(0,0,0,0.2));
-  transition: 
+  transition:
     opacity .4s ease-in-out,
     height .4s ease-in-out,
     transform .4s cubic-bezier(0.175, 0.885, 0.32, 1.275),

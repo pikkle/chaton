@@ -1,5 +1,5 @@
 import {Injectable} from "@angular/core";
-import {ContactComponent} from '../contact/contact.component';
+import {Contact} from '../contact/contact';
 
 import * as io from "socket.io-client";
 import {CryptoService} from "./crypto.service";
@@ -10,13 +10,13 @@ export class SocketService {
   private socket: SocketIOClient.Socket;
   private token: string;
   private id: string;
-  private email: string
+  private email: string;
+  authenticated: boolean = false;
 
   /**
    * Singleton constructor
    */
   constructor(private cryptoService: CryptoService) {
-    console.log("Creating a socket service");
   }
 
   /**
@@ -26,7 +26,7 @@ export class SocketService {
    * @param email the user's mail
    * @returns {boolean} whether the user is authenticated or not
    */
-  public authenticate(token: string, id: string, email: string): boolean {
+  public authenticate(token: string, id: string, email: string) {
     if (this.isAuthenticated()) {
       return true;
     }
@@ -35,15 +35,24 @@ export class SocketService {
     this.id = id;
     this.email = email;
     this.socket.emit("authenticate", {token: this.token, id: this.id});
-
-    return this.isAuthenticated();
+    this.authenticated = true;
+    this.socket.on("error_authentication", function(event, data){
+      console.error("Received an error_authentication message from the server");
+      console.error(event);
+      console.error(data);
+      this.SocketService.authenticated = false;
+    });
   }
 
   /**
    * @returns {boolean} whether or not the user is authenticated
    */
   public isAuthenticated(): boolean {
-    return this.socket != undefined && this.socket.connected;
+    return this.authenticated;
+  }
+
+  public disconnect(): void {
+    this.socket.close();
   }
 
   /**
@@ -51,7 +60,7 @@ export class SocketService {
    * @param message the message to be sent
    * @param to the recipient
    */
-  public sendMessage(message: string, to: ContactComponent): void {
+  public sendMessage(message: string, to: Contact): void {
     this.socket.emit('send_message', {
       token: this.token,
       id: this.id,

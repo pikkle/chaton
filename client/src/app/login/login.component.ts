@@ -21,17 +21,17 @@ export class LoginComponent implements OnInit {
 
   // Constructor. Initializes LoginComponent's Router and Http fields
   constructor(private router: Router,
-              private apiService: ApiService) {
+              private apiService: ApiService,
+              private socketService: SocketService) {
   }
 
   authenticated: boolean;
 
   ngOnInit() {
-    this.authenticated = false;//(localStorage["token"] !== undefined); // tmp
-
     // If user is already authenticated
-    if (this.authenticated) {
+    if (this.socketService.isAuthenticated()) {
       this.router.navigateByUrl('authenticated');
+      return;
     }
 
     // Startup screen with only avatar
@@ -44,21 +44,17 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Extracts JWT from server response
-   * @param {Response} res: Response sent by server
-   * @return {string} token
-   */
-  private extractData(res: Response): string {
-    let body = res.json();
-    return body;
-  }
-
-  /**
    * Called when user presses the login button
    */
   login(): void {
     this.apiService.login(this.email, this.password)
-      .then(_ => this.router.navigateByUrl('authenticated'));
+      .then(data => { // authenticate to server to open websocket
+        localStorage["token"] = data.token;
+        localStorage["id"] = data.id;
+        localStorage["email"] = this.email;
+        this.socketService.authenticate(data.token, data.id, this.email)
+      })
+      .then(_ => this.router.navigateByUrl('chat'));
   }
 
   redirectToRegister(): void {

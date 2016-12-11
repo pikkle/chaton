@@ -1,0 +1,16 @@
+<header class="chaton">
+  <img class="logo" src="../assets/logo.png" (click)="this.router.navigateByUrl('');">
+  <div class="logout" (click)="logout()">Logout</div>
+</header>
+
+<div class="mainwindow container">
+  <div class="col-md-3 contact-list">
+    <app-contact-list [contacts]="contacts" [(selectedContact)]="selectedContact"></app-contact-list>
+  </div>
+
+  <div class="col-md-9 conversation">
+    <app-conversation [(selectedContact)]="selectedContact"></app-conversation>
+
+  </div>
+</div>
+

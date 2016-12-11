@@ -30,6 +30,7 @@ module.exports = function (socketio) {
             // verify token
             jwt.verify(data.token, config.secret, function (err, decoded) {
                 if (err) {
+                    socket.emit("error_authentication");
                     socket.disconnect("Invalid token");
                 }
                 if (!err && decoded) {

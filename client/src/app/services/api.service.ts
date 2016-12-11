@@ -3,7 +3,8 @@ import {Http, Response, Headers, RequestOptions} from '@angular/http';
 import {ConfigService} from './config.service';
 import {SocketService} from "./socket.service";
 import {CryptoService} from "./crypto.service";
-import {ContactComponent} from "../contact/contact.component";
+import {Contact} from "../contact/contact";
+import {Message} from "../conversation/message";
 
 @Injectable()
 export class ApiService {
@@ -96,13 +97,7 @@ export class ApiService {
       "password": this.cryptoService.hashPassword(password)
     };
 
-    return this.post(options, path, data)
-      .then(data => { // authenticate to server to open websocket
-        localStorage["token"] = data.token;
-        localStorage["id"] = data.id;
-        localStorage["email"] = email;
-        this.socketService.authenticate(data.token, data.id, email);
-      });
+    return this.post(options, path, data);
   }
 
   /**
@@ -130,16 +125,17 @@ export class ApiService {
   }
 
   /**
-   * Requests a contact list from the server
+   * Requests a contact list fr om the server
    * @param userId the user's id
    * @param token the user's session token
    * @returns {Promise<ContactComponent[]>} the body response
    */
-  public getContacts(userId: string, token: string): Promise<ContactComponent[]> {
+  public getContacts(userId: string, token: string): Promise<Contact[]> {
     var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + token});
     var options = new RequestOptions({headers: headers});
     var path = '/api/profile/' + userId;
-    return this.get(options, path).then(ContactComponent.contactsFromJson);
+    return this.get(options, path).then(Contact.contactsFromJson);
   }
+
 
 }

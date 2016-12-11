@@ -1,6 +1,145 @@
-html, body {
-    width: 80%;
-    height: 100%;
-    float: right;
-    background-color: #F5F5F5;
+.conversationCanvas {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom, #80CBC4 0%, #E0F2F1 100%);
+  display: flex;
+  flex-direction: column;
 }
+
+#selectedConversation {
+  box-sizing: border-box;
+  overflow-y: scroll;
+  flex: 1 1 auto;
+}
+
+.message:nth-child(1) {
+  margin-top: 60px;
+}
+
+#selectedConversation li:first-of-type {
+  margin-top: 50px;
+}
+
+
+/*.contactList:hover {
+    background-color: #f5f5f5;
+    transition: 0.2s;
+    cursor: pointer;
+}*/
+
+.userInput {
+  width: 100%;
+  float: right;
+  /*
+  min-height: 6%;
+  box-sizing: border-box;
+  border-top: 1px solid dimgray;*/
+  bottom: 0;
+  margin-top: 10px;
+  background-color: white;
+  right: 0;/*
+    position: fixed;*/
+}
+
+.userInput textarea {
+  vertical-align: middle;
+  width: 70%;
+  padding: 10px;
+  border: none;
+  word-wrap: break-word;
+  outline-width: 0;
+  overflow: auto;
+}
+#userTextArea {
+  font-size: 14px;
+  max-height: 400px;
+  overflow-y: scroll !important;
+}
+.sendMessage {
+  width: 20px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+  color: black;
+  padding: 20px;
+  text-align: left;
+  vertical-align: middle;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.emoji {
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.modalEmoji {
+  width: 40px;
+  padding: 3px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modalEmoji:hover {
+  background-color: gray;
+  transition: 0.6s;
+}
+
+.message {
+  margin: 10px;/*
+    max-width: 30%;*/
+  right: 20px;
+  clear: both;
+  line-height: 150%;
+  padding-top: 10px;
+  overflow: wrap;
+}
+.otherSender {
+  float: left;
+}
+.thisSender {
+  float: right;
+}
+.message {
+  word-wrap: break-word;
+}
+.bubble {
+  background-color: white;
+  border: 1px solid white;
+  font-size: 13px;
+  max-width: 30%;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 20px;
+  word-wrap: break-word;
+}
+
+.imageMessage {}
+
+.attach {
+  width: 50px;
+  height: 50px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.my-drop-zone {
+  border: dotted 3px lightgray;
+}
+
+.nv-file-over {
+  border: dotted 3px red;
+}
+
+
+/* Default class applied to drop zones on over */
+
+.another-file-over-class {
+  border: dotted 3px green;
+}
+

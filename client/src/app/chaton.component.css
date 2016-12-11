@@ -1,0 +1,20 @@
+html {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.mainwindow {
+  padding: 50px 0 0 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+
+.contact-list, .conversation, app-conversation, app-contact-list {
+  height: 100%;
+  padding: 0;
+}
+

@@ -24,5 +24,5 @@ module.exports = {
     /**
      * Database URL
      */
-    db_url: "mongodb://192.168.99.100:27017"
+    db_url: "mongodb://localhost:27017"
 }
