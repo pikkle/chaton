@@ -9,6 +9,9 @@ import {ConfigService} from './services/config.service';
 // Routing
 import {RouterModule} from '@angular/router'
 
+// Angular-material
+import {MaterialModule} from '@angular/material';
+
 // Angular-modal
 import {ModalModule} from "ng2-modal";
 
@@ -32,6 +35,7 @@ import {AlertModule} from 'ng2-bootstrap/ng2-bootstrap';
 
 import {Autosize} from '../../node_modules/angular2-autosize/angular2-autosize'
 import {EmojiService} from "./services/emoji.service";
+import 'hammerjs';
 
 
 @NgModule({
@@ -45,7 +49,8 @@ import {EmojiService} from "./services/emoji.service";
       {path: '', component: LoginComponent},
       {path: 'chat', component: ChatonComponent}
     ]),
-    AlertModule
+    AlertModule,
+    MaterialModule.forRoot()
   ],
   declarations: [
     AppComponent,

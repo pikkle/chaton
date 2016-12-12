@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, Output} from '@angular/core';
 import {Message} from './message';
 import {EmojiService} from '../services/emoji.service';
 import {Contact} from "../contact/contact";

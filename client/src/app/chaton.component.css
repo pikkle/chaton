@@ -13,8 +13,24 @@ body {
   width: 100%;
 }
 
-.contact-list, .conversation, app-conversation, app-contact-list {
+.conversation {
   height: 100%;
-  padding: 0;
 }
 
+
+md-sidenav-layout {
+  height: 100%;
+}
+
+md-sidenav {
+  width: 300px;
+  height: 100%;
+}
+
+#toggle-menu {
+  margin-left: 20px;
+  margin-right: 5px;
+  color: #0c695c;
+  text-decoration: none;
+  font-size: 20px;
+}

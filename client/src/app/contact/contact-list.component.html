@@ -4,7 +4,7 @@
         class="contactList">
       <img class="profilePic" src={{contact.avatar}}>
       <h1>{{contact.username}}</h1>
-      <!--<p *ngIf="contact.conversation.messages.length > 0" class="lastMessage">{{contact.conversation.messages[contact.conversation.messages.length - 1].content}}</p>-->
+      <p *ngIf="contact.messages.length > 0" class="lastMessage">{{contact.messages[contact.messages.length - 1].content}}</p>
     </li>
   </ul>
 </div>

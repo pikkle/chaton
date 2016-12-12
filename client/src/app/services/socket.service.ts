@@ -53,6 +53,7 @@ export class SocketService {
   }
 
   public disconnect(): void {
+    this.authenticated = false;
     this.socket.close();
   }
 

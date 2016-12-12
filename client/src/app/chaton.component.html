@@ -1,16 +1,23 @@
 <header class="chaton">
+  <a id="toggle-menu" #togglemenu (click)="start.toggle()">
+    <i class="fa fa-bars"> </i>
+  </a>
   <img class="logo" src="../assets/logo.png" (click)="this.router.navigateByUrl('');">
   <div class="logout" (click)="logout()">Logout</div>
 </header>
 
-<div class="mainwindow container">
-  <div class="col-md-3 contact-list">
-    <app-contact-list [contacts]="contacts" [(selectedContact)]="selectedContact"></app-contact-list>
-  </div>
+<div class="mainwindow">
+  <md-sidenav-layout>
+    <md-sidenav #start (open)="togglemenu.focus()" mode="side" opened="true">
+      <div class="contact-list">
+        <app-contact-list [contacts]="contacts" [(selectedContact)]="selectedContact"></app-contact-list>
+      </div>
+    </md-sidenav>
 
-  <div class="col-md-9 conversation">
-    <app-conversation [(selectedContact)]="selectedContact"></app-conversation>
+    <div class="conversation">
 
-  </div>
+      <app-conversation [(selectedContact)]="selectedContact"></app-conversation>
+    </div>
+  </md-sidenav-layout>
 </div>
 

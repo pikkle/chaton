@@ -39,7 +39,13 @@ export class ChatonComponent implements OnInit {
   getContacts(): void {
     console.log("Fetching contacts...");
     this.contacts = [];
-    this.apiService.getContacts(this.id, this.token).then(newContacts => this.contacts = newContacts);
+    this.apiService.getContacts(this.id, this.token).then(newContacts => {
+      //TODO: trier les contacts par ordre chronologique du dernier message
+      this.contacts = newContacts;
+      if (this.contacts.length > 0) {
+        this.selectedContact = this.contacts[0];
+      }
+    });
 
   }
 

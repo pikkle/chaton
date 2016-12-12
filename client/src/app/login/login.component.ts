@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     // If user is already authenticated
     if (this.socketService.isAuthenticated()) {
-      this.router.navigateByUrl('authenticated');
+      this.router.navigateByUrl('chat');
       return;
     }
 
