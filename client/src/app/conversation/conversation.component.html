@@ -2,9 +2,8 @@
   <div id="selectedConversation">
     <div *ngIf="selectedContact != null">
       <div class="message" *ngFor="let message of selectedContact.messages">
-
         <div [ngSwitch]="message.sender">
-          <div *ngSwitchCase="email">
+          <div *ngSwitchCase="id">
             <div *ngIf="message.type==='image'" class="thisSender">
               <img class="imageMessage" src={{message.content}}>
             </div>

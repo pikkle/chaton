@@ -3,6 +3,8 @@ import {SocketService} from "./services/socket.service";
 import {Router} from "@angular/router";
 import {Contact} from "./contact/contact";
 import {ApiService} from "./services/api.service";
+import {Message} from "./conversation/message";
+import {EmojiService} from "./services/emoji.service";
 
 @Component({
   selector: 'app-chaton',
@@ -18,8 +20,8 @@ export class ChatonComponent implements OnInit {
 
   constructor(private router: Router,
               private socketService: SocketService,
-              private apiService: ApiService
-  ) {
+              private apiService: ApiService,
+              private emojiService: EmojiService) {
   }
 
 
@@ -50,8 +52,21 @@ export class ChatonComponent implements OnInit {
     if (!this.socketService.isAuthenticated()) {
       console.log("You are not authenticated");
       this.router.navigateByUrl('');
+      return;
     }
     this.getContacts();
+
+    this.socketService.addListener("new_message", (data: any) => {
+      console.log("Received a message: ");
+      console.log(data);
+      Message.parseMessage(data.content, data.id, this.emojiService).then(message => {
+        for (let c of this.contacts) {
+          if (c.id === data.id) {
+            c.addMessage(message);
+          }
+        }
+      });
+    });
   }
 
 }

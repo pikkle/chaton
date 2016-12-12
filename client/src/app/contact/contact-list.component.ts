@@ -3,11 +3,6 @@ import {Contact} from './contact';
 import {ContactService} from '../services/contact.service';
 import {EmojiService} from '../services/emoji.service';
 import {EmojiComponent} from '../emoji/emoji.component';
-import {ApiService} from '../services/api.service';
-import {SocketService} from '../services/socket.service';
-import {Router} from "@angular/router";
-
-declare let io: any;
 
 @Component({
   inputs: ['nextMessage'],
@@ -24,21 +19,17 @@ export class ContactListComponent implements OnInit {
   selectedContactChange = new EventEmitter<Contact>();
   @Input()
   selectedContact: Contact; // Contact that user selects in GUI
-
   @Input()
   contacts: Contact[]; // All user's contacts
+
   emojis: EmojiComponent[]; // All emojis
   nextMessage: string; // Typed message
 
   /**
    * Initializing contactService
    */
-  constructor(private apiService: ApiService,
-              private socketService: SocketService,
-              private emojiService: EmojiService,
-              private router: Router) {
+  constructor() {
   }
-
 
   /**
    * Selecting a contact in the list
@@ -47,26 +38,12 @@ export class ContactListComponent implements OnInit {
   onSelect(contact: Contact): void {
     this.selectedContactChange.emit(contact);
     this.selectedContact = contact;
-
-    /*setTimeout(function () {
-     var objDiv = document.getElementById("selectedConversation");
-     objDiv.scrollTop = objDiv.scrollHeight;
-     }, 200);*/
   }
 
-
-
-
-  // Calls the Emoji Service for emoji list
-  getEmojis(): void {
-    this.emojiService.getEmojis().then(emojis => this.emojis = emojis);
-  }
-
-
-  // Called on component instanciation
+  /**
+   * Called on component instanciation
+   */
   ngOnInit(): void {
-    //this.getContacts();
-    this.getEmojis();
   }
 
 }

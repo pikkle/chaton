@@ -14,26 +14,20 @@ export class ConversationComponent implements OnInit {
   selectedContact: Contact;
 
   email: string;
+  id: string;
   nextMessage: string;
 
   constructor(private emojiService: EmojiService, private socketService: SocketService) {
   }
 
   ngOnInit() {
-    this.socketService.addListener("new_message", (data: any) => {
-      console.log("Received a message: ");
-      console.log(data);
-      if (data.id === this.selectedContact.id) {
-        this.receiveMessage(data.sender, data.content);
-      }
-    });
     this.email = localStorage['email'];
+    this.id = localStorage['id'];
   }
 
   // Sets the content of "nextMessage" and sends it
   changeMessage(newMess: string) {
     this.nextMessage = newMess;
-    this.sendMessage();
   }
 
   /**
@@ -41,41 +35,12 @@ export class ConversationComponent implements OnInit {
    * and sent to every concerned contact through the server
    */
   sendMessage(): void {
-    //for (let contact of this.contacts) {
-    console.log("sending message");
-    this.receiveMessage(localStorage['id'], this.nextMessage);
-    this.socketService.sendMessage(this.nextMessage, this.selectedContact);
-    this.nextMessage = "";
-    //}
-  }
+    Message.parseMessage(this.nextMessage, this.id, this.emojiService).then(message => {
+      this.selectedContact.addMessage(message);
+      this.socketService.sendMessage(message, this.selectedContact);
+      this.nextMessage = "";
+    });
 
-  /**
-   * Adds a message to the component view
-   * @param from
-   * @param message
-   */
-  receiveMessage(from: string, message: string): void {
-    // TODO: insert in right conversation...
-    if (message !== null && message.length > 0) {
-      if (/\S/.test(message)) {
-        // string is not empty and not just whitespace
-
-        this.emojiService.getEmoji(message.replace(/^\s+|\s+$/g, "")).then(emoji => {
-          if (emoji !== null && emoji !== undefined) {
-            this.selectedContact.addMessage(new Message(new Date().getTime(), "image", emoji.text, ".png", from));
-          } else {
-            this.selectedContact.addMessage(new Message(new Date().getTime(), "text", message, ".txt", from));
-            console.log("added message to list");
-          }
-        }).then(() => {
-          message = "";
-          var objDiv = document.getElementById("selectedConversation");
-          objDiv.scrollTop = objDiv.scrollHeight;
-        });
-      } else {
-        message = "";
-      }
-    }
   }
 
 }

@@ -3,6 +3,7 @@ import {Contact} from '../contact/contact';
 
 import * as io from "socket.io-client";
 import {CryptoService} from "./crypto.service";
+import {Message} from "../conversation/message";
 
 @Injectable()
 export class SocketService {
@@ -60,13 +61,13 @@ export class SocketService {
    * @param message the message to be sent
    * @param to the recipient
    */
-  public sendMessage(message: string, to: Contact): void {
+  public sendMessage(message: Message, to: Contact): void {
     this.socket.emit('send_message', {
       token: this.token,
       id: this.id,
       sender: this.email,
       receiver: to.id,
-      content: this.cryptoService.cipher(message, to.publickey)
+      content: this.cryptoService.cipher(message.content, to.publickey)
     });
   }
 
