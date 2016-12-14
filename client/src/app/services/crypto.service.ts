@@ -1,15 +1,21 @@
-import { Injectable } from '@angular/core';
+/// <reference path="../../../typings/modules/crypto-js/index.d.ts" />
+import * as crypto from 'crypto-js';
+
+import {Injectable} from '@angular/core';
 
 @Injectable()
 export class CryptoService {
+  
+  constructor() {
 
-  constructor() { }
+  }
 
   /**
    * Generates a key pair
    * @returns {{private: string, public: string}} the object containing both keys
    */
-  generateKeypair() : any {
+  generateKeypair(): any {
+
     return {
       "private": "asfsufhsifisd",
       "public": "ivhdidfviudfi"
@@ -21,7 +27,7 @@ export class CryptoService {
    * @param clearPassword the password to hash
    * @returns {string} the hashed password
    */
-  hashPassword(clearPassword: string) : string {
+  hashPassword(clearPassword: string): string {
     return clearPassword;
   }
 
@@ -41,7 +47,7 @@ export class CryptoService {
    * @param key the key used in the hash algorithm (generally a private key)
    * @returns {string} the decrypted message
    */
-  decipher(message: string, key:string) {
+  decipher(message: string, key: string) {
     return message;
   }
 }

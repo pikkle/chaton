@@ -24,7 +24,6 @@ export class ChatonComponent implements OnInit {
               private emojiService: EmojiService) {
   }
 
-
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
