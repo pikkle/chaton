@@ -18,6 +18,7 @@ export class ChatonComponent implements OnInit {
   id: string;
   email: string;
   username: string;
+  avatar: string;
 
   formUsername: string;
   formOldPassword: string;
@@ -59,7 +60,8 @@ export class ChatonComponent implements OnInit {
     this.token = localStorage["token"];
     this.id = localStorage["id"];
     this.email = localStorage["email"];
-    this.username = localStorage["username"]
+    this.username = localStorage["username"];
+    this.avatar = localStorage["avatar"];
 
     this.formUsername = this.username;
     this.formOldPassword = "";
@@ -90,7 +92,10 @@ export class ChatonComponent implements OnInit {
   updateUserInfos(): void {
     console.log("Updating infos");
     if (this.formUsername != this.username) {
-
+      console.log("Changed username");
+    }
+    if (this.formOldPassword != "" && this.formNewPassword != "" && this.formRepeatPassword != "") {
+      console.log("Changed password");
     }
   }
 

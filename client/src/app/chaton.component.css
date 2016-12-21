@@ -4,7 +4,36 @@ html {
 
 body {
   font-family: "Open Sans", sans-serif;
-  overflow-y:hidden;
+  overflow-y: hidden;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  color: white;
+}
+
+.header-center {
+  display: flex;
+  flex-direction: row;
+  padding-top: 8px;
+  cursor: pointer;
+}
+
+.header-center img {
+  margin-right: 10px;
+}
+
+#logoutButton {
+  padding-right: 15px;
+  padding-top: 12px;
+}
+
+#userConfig {
+  height: 35px;
+}
+
+.logout {
 }
 
 .mainwindow {
@@ -18,7 +47,6 @@ body {
   height: 100%;
 }
 
-
 md-sidenav-layout {
   height: 100%;
 }
@@ -28,23 +56,18 @@ md-sidenav {
   height: 100%;
 }
 
-.logout {
-  clear: none;
-  float: right;
-  padding-right: 20px;
-  padding-top: 8px;
-  box-sizing: border-box;
-  cursor: pointer;
-  height: 100%;
+md-sidenav.md-sidenav-opened {
+  box-shadow: none;
 }
 
-.icon-fa {
-  margin-left: 20px;
-  margin-right: 5px;
+
+
+header .icon-fa {
+  padding: 5px;
   color: #0c695c;
   text-decoration: none;
   font-size: 25px;
-  padding-top: 5px;
+  cursor: pointer;
 }
 
 .modal-content {

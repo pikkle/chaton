@@ -1,12 +1,15 @@
 <header class="chaton">
-  <a class="icon-fa" id="toggle-menu" #togglemenu (click)="start.toggle()">
-    <i class="fa fa-bars"> </i>
-  </a>
-  <img class="logo" src="../assets/logo.png" (click)="this.router.navigateByUrl('');">
-
-  <i (click)="modalConfig.open()" class="icon-fa fa fa-cog"> </i>
-
-  <div class="logout" (click)="logout()"><i class="icon-fa fa fa-power-off"></i></div>
+  <div class="header-left">
+    <img class="logo" src="../assets/logo.png" (click)="this.router.navigateByUrl('');">
+    <i class="icon-fa fa fa-bars" #togglemenu (click)="start.toggle()"> </i>
+  </div>
+  <div class="header-center" (click)="modalConfig.open()">
+    <img id="userConfig" class="img-circle" src="{{avatar}}"/>
+    <h4>{{username}}</h4>
+  </div>
+  <div class="header-right">
+    <i id="logoutButton" class="icon-fa fa fa-power-off" (click)="logout()"></i>
+  </div>
 </header>
 
 <div class="mainwindow">
@@ -24,45 +27,6 @@
   </md-sidenav-layout>
 </div>
 
-<!--
-<div class="modal" id="modalConfig" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-          aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="modalConfigLabel">Edit your profile</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="usernameInput">Edit your username</label>
-            <input id="usernameInput" name="formUsername" class="form-control" type="text" [(ngModel)]="formUsername" placeholder="Username"
-                   required/>
-          </div>
-          <hr>
-          <div class="form-group">
-            <label for="ancientPassword">Type your current password</label>
-            <input id="ancientPassword" name="formAncientPassword" class="form-control" type="text" [(ngModel)]="formOldPassword" placeholder="Old password"/>
-          </div>
-          <div class="form-group">
-            <label for="newPassword">Type your new password</label>
-            <input id="newPassword" name="formNewPassword" class="form-control" type="text" [(ngModel)]="formNewPassword" placeholder="New password"/>
-          </div>
-          <div class="form-group">
-            <label for="repeatPassword">Confirm your new password</label>
-            <input id="repeatPassword" name="formRepeatPassword" class="form-control" type="text" [(ngModel)]="formRepeatPassword" placeholder="Repeat new password"/>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="updateUserInfos()">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>-->
-
 <modal #modalConfig>
   <modal-header>
     <h1>Edit your profile</h1>
@@ -71,21 +35,25 @@
     <form>
       <div class="form-group">
         <label for="usernameInput">Edit your username</label>
-        <input id="usernameInput" name="formUsername" class="form-control" type="text" [(ngModel)]="formUsername" placeholder="Username"
+        <input id="usernameInput" name="formUsername" class="form-control" type="text" [(ngModel)]="formUsername"
+               placeholder="Username"
                required/>
       </div>
       <hr>
       <div class="form-group">
         <label for="ancientPassword">Type your current password</label>
-        <input id="ancientPassword" name="formAncientPassword" class="form-control" type="text" [(ngModel)]="formOldPassword" placeholder="Old password"/>
+        <input id="ancientPassword" name="formAncientPassword" class="form-control" type="text"
+               [(ngModel)]="formOldPassword" placeholder="Old password"/>
       </div>
       <div class="form-group">
         <label for="newPassword">Type your new password</label>
-        <input id="newPassword" name="formNewPassword" class="form-control" type="text" [(ngModel)]="formNewPassword" placeholder="New password"/>
+        <input id="newPassword" name="formNewPassword" class="form-control" type="text" [(ngModel)]="formNewPassword"
+               placeholder="New password"/>
       </div>
       <div class="form-group">
         <label for="repeatPassword">Confirm your new password</label>
-        <input id="repeatPassword" name="formRepeatPassword" class="form-control" type="text" [(ngModel)]="formRepeatPassword" placeholder="Repeat new password"/>
+        <input id="repeatPassword" name="formRepeatPassword" class="form-control" type="text"
+               [(ngModel)]="formRepeatPassword" placeholder="Repeat new password"/>
       </div>
     </form>
   </modal-content>

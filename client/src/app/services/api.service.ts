@@ -135,6 +135,7 @@ export class ApiService {
     var path = '/api/profile/' + userId;
     return this.get(options, path).then(response => {
       localStorage["username"] = response.username;
+      localStorage["avatar"] = '../assets/cat.jpg';
       return response;
     }).then(Contact.contactsFromJson);
   }

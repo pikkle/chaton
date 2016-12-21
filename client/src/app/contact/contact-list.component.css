@@ -4,10 +4,29 @@ ul {
   height: 100%;
 }
 
+.addUser {
+  height: 80px;
+  background-color: #124648;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+}
+
+.addUser i {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 40px;
+}
+
+.addUser div {
+  padding-top: 25px;
+}
+
 .contactList {
   color: black;
-  padding: 20px;
   list-style: none;
+  padding: 10px;
 }
 
 .listContainer {
@@ -20,10 +39,11 @@ ul {
 }
 
 .listContainer li {
-  min-height: 60px;
+  min-height: 80px;
 }
 
 .listContainer h1 {
+  padding-top: 8px;
   margin: 0;
 }
 
@@ -43,8 +63,8 @@ ul {
 }
 
 .profilePic {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   text-align: left;
   padding: 0;
   vertical-align: middle;

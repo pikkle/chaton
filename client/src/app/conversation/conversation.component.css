@@ -20,14 +20,19 @@
   margin-top: 50px;
 }
 
-
 .userInput {
+  display: flex;
   width: 100%;
   float: right;
   bottom: 0;
   margin-top: 10px;
   background-color: white;
   right: 0;
+}
+
+.userInput textarea {
+  flex-grow: 1;
+  resize: none;
 }
 
 .userInput textarea {

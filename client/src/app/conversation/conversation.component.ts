@@ -32,6 +32,7 @@ export class ConversationComponent implements OnInit {
   // Sets the content of "nextMessage" and sends it
   changeMessage(newMess: string) {
     this.nextMessage = newMess;
+    this.sendMessage();
   }
 
   /**
