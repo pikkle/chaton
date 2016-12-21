@@ -1,17 +1,17 @@
 version: '2'
 services:
   chaton_mongo:
-    build: images/chaton_mongo
-    image: chaton_mongo
-    container_name: "chaton_mongo"
+    build: images/coolapp_mongo
+    image: coolapp_mongo
+    container_name: "coolapp_mongo"
     ports:
       - "27017:27017"
 
   chaton_mongo_seed:
-    build: images/chaton_mongo_seed
-    image: chaton_mongo_seed
-    container_name: "chaton_mongo_seed"
+    build: images/coolapp_mongo_seed
+    image: coolapp_mongo_seed
+    container_name: "coolapp_mongo_seed"
     links:
-      - chaton_mongo
+      - coolapp_mongo
     depends_on:
-      - chaton_mongo
+      - coolapp_mongo

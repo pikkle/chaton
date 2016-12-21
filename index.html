@@ -1,0 +1,817 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Chaton plateform API</title>
+    <style type="text/css">
+      body {
+	font-family: Trebuchet MS, sans-serif;
+	font-size: 15px;
+	color: #444;
+	margin-right: 24px;
+}
+
+h1	{
+	font-size: 25px;
+}
+h2	{
+	font-size: 20px;
+}
+h3	{
+	font-size: 16px;
+	font-weight: bold;
+}
+hr	{
+	height: 1px;
+	border: 0;
+	color: #ddd;
+	background-color: #ddd;
+}
+
+.app-desc {
+  clear: both;
+  margin-left: 20px;
+}
+.param-name {
+  width: 100%;
+}
+.license-info {
+  margin-left: 20px;
+}
+
+.license-url {
+  margin-left: 20px;
+}
+
+.model {
+  margin: 0 0 0px 20px;
+}
+
+.method {
+  margin-left: 20px;
+}
+
+.method-notes	{
+	margin: 10px 0 20px 0;
+	font-size: 90%;
+	color: #555;
+}
+
+pre {
+  padding: 10px;
+  margin-bottom: 2px;
+}
+
+.http-method {
+ text-transform: uppercase;
+}
+
+pre.get {
+  background-color: #0f6ab4;
+}
+
+pre.post {
+  background-color: #10a54a;
+}
+
+pre.put {
+  background-color: #c5862b;
+}
+
+pre.delete {
+  background-color: #a41e22;
+}
+
+.huge	{
+	color: #fff;
+}
+
+pre.example {
+  background-color: #f3f3f3;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+code {
+  white-space: pre;
+}
+
+.nickname {
+  font-weight: bold;
+}
+
+.method-path {
+  font-size: 1.5em;
+  background-color: #0f6ab4;
+}
+
+.up {
+  float:right;
+}
+
+.parameter {
+  width: 500px;
+}
+
+.param {
+  width: 500px;
+  padding: 10px 0 0 20px;
+  font-weight: bold;
+}
+
+.param-desc {
+  width: 700px;
+  padding: 0 0 0 20px;
+  color: #777;
+}
+
+.param-type {
+  font-style: italic;
+}
+
+.param-enum-header {
+width: 700px;
+padding: 0 0 0 60px;
+color: #777;
+font-weight: bold;
+}
+
+.param-enum {
+width: 700px;
+padding: 0 0 0 80px;
+color: #777;
+font-style: italic;
+}
+
+.field-label {
+  padding: 0;
+  margin: 0;
+  clear: both;
+}
+
+.field-items	{
+	padding: 0 0 15px 0;
+	margin-bottom: 15px;
+}
+
+.return-type {
+  clear: both;
+  padding-bottom: 10px;
+}
+
+.param-header {
+  font-weight: bold;
+}
+
+.method-tags {
+  text-align: right;
+}
+
+.method-tag {
+  background: none repeat scroll 0% 0% #24A600;
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin: 2px;
+  color: #FFF;
+  display: inline-block;
+  text-decoration: none;
+}
+
+    </style>
+  </head>
+  <body>
+  <h1>Chaton plateform API</h1>
+    <div class="app-desc">**This is the documentation of the PDG Chaton Plateform API**
+</div>
+    <div class="app-desc">More information: <a href="https://helloreverb.com">https://helloreverb.com</a></div>
+    <div class="app-desc">Contact Info: <a href="hello@helloreverb.com">hello@helloreverb.com</a></div>
+    <div class="app-desc">Version: 1.0.0</div>
+    <div class="app-desc">BasePath:/api</div>
+    <div class="license-info">All rights reserved</div>
+    <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
+  <h2>Access</h2>
+
+  <h2><a name="__Methods">Methods</a></h2>
+  [ Jump to <a href="#__Models">Models</a> ]
+
+  <h3>Table of Contents </h3>
+  <div class="method-summary"></div>
+  <h4><a href="#Default">Default</a></h4>
+  <ul>
+  <li><a href="#authPost"><code><span class="http-method">post</span> /auth</code></a></li>
+  <li><a href="#profileIdContactGet"><code><span class="http-method">get</span> /profile/{id}/contact</code></a></li>
+  <li><a href="#profileIdContactPost"><code><span class="http-method">post</span> /profile/{id}/contact</code></a></li>
+  <li><a href="#profileIdGet"><code><span class="http-method">get</span> /profile/{id}</code></a></li>
+  <li><a href="#profileIdHistoryGet"><code><span class="http-method">get</span> /profile/{id}/history</code></a></li>
+  <li><a href="#profilePost"><code><span class="http-method">post</span> /profile</code></a></li>
+  <li><a href="#profileProfileIdContactContactIdDelete"><code><span class="http-method">delete</span> /profile/{profileId}/contact/{contactId}</code></a></li>
+  <li><a href="#profileProfileIdContactContactIdGet"><code><span class="http-method">get</span> /profile/{profileId}/contact/{contactId}</code></a></li>
+  </ul>
+
+  <h1><a name="Default">Default</a></h1>
+  <div class="method"><a name="authPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /auth</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">authPost</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; The info required to authenticate a user </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Token">Token</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : "aeiou",
+  "token" : "aeiou"
+}</code></pre>
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Authentication sucessful
+        <a href="#Token">Token</a>
+    <h4 class="field-label">401</h4>
+    Authentication failed
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profileIdContactGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /profile/{id}/contact</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profileIdContactGet</span>)</div>
+    <div class="method-notes">Retrieve a user profile contacts by his id</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the profile to fetch contacts </div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ClientContact">ClientContact</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "public_key" : "aeiou",
+  "_id" : 1.3579000000000001069366817318950779736042022705078125,
+  "avatar" : "aeiou",
+  "email" : "aeiou",
+  "username" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Return the specified user profile contacts
+        <a href="#ClientContact">ClientContact</a>
+    <h4 class="field-label">401</h4>
+    invalid profile id
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profileIdContactPost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /profile/{id}/contact</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profileIdContactPost</span>)</div>
+    <div class="method-notes">Adding a new user contact to Chaton plateform</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the profile to add contacts </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; The id of the new contact </div>
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    adding sucessfully
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    invalid profile id or contact id
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profileIdGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /profile/{id}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profileIdGet</span>)</div>
+    <div class="method-notes">Retrieve one user profile by id</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the user profile to fetch </div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ClientProfile">ClientProfile</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "public_key" : "aeiou",
+  "password" : "aeiou",
+  "validated" : true,
+  "blacklist" : [ {
+    "public_key" : "aeiou",
+    "password" : "aeiou",
+    "validated" : true,
+    "blacklist" : [ "" ],
+    "_id" : 1.3579000000000001069366817318950779736042022705078125,
+    "avatar" : "aeiou",
+    "history" : [ {
+      "messages" : [ {
+        "extention" : "aeiou",
+        "sender" : "",
+        "id" : "aeiou",
+        "state" : 1.3579000000000001069366817318950779736042022705078125,
+        "content" : "aeiou",
+        "timestamp" : "2000-01-23T04:56:07.000+00:00"
+      } ],
+      "group" : {
+        "members" : [ "" ],
+        "name" : "aeiou",
+        "_id" : 1.3579000000000001069366817318950779736042022705078125
+      }
+    } ],
+    "email" : "aeiou",
+    "contacts" : [ "" ],
+    "username" : "aeiou"
+  } ],
+  "_id" : 1.3579000000000001069366817318950779736042022705078125,
+  "avatar" : "aeiou",
+  "history" : [ "" ],
+  "email" : "aeiou",
+  "contacts" : [ {
+    "public_key" : "aeiou",
+    "_id" : 1.3579000000000001069366817318950779736042022705078125,
+    "avatar" : "aeiou",
+    "email" : "aeiou",
+    "username" : "aeiou"
+  } ],
+  "username" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Return the specified user profile
+        <a href="#ClientProfile">ClientProfile</a>
+    <h4 class="field-label">401</h4>
+    invalid profile id
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profileIdHistoryGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /profile/{id}/history</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profileIdHistoryGet</span>)</div>
+    <div class="method-notes">Retrieve a user profile history by his id</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">id (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the profile to fetch history </div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#History">History</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "messages" : [ {
+    "extention" : "aeiou",
+    "sender" : "",
+    "id" : "aeiou",
+    "state" : 1.3579000000000001069366817318950779736042022705078125,
+    "content" : "aeiou",
+    "timestamp" : "2000-01-23T04:56:07.000+00:00"
+  } ],
+  "group" : {
+    "members" : [ {
+      "public_key" : "aeiou",
+      "password" : "aeiou",
+      "validated" : true,
+      "blacklist" : [ "" ],
+      "_id" : 1.3579000000000001069366817318950779736042022705078125,
+      "avatar" : "aeiou",
+      "history" : [ "" ],
+      "email" : "aeiou",
+      "contacts" : [ "" ],
+      "username" : "aeiou"
+    } ],
+    "name" : "aeiou",
+    "_id" : 1.3579000000000001069366817318950779736042022705078125
+  }
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Return the specified user profile history
+        <a href="#History">History</a>
+    <h4 class="field-label">401</h4>
+    invalid profile id
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profilePost"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /profile</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profilePost</span>)</div>
+    <div class="method-notes">Register a new user profile to Chaton plateform</div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="heaader">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">body (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash; The infos of the new user profile </div>
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Profile">Profile</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "public_key" : "aeiou",
+  "password" : "aeiou",
+  "validated" : true,
+  "blacklist" : [ "" ],
+  "_id" : 1.3579000000000001069366817318950779736042022705078125,
+  "avatar" : "aeiou",
+  "history" : [ {
+    "messages" : [ {
+      "extention" : "aeiou",
+      "sender" : "",
+      "id" : "aeiou",
+      "state" : 1.3579000000000001069366817318950779736042022705078125,
+      "content" : "aeiou",
+      "timestamp" : "2000-01-23T04:56:07.000+00:00"
+    } ],
+    "group" : {
+      "members" : [ "" ],
+      "name" : "aeiou",
+      "_id" : 1.3579000000000001069366817318950779736042022705078125
+    }
+  } ],
+  "email" : "aeiou",
+  "contacts" : [ "" ],
+  "username" : "aeiou"
+}</code></pre>
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">201</h4>
+    Registration sucessful
+        <a href="#Profile">Profile</a>
+    <h4 class="field-label">401</h4>
+    Registration failed
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profileProfileIdContactContactIdDelete"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /profile/{profileId}/contact/{contactId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profileProfileIdContactContactIdDelete</span>)</div>
+    <div class="method-notes">delete a contact specified by its id of a profile specified by his id</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">profileId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the profile to delete contact </div><div class="param">contactId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the specified contact to delete </div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">204</h4>
+    delete the specified user profile contact
+        <a href="#"></a>
+    <h4 class="field-label">401</h4>
+    invalid profile id or contact id
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="profileProfileIdContactContactIdGet"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /profile/{profileId}/contact/{contactId}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">profileProfileIdContactContactIdGet</span>)</div>
+    <div class="method-notes">Retrieve a contact specified by its id of a profile specified by his id</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">profileId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the profile to fetch contact </div><div class="param">contactId (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash; id of the specified contact to fetch </div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#ClientContact">ClientContact</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "public_key" : "aeiou",
+  "_id" : 1.3579000000000001069366817318950779736042022705078125,
+  "avatar" : "aeiou",
+  "email" : "aeiou",
+  "username" : "aeiou"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="heaader">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Return the specified user profile contact
+        <a href="#ClientContact">ClientContact</a>
+    <h4 class="field-label">401</h4>
+    invalid profile id or contact id
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+
+  <div class="up"><a href="#__Models">Up</a></div>
+  <h2><a name="__Models">Models</a></h2>
+  [ Jump to <a href="#__Methods">Methods</a> ]
+
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#ClientContact"><code>ClientContact</code></a></li>
+    <li><a href="#ClientProfile"><code>ClientProfile</code></a></li>
+    <li><a href="#ContactId"><code>ContactId</code></a></li>
+    <li><a href="#Credentials"><code>Credentials</code></a></li>
+    <li><a href="#Group"><code>Group</code></a></li>
+    <li><a href="#History"><code>History</code></a></li>
+    <li><a href="#Message"><code>Message</code></a></li>
+    <li><a href="#Profile"><code>Profile</code></a></li>
+    <li><a href="#Token"><code>Token</code></a></li>
+  </ol>
+
+  <div class="model">
+    <h3 class="field-label"><a name="ClientContact">ClientContact - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">public_key (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="ClientProfile">ClientProfile - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">validated (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">public_key (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contacts (optional)</div><div class="param-desc"><span class="param-type"><a href="#ClientContact">array[ClientContact]</a></span>  </div>
+<div class="param">blacklist (optional)</div><div class="param-desc"><span class="param-type"><a href="#Profile">array[Profile]</a></span>  </div>
+<div class="param">history (optional)</div><div class="param-desc"><span class="param-type"><a href="#History">array[History]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="ContactId">ContactId - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Credentials">Credentials - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Group">Group - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">members (optional)</div><div class="param-desc"><span class="param-type"><a href="#Profile">array[Profile]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="History">History - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">group (optional)</div><div class="param-desc"><span class="param-type"><a href="#Group">Group</a></span>  </div>
+<div class="param">messages (optional)</div><div class="param-desc"><span class="param-type"><a href="#Message">array[Message]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Message">Message - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">timestamp (optional)</div><div class="param-desc"><span class="param-type"><a href="#DateTime">Date</a></span>  format: date-time</div>
+<div class="param">state (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">extention (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">sender (optional)</div><div class="param-desc"><span class="param-type"><a href="#Profile">Profile</a></span>  </div>
+<div class="param">content (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Profile">Profile - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">_id (optional)</div><div class="param-desc"><span class="param-type"><a href="#number">BigDecimal</a></span>  </div>
+<div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">validated (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">username (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">public_key (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">avatar (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">contacts (optional)</div><div class="param-desc"><span class="param-type"><a href="#Profile">array[Profile]</a></span>  </div>
+<div class="param">blacklist (optional)</div><div class="param-desc"><span class="param-type"><a href="#Profile">array[Profile]</a></span>  </div>
+<div class="param">history (optional)</div><div class="param-desc"><span class="param-type"><a href="#History">array[History]</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3 class="field-label"><a name="Token">Token - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">token (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  </body>
+</html>
