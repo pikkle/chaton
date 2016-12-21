@@ -3,6 +3,7 @@ import {Message} from './message';
 import {EmojiService} from '../services/emoji.service';
 import {Contact} from "../contact/contact";
 import {SocketService} from "../services/socket.service";
+import {Emoji} from "../services/emoji";
 
 @Component({
   selector: 'app-conversation',
@@ -17,12 +18,15 @@ export class ConversationComponent implements OnInit {
   id: string;
   nextMessage: string;
 
+  emojis: Emoji[];
+
   constructor(private emojiService: EmojiService, private socketService: SocketService) {
   }
 
   ngOnInit() {
     this.email = localStorage['email'];
     this.id = localStorage['id'];
+    this.emojiService.getEmojis().then(emojis => this.emojis = emojis);
   }
 
   // Sets the content of "nextMessage" and sends it

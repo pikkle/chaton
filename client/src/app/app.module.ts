@@ -20,7 +20,6 @@ import {AppComponent} from './app.component';
 import {ChatonComponent} from './chaton.component';
 import {ContactListComponent} from './contact/contact-list.component';
 import {ConversationComponent} from './conversation/conversation.component';
-import {EmojiComponent} from './emoji/emoji.component'
 import {RegisterComponent} from './register/register.component';
 import {LoginComponent} from './login/login.component';
 
@@ -58,11 +57,17 @@ import 'hammerjs';
     ChatonComponent,
     ContactListComponent,
     ConversationComponent,
-    EmojiComponent,
     RegisterComponent,
     LoginComponent
   ],
-  providers: [ApiService, ContactService, EmojiService, SocketService, CryptoService, ConfigService],
+  providers: [
+    ApiService,
+    ContactService,
+    EmojiService,
+    SocketService,
+    CryptoService,
+    ConfigService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

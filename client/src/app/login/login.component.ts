@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
   login(): void {
     this.apiService.login(this.email, this.password)
       .then(data => { // authenticate to server to open websocket
+        console.log(data);
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
         localStorage["email"] = this.email;

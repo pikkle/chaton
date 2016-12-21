@@ -17,6 +17,12 @@ export class ChatonComponent implements OnInit {
   token: string;
   id: string;
   email: string;
+  username: string;
+
+  formUsername: string;
+  formOldPassword: string;
+  formNewPassword: string;
+  formRepeatPassword: string;
 
   constructor(private router: Router,
               private socketService: SocketService,
@@ -53,6 +59,13 @@ export class ChatonComponent implements OnInit {
     this.token = localStorage["token"];
     this.id = localStorage["id"];
     this.email = localStorage["email"];
+    this.username = localStorage["username"]
+
+    this.formUsername = this.username;
+    this.formOldPassword = "";
+    this.formNewPassword = "";
+    this.formRepeatPassword = "";
+
 
     if (!this.socketService.isAuthenticated()) {
       console.log("You are not authenticated");
@@ -72,6 +85,13 @@ export class ChatonComponent implements OnInit {
         }
       });
     });
+  }
+
+  updateUserInfos(): void {
+    console.log("Updating infos");
+    if (this.formUsername != this.username) {
+
+    }
   }
 
 }

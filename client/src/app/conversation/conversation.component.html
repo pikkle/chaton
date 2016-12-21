@@ -28,31 +28,24 @@
     <div class="userInput" ng-submit="sendMessage()">
 				<textarea autosize id="userTextArea" [(ngModel)]="nextMessage" (keyup.enter)="sendMessage()" autofocus
                   placeholder="Enter message...">
-					</textarea>
-      <img src="../../assets/emojis/1f60a.png" class="emoji" (click)="firstModal.open()">
-      <img src="../../assets/attach.jpg" class="attach" (click)="secondModal.open()">
+        </textarea>
+      <img src="../../assets/emojis/1f60a.png" class="emoji" (click)="modalEmojis.open()">
+      <!--<img src="../../assets/attach.jpg" class="attach" (click)="secondModal.open()">-->
     </div>
-    <modal #firstModal>
-      <modal-header>
-        <h1>Choose emoji</h1>
-      </modal-header>
-      <modal-content>
-        <img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji"
-             (click)="changeMessage(emoji.text); firstModal.close();">
-      </modal-content>
-      <modal-footer>
-        <button class="btn btn-primary" (click)="firstModal.close()">Changed my mind</button>
-      </modal-footer>
-    </modal>
-    <modal #secondModal>
-      <modal-header>
-        <h1>Upload file</h1>
-      </modal-header>
-      <modal-content>
-      </modal-content>
-      <modal-footer>
-        <button class="btn btn-primary" (click)="secondModal.close()">Changed my mind</button>
-      </modal-footer>
-    </modal>
   </div>
+</div>
+
+<div style="position: relative">
+  <modal #modalEmojis>
+    <modal-header>
+      <h1>Choose emoji</h1>
+    </modal-header>
+    <modal-content>
+      <img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji"
+           (click)="changeMessage(emoji.text); modalEmojis.close();">
+    </modal-content>
+    <modal-footer>
+      <button class="btn btn-primary" (click)="modalEmojis.close()">Changed my mind</button>
+    </modal-footer>
+  </modal>
 </div>

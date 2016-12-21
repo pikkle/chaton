@@ -13,6 +13,7 @@ var ProfileSchema = new Schema({
     validated: Boolean,
     username: { type: String, trim: true },
     password: { type: String, trim: true },
+    private_key: { type: String, trim: true }, // private key will be encoded with user's password (updated when user changes his password)
     public_key: { type: String, trim: true },
     avatar: Buffer,
     contacts: [{ type: Schema.Types.ObjectId, ref: "Profile" }],

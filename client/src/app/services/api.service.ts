@@ -4,7 +4,6 @@ import {ConfigService} from './config.service';
 import {SocketService} from "./socket.service";
 import {CryptoService} from "./crypto.service";
 import {Contact} from "../contact/contact";
-import {Message} from "../conversation/message";
 
 @Injectable()
 export class ApiService {
@@ -134,7 +133,14 @@ export class ApiService {
     var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + token});
     var options = new RequestOptions({headers: headers});
     var path = '/api/profile/' + userId;
-    return this.get(options, path).then(Contact.contactsFromJson);
+    return this.get(options, path).then(response => {
+      localStorage["username"] = response.username;
+      return response;
+    }).then(Contact.contactsFromJson);
+  }
+
+  public updateUser(data: Object) {
+    // TODO: une fois que le serveur permet d'updater les infos
   }
 
 

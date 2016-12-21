@@ -1,13 +1,9 @@
-/// <reference path="../../../typings/modules/crypto-js/index.d.ts" />
-import * as crypto from 'crypto-js';
-
 import {Injectable} from '@angular/core';
 
 @Injectable()
 export class CryptoService {
-  
-  constructor() {
 
+  constructor() {
   }
 
   /**
@@ -15,7 +11,6 @@ export class CryptoService {
    * @returns {{private: string, public: string}} the object containing both keys
    */
   generateKeypair(): any {
-
     return {
       "private": "asfsufhsifisd",
       "public": "ivhdidfviudfi"

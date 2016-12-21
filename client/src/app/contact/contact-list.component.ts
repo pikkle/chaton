@@ -2,7 +2,7 @@ import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
 import {Contact} from './contact';
 import {ContactService} from '../services/contact.service';
 import {EmojiService} from '../services/emoji.service';
-import {EmojiComponent} from '../emoji/emoji.component';
+import {Emoji} from '../services/emoji';
 
 @Component({
   inputs: ['nextMessage'],
@@ -22,7 +22,7 @@ export class ContactListComponent implements OnInit {
   @Input()
   contacts: Contact[]; // All user's contacts
 
-  emojis: EmojiComponent[]; // All emojis
+  emojis: Emoji[]; // All emojis
   nextMessage: string; // Typed message
 
   /**

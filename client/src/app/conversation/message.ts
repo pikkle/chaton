@@ -1,4 +1,3 @@
-import {Inject} from '@angular/core';
 import {EmojiService} from '../services/emoji.service';
 
 export class Message {
@@ -8,10 +7,10 @@ export class Message {
   extension: string;
   sender: string;
 
-  @Inject(EmojiService)
   emojiService: EmojiService;
 
-  constructor(timestamp: number, type: string, content: string, extension: string, sender: string) {
+  constructor(emojiService: EmojiService, timestamp: number, type: string, content: string, extension: string, sender: string) {
+    this.emojiService = emojiService;
     this.timestamp = timestamp;
     this.type = type;
     if (this.type === 'image') {
@@ -28,9 +27,9 @@ export class Message {
         // string is not empty and not just whitespace
         return emojiService.getEmoji(content.replace(/^\s+|\s+$/g, "")).then(emoji => {
           if (emoji !== null && emoji !== undefined) {
-            return new Message(new Date().getTime(), "image", emoji.text, ".png", from);
+            return new Message(emojiService, new Date().getTime(), "image", emoji.text, ".png", from);
           } else {
-            return new Message(new Date().getTime(), "text", content, ".txt", from);
+            return new Message(emojiService, new Date().getTime(), "text", content, ".txt", from);
           }
         });
       }
