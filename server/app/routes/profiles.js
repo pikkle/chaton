@@ -23,6 +23,21 @@ module.exports = function (router) {
                 res.send(profile);
             });
         });
+    
+    /**
+     * Modify existing profile
+     * @param {String} id: The profile id
+     */
+    router.route("/:id")
+        .put(function(req, res, next) {
+            console.log("HEllo from the other side")
+            var id = req.params.id;
+            profileController.modifyProfile(id, req.body, function(response) {
+                console.log("CONTROLLER: ");
+                console.log(response);
+                res.send(req.body);
+            })
+        })
 
     /**
      * Add new profile
@@ -35,7 +50,7 @@ module.exports = function (router) {
                     console.log(err);
                     res.status(500).send(err);
                 }
-                res.status(201).send(result);
+                res.status(201).send(req.body);
             });
         });
 

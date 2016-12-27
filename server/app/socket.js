@@ -59,7 +59,7 @@ module.exports = function (socketio) {
             
             // todo : one tick & two ticks
             socket.emit("message_processed");
-
+            console.log(message);
             // add message to destination user's history
             profileController.addToHistory(message.receiver, message, function (err, response) {
                 if (err) {
