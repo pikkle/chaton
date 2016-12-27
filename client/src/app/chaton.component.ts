@@ -101,7 +101,7 @@ export class ChatonComponent implements OnInit {
       console.log("Changing password");
     }
     if (changedData != {}) {
-      this.apiService.updateUser(changedData).then(function (response) {
+      this.apiService.updateUser(changedData).then(response => {
         console.log(response);
         if(response["username"])
           this.username = response["username"];
