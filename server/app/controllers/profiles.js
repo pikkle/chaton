@@ -10,7 +10,7 @@ var mongooseProfile = require("../models/profile"),
 var mongooseGroup = require("../models/group"),
     Group = mongooseGroup.model("Group");
 var mongooseMessage = require("../models/message"),
-    Message = mongooseGroup.model("Message");
+    Message = mongooseMessage.model("Message");
 
 /**
  * Get profile by id * 
@@ -66,6 +66,23 @@ exports.getAllContacts = function (id, callback) {
             }
         });
 };
+
+exports.modifyProfile = function(id, body, callback) {
+    Profile.findById(id, function(err, profile) {
+        if(err) {
+            callback(err);
+        }
+        if(body.username) {
+            profile.username = body.username;
+        }
+        if(body.password) {
+            profile.password = body.password;
+        }
+        profile.save();
+        console.log("PROFILE UPDATED");
+        callback({"response": "OK"});
+    })
+}
 
 /**
  * Get a specific contact
@@ -174,7 +191,13 @@ exports.getGroupHistory = function (profileId, groupId, callback) {
 exports.addToHistory = function (profileId, message, callback) {
     // validate new message
     var m = new Message(message);
+    console.log(m);
 
+    console.log("MESSAGES");
+    Message.find(mess => {
+        console.log(mess);
+    })
+    console.log("=================")
     Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
@@ -186,7 +209,8 @@ exports.addToHistory = function (profileId, message, callback) {
             var history = profile.history.find(h => {
                 return h.group && h.group._id == message.group;
             });
-
+            console.log("HISTORY");
+            console.log(history);
             // existing history
             if (history) {
                 history.messages.push(m);

@@ -64,6 +64,16 @@ export class ApiService {
       .catch(this.handleError);
   }
 
+  private put(options, path, data): any {
+    return this.http.put(this.config.server() + path, JSON.stringify(data), options)
+      .toPromise()
+      .then(response => {
+        return response;
+      })
+      .then(this.extractData)
+      .catch(this.handleError);
+  }
+
   /**
    * Sends a GET request to the server
    * @param options HTTP options
@@ -142,6 +152,11 @@ export class ApiService {
 
   public updateUser(data: Object) {
     // TODO: une fois que le serveur permet d'updater les infos
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"]});    
+    var options = new RequestOptions({"headers": headers});
+    var path = "/api/profile/" + localStorage["id"];
+
+    return this.put(options, path, data);
   }
 
 

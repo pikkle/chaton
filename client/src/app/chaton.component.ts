@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {SocketService} from "./services/socket.service";
-import {Router} from "@angular/router";
-import {Contact} from "./contact/contact";
-import {ApiService} from "./services/api.service";
-import {Message} from "./conversation/message";
-import {EmojiService} from "./services/emoji.service";
+import { Component, OnInit } from '@angular/core';
+import { SocketService } from "./services/socket.service";
+import { Router } from "@angular/router";
+import { Contact } from "./contact/contact";
+import { ApiService } from "./services/api.service";
+import { Message } from "./conversation/message";
+import { EmojiService } from "./services/emoji.service";
 
 @Component({
   selector: 'app-chaton',
@@ -26,9 +26,9 @@ export class ChatonComponent implements OnInit {
   formRepeatPassword: string;
 
   constructor(private router: Router,
-              private socketService: SocketService,
-              private apiService: ApiService,
-              private emojiService: EmojiService) {
+    private socketService: SocketService,
+    private apiService: ApiService,
+    private emojiService: EmojiService) {
   }
 
   logout(): void {
@@ -91,11 +91,21 @@ export class ChatonComponent implements OnInit {
 
   updateUserInfos(): void {
     console.log("Updating infos");
-    if (this.formUsername != this.username) {
-      console.log("Changed username");
+    var changedData = {};
+    if (this.formUsername != "" && this.formUsername != this.username) {
+      changedData["username"] = this.formUsername;
+      console.log("Changing username");
     }
-    if (this.formOldPassword != "" && this.formNewPassword != "" && this.formRepeatPassword != "") {
-      console.log("Changed password");
+    if (this.formOldPassword != "" && this.formNewPassword != "" && this.formRepeatPassword != "" && this.formNewPassword == this.formRepeatPassword) {
+      changedData["password"] = this.formNewPassword;
+      console.log("Changing password");
+    }
+    if (changedData != {}) {
+      this.apiService.updateUser(changedData).then(response => {
+        console.log(response);
+        if(response["username"])
+          this.username = response["username"];
+      });
     }
   }
 
