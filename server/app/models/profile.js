@@ -1,4 +1,3 @@
-
 /**
  * Schema for a user profile
  */
@@ -21,7 +20,7 @@ var ProfileSchema = new Schema({
     history: [{
         _id: false,
         group: { type: Schema.Types.ObjectId, ref: "Group" },
-        messages: [{type: Schema.Types.ObjectId, ref: "Message"}]
+        messages: [ /*{type: Schema.Types.ObjectId, ref: "Message"}*/ ]
     }],
     last_connected: Date
 });

@@ -1,4 +1,3 @@
-
 /**
  * Web socket handler
  */
@@ -11,42 +10,42 @@ var jwt = require("jsonwebtoken");
 var profileController = require('./controllers/profiles')
 var connected_clients = {};
 
-module.exports = function (socketio) {
+module.exports = function(socketio) {
 
     // connection event
-    socketio.on("connection", function (socket) {
+    socketio.on("connection", function(socket) {
 
         // client has limited time to authenticate
-        var auth_timeout = setTimeout(function () {
+        var auth_timeout = setTimeout(function() {
             socket.disconnect("Authentication timeout reached");
         }, config.auth_timeout);
 
         // handle authentication
-        var authenticate = function (data) {
-            
-            // disable timeout
-            clearTimeout(auth_timeout);
+        var authenticate = function(data) {
 
-            // verify token
-            jwt.verify(data.token, config.secret, function (err, decoded) {
-                if (err) {
-                    socket.emit("error_authentication");
-                    socket.disconnect("Invalid token");
-                }
-                if (!err && decoded) {
+                // disable timeout
+                clearTimeout(auth_timeout);
 
-                    // update socket list
-                    console.log("Authenticated: " + data.id);
-                    socket.profileId = data.id;
-                    connected_clients[data.id] = socket;
+                // verify token
+                jwt.verify(data.token, config.secret, function(err, decoded) {
+                    if (err) {
+                        socket.emit("error_authentication");
+                        socket.disconnect("Invalid token");
+                    }
+                    if (!err && decoded) {
 
-                    socket.connectedAt = new Date();
-                    socket.emit("authenticated");
-                }
-            })
-        }
-        // disconnection event
-        socket.on("disconnect", function () {
+                        // update socket list
+                        console.log("Authenticated: " + data.id);
+                        socket.profileId = data.id;
+                        connected_clients[data.id] = socket;
+
+                        socket.connectedAt = new Date();
+                        socket.emit("authenticated");
+                    }
+                })
+            }
+            // disconnection event
+        socket.on("disconnect", function() {
             console.log("Disconnected: " + socket.profileId);
 
             // todo: remove socket & revoke token? to discuss
@@ -54,19 +53,18 @@ module.exports = function (socketio) {
         });
 
         // message sent event
-        socket.on("send_message", function (message) {
+        socket.on("send_message", function(message) {
             authenticate(message);
-            
+
             // todo : one tick & two ticks
             socket.emit("message_processed");
             console.log(message);
             // add message to destination user's history
-            profileController.addToHistory(message.receiver, message, function (err, response) {
+            profileController.addToHistory(message.receiver, message, function(err, response) {
                 if (err) {
                     console.log(err);
                 }
             });
-
             // send message to destination user (if connected)
             var receiverSocket = connected_clients[message.receiver];
             if (receiverSocket) {
