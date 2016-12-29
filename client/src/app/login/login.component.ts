@@ -1,9 +1,9 @@
-import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router'
-import {Http, Response} from '@angular/http';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router'
+import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import {ApiService} from '../services/api.service';
-import {SocketService} from '../services/socket.service';
+import { ApiService } from '../services/api.service';
+import { SocketService } from '../services/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -18,11 +18,13 @@ export class LoginComponent implements OnInit {
   // Input by user through form
   private email: string;
   private password: string;
+  private invalidCredentials: boolean;
 
   // Constructor. Initializes LoginComponent's Router and Http fields
   constructor(private router: Router,
-              private apiService: ApiService,
-              private socketService: SocketService) {
+    private apiService: ApiService,
+    private socketService: SocketService) {
+    this.invalidCredentials = false;
   }
 
   authenticated: boolean;
@@ -47,15 +49,24 @@ export class LoginComponent implements OnInit {
    * Called when user presses the login button
    */
   login(): void {
+    this.invalidCredentials = false;
     this.apiService.login(this.email, this.password)
       .then(data => { // authenticate to server to open websocket
+        console.log("Received");
         console.log(data);
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
         localStorage["email"] = this.email;
         this.socketService.authenticate(data.token, data.id, this.email)
       })
-      .then(_ => this.router.navigateByUrl('chat'));
+      .then(_ => {
+        this.router.navigateByUrl('chat')
+      })
+      .catch(err => {
+        this.invalidCredentials = true;
+        this.email = "";
+        this.password = "";
+      });
   }
 
   redirectToRegister(): void {

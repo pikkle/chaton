@@ -4,7 +4,7 @@
 
 "use strict";
 
-module.exports = function (router) {
+module.exports = function(router) {
 
     var authController = require('../controllers/auth');
 
@@ -12,14 +12,16 @@ module.exports = function (router) {
      * Authenticate credentias
      */
     router.route("/")
-        .post(function (req, res, next) {
+        .post(function(req, res, next) {
             var email = req.body.email;
             var password = req.body.password;
-            authController.verify(email, password, function (err, token, _id) {
+            authController.verify(email, password, function(err, token, _id) {
                 if (err) {
-                    res.status(401).send(err);
+                    console.log(err)
+                    res.status(401).send({ "error": err });
+                } else {
+                    res.status(200).send({ "token": token, "id": _id });
                 }
-                res.status(200).send({ "token": token , "id": _id});
             });
         });
 };

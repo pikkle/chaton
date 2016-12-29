@@ -1,4 +1,3 @@
-
 /**
  * Authentication controller
  */
@@ -17,11 +16,10 @@ var jwt = require("jsonwebtoken");
  * @param {Function} callback(err, token): called once finished
  */
 exports.verify = function(email, password, callback) {
-    Profile.findOne({ "email": email, "password": password}, function(err, profile) {
+    Profile.findOne({ "email": email, "password": password }, function(err, profile) {
         if (err || !profile) {
             callback("Invalid credentials");
-        }
-        else {
+        } else {
             // generate and return Json web token
             var token = jwt.sign({}, config.secret);
             callback(null, token, profile._id);

@@ -67,20 +67,20 @@ exports.getAllContacts = function (id, callback) {
         });
 };
 
-exports.modifyProfile = function(id, body, callback) {
-    Profile.findById(id, function(err, profile) {
-        if(err) {
+exports.modifyProfile = function (id, body, callback) {
+    Profile.findById(id, function (err, profile) {
+        if (err) {
             callback(err);
         }
-        if(body.username) {
+        if (body.username) {
             profile.username = body.username;
         }
-        if(body.password) {
+        if (body.password) {
             profile.password = body.password;
         }
         profile.save();
         console.log("PROFILE UPDATED");
-        callback({"response": "OK"});
+        callback({ "response": "OK" });
     })
 }
 
@@ -165,7 +165,7 @@ exports.getGroupHistory = function (profileId, groupId, callback) {
                 callback(err);
                 return;
             }
-            
+
             if (profile) {
                 var history = profile.history.find(h => {
                     return h.group && h.group._id == groupId;
@@ -214,7 +214,7 @@ exports.addToHistory = function (profileId, message, callback) {
             // existing history
             if (history) {
                 history.messages.push(m);
-            // no history for this conversation
+                // no history for this conversation
             } else {
                 // create new group
                 var group = new Group({
@@ -228,7 +228,7 @@ exports.addToHistory = function (profileId, message, callback) {
                 // update history
                 profile.history.push({ group: group, messages: [m] });
             }
-            
+
             profile.save();
             callback();
         } else {
