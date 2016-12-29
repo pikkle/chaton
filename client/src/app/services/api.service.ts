@@ -65,14 +65,14 @@ export class ApiService {
   }
 
   /**
-   * Sends a PUT request to the server
+   * Sends a PATCH request to the server
    * @param options HTTP options
    * @param path REST API path
    * @param data the data to send
    * @returns {Promise<any>} the body response of the server
    */
-  private put(options, path, data): any {
-    return this.http.put(this.config.server() + path, JSON.stringify(data), options)
+  private patch(options, path, data): any {
+    return this.http.patch(this.config.server() + path, JSON.stringify(data), options)
       .toPromise()
       .then(response => {
         return response;
@@ -168,7 +168,7 @@ export class ApiService {
     var options = new RequestOptions({ "headers": headers });
     var path = "/api/profile/" + localStorage["id"];
 
-    return this.put(options, path, data);
+    return this.patch(options, path, data);
   }
 
 
