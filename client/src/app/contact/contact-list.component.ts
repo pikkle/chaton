@@ -3,6 +3,7 @@ import {Contact} from './contact';
 import {ContactService} from '../services/contact.service';
 import {EmojiService} from '../services/emoji.service';
 import {Emoji} from '../services/emoji';
+import {ApiService} from "../services/api.service";
 
 @Component({
   inputs: ['nextMessage'],
@@ -23,12 +24,13 @@ export class ContactListComponent implements OnInit {
   contacts: Contact[]; // All user's contacts
 
   emojis: Emoji[]; // All emojis
-  nextMessage: string; // Typed message
+  nextMessage: string;
+
 
   /**
    * Initializing contactService
    */
-  constructor() {
+  constructor(private apiService: ApiService) {
   }
 
   /**
@@ -40,10 +42,12 @@ export class ContactListComponent implements OnInit {
     this.selectedContact = contact;
   }
 
+
   /**
    * Called on component instanciation
    */
   ngOnInit(): void {
+
   }
 
 }

@@ -10,7 +10,7 @@ var mongooseProfile = require("../models/profile"),
 var mongooseGroup = require("../models/group"),
     Group = mongooseGroup.model("Group");
 var mongooseMessage = require("../models/message"),
-    Message = mongooseGroup.model("Message");
+    Message = mongooseMessage.model("Message");
 
 /**
  * Get profile by id * 
@@ -67,6 +67,23 @@ exports.getAllContacts = function (id, callback) {
         });
 };
 
+exports.modifyProfile = function (id, body, callback) {
+    Profile.findById(id, function (err, profile) {
+        if (err) {
+            callback(err);
+        }
+        if (body.username) {
+            profile.username = body.username;
+        }
+        if (body.password) {
+            profile.password = body.password;
+        }
+        profile.save();
+        console.log("PROFILE UPDATED");
+        callback({ "response": "OK" });
+    })
+}
+
 /**
  * Get a specific contact
  * @param {String} profileId: The profile id
@@ -96,21 +113,32 @@ exports.getContactById = function (profileId, contactId, callback) {
 /**
  * Add a contact
  * @param {String} profileId: The profile id
- * @param {String} contactId: The contact id
+ * @param {String} contactEmail: The contact email
  * @param {Function} callback(err): called once finished
  */
-exports.addContact = function (profileId, contactId, callback) {
+exports.addContact = function (profileId, contactEmail, callback) {
     Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
             return;
         }
-
         if (profile) {
-            if (profile.contacts.indexOf(contactId) === -1) {
-                profile.contacts.push(contactId);
-                profile.save();
-            }
+            Profile.findOne({'email': contactEmail}, function(err2, newContact) {
+                if (err2) {
+                    callback(err2);
+                    return;
+                }
+                if (profileId == newContact.id) {
+                    callback("Can't add yourself in your contact list");
+                    return;
+                }
+                if (newContact) {
+                    if (profile.contacts.indexOf(newContact.id) === -1) {
+                        profile.contacts.push(newContact.id);
+                        profile.save();
+                    }
+                }
+            });
         }
         callback();
     });
@@ -148,9 +176,9 @@ exports.getGroupHistory = function (profileId, groupId, callback) {
                 callback(err);
                 return;
             }
-            
+
             if (profile) {
-                var history = profile.history.find(h => {
+                var history = profile.history.find(function(h) {
                     return h.group && h.group._id == groupId;
                 });
 
@@ -174,7 +202,13 @@ exports.getGroupHistory = function (profileId, groupId, callback) {
 exports.addToHistory = function (profileId, message, callback) {
     // validate new message
     var m = new Message(message);
+    console.log(m);
 
+    console.log("MESSAGES");
+    Message.find(function(mess) {
+        console.log(mess);
+    });
+    console.log("=================");
     Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
@@ -183,14 +217,15 @@ exports.addToHistory = function (profileId, message, callback) {
 
         if (profile) {
 
-            var history = profile.history.find(h => {
+            var history = profile.history.find(function(h) {
                 return h.group && h.group._id == message.group;
             });
-
+            console.log("HISTORY");
+            console.log(history);
             // existing history
             if (history) {
                 history.messages.push(m);
-            // no history for this conversation
+                // no history for this conversation
             } else {
                 // create new group
                 var group = new Group({
@@ -204,7 +239,7 @@ exports.addToHistory = function (profileId, message, callback) {
                 // update history
                 profile.history.push({ group: group, messages: [m] });
             }
-            
+
             profile.save();
             callback();
         } else {

@@ -1,11 +1,7 @@
 <div class="listContainer">
 
   <ul>
-    <li class="addUser">
-      <div>
-        <i class="icon-fa fa fa-plus"></i> Add a new contact
-      </div>
-    </li>
+
     <li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)"
         class="contactList">
       <img class="img-circle profilePic" src={{contact.avatar}}>
@@ -15,3 +11,5 @@
     </li>
   </ul>
 </div>
+
+

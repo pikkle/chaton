@@ -1,42 +1,43 @@
 <router-outlet>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
 
 
-  <link rel="stylesheet" href="./login.component.css">
+    <link rel="stylesheet" href="./login.component.css">
 
-  <body>
+    <body>
 
-    <div class=chaton>
-        <img class="logo" src="../assets/logo.png">
-    </div>
-    <!--Google Font - Work Sans-->
-    <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
+        <div class=chaton>
+            <img class="logo" src="../assets/logo.png">
+        </div>
+        <!--Google Font - Work Sans-->
+        <link href='https://fonts.googleapis.com/css?family=Work+Sans:400,300,700' rel='stylesheet' type='text/css'>
 
-    <div class="container">
-      <div class="profile">
-        <button class="profile__avatar" id="toggleProfile">
+        <div class="container">
+            <div class="profile">
+                <button class="profile__avatar" id="toggleProfile">
           <img src="../../assets/default_avatar.png" alt="Avatar" /> 
         </button>
-        <div class="profile__form">
-          <div class="profile__fields">
-            <div class="field">
-              <input type="text" class="input" [(ngModel)]="email" required pattern=.*\S.* />
-              <label for="fieldEmail" class="label">Email address</label>
+                <div class="profile__form">
+                    <div class="alert alert-danger" *ngIf="invalidCredentials">Invalid credentials</div>
+                    <div class="profile__fields">
+                        <div class="field">
+                            <input type="text" class="input" [(ngModel)]="email" required pattern=.*\S.* />
+                            <label for="fieldEmail" class="label">Email address</label>
+                        </div>
+                        <div class="field">
+                            <input type="password" class="input" [(ngModel)]="password" required pattern=.*\S.* />
+                            <label for="fieldPassword" class="label">Password</label>
+                        </div>
+                        <div class="profile__footer" style="float: left; margin-bottom: 10px;">
+                            <button class="btn" (click)="login()">Login</button>
+                        </div>
+                        <div class="profile__footer" style="float: right; margin-bottom: 10px;">
+                            <button class="btn" (click)="redirectToRegister()">Register</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="field">
-              <input type="password" class="input" [(ngModel)]="password" required pattern=.*\S.* />
-              <label for="fieldPassword" class="label">Password</label>
-            </div>
-            <div class="profile__footer" style="float: left; margin-bottom: 10px;">
-              <button class="btn" (click)="login()">Login</button>
-            </div>
-            <div class="profile__footer" style="float: right; margin-bottom: 10px;">
-              <button class="btn" (click)="redirectToRegister()">Register</button>
-            </div>
-          </div>
         </div>
-      </div>
-    </div>
-  </body>
+    </body>
 
 </router-outlet>

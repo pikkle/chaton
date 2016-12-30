@@ -16,6 +16,11 @@
   <md-sidenav-layout>
     <md-sidenav #start (open)="togglemenu.focus()" mode="side" opened="true">
       <div class="contact-list">
+        <li class="addUser" (click)="modalNewContact.open()">
+          <div>
+            <i class="icon-fa fa fa-plus"></i> Add a new contact
+          </div>
+        </li>
         <app-contact-list [contacts]="contacts" [(selectedContact)]="selectedContact"></app-contact-list>
       </div>
     </md-sidenav>
@@ -64,7 +69,7 @@
   </modal-footer>
 </modal>
 
-<modal #modalConfig>
+<modal #modalNewContact>
   <modal-header>
     <h1>Add a new contact</h1>
   </modal-header>
@@ -79,10 +84,9 @@
     </form>
   </modal-content>
   <modal-footer>
-    <button type="button" class="btn btn-default" (click)="modalConfig.close()">Close</button>
-    <button type="button" class="btn btn-primary" (click)="updateUserInfos(); modalConfig.close();">Save changes
+    <button type="button" class="btn btn-default" (click)="modalNewContact.close()">Close</button>
+    <button type="button" class="btn btn-primary" (click)="addNewContact(); modalNewContact.close();">Save changes
     </button>
   </modal-footer>
 </modal>
-
 
