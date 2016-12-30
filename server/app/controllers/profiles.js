@@ -129,7 +129,7 @@ exports.addContact = function (profileId, contactEmail, callback) {
                     return;
                 }
                 if (profileId == newContact.id) {
-                    callback("Can't add yourself in your contact list");
+                    // TODO: proper error (crashes the server currently: Can't set headers after they are sent.)
                     return;
                 }
                 if (newContact) {
