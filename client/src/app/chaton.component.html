@@ -59,7 +59,30 @@
   </modal-content>
   <modal-footer>
     <button type="button" class="btn btn-default" (click)="modalConfig.close()">Close</button>
-    <button type="button" class="btn btn-primary" (click)="updateUserInfos()">Save changes</button>
+    <button type="button" class="btn btn-primary" (click)="updateUserInfos(); modalConfig.close();">Save changes
+    </button>
   </modal-footer>
 </modal>
+
+<modal #modalConfig>
+  <modal-header>
+    <h1>Add a new contact</h1>
+  </modal-header>
+  <modal-content>
+    <form>
+      <div class="form-group">
+        <label for="contactEmail">Enter your contact email:</label>
+        <input id="contactEmail" name="formNewContactEmail" class="form-control" type="text"
+               [(ngModel)]="formNewContactEmail"
+               placeholder="Email" required/>
+      </div>
+    </form>
+  </modal-content>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="modalConfig.close()">Close</button>
+    <button type="button" class="btn btn-primary" (click)="updateUserInfos(); modalConfig.close();">Save changes
+    </button>
+  </modal-footer>
+</modal>
+
 

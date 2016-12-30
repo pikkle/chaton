@@ -25,6 +25,8 @@ export class ChatonComponent implements OnInit {
   formNewPassword: string;
   formRepeatPassword: string;
 
+  formNewContactEmail: string;
+
   constructor(private router: Router,
               private socketService: SocketService,
               private apiService: ApiService,
@@ -67,6 +69,7 @@ export class ChatonComponent implements OnInit {
     this.formOldPassword = "";
     this.formNewPassword = "";
     this.formRepeatPassword = "";
+    this.formNewContactEmail = "";
 
 
     if (!this.socketService.isAuthenticated()) {
@@ -96,6 +99,14 @@ export class ChatonComponent implements OnInit {
     }
     if (this.formOldPassword != "" && this.formNewPassword != "" && this.formRepeatPassword != "") {
       console.log("Changed password");
+    }
+  }
+
+  addNewContact(): void {
+    console.log("Adding new contact");
+    if (this.formNewContactEmail != "") {
+      this.apiService.addContact(this.formNewContactEmail);
+
     }
   }
 

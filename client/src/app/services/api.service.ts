@@ -144,5 +144,9 @@ export class ApiService {
     // TODO: une fois que le serveur permet d'updater les infos
   }
 
+  public addContact(contactEmail: string) {
+    // TODO: une fois que le serveur permet d'ajouter un contact à partir d'un mail et pas d'un id
+  }
+
 
 }
