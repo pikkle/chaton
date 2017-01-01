@@ -26,7 +26,7 @@
     </md-sidenav>
 
     <div class="conversation">
-      <app-conversation [(selectedContact)]="selectedContact"></app-conversation>
+      <app-conversation [(selectedContact)]="selectedContact" (addedNewMessage)="haveNewMessage()"></app-conversation>
 
     </div>
   </md-sidenav-layout>

@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { SocketService } from "./services/socket.service";
-import { Router } from "@angular/router";
-import { Contact } from "./contact/contact";
-import { ApiService } from "./services/api.service";
-import { Message } from "./conversation/message";
-import { EmojiService } from "./services/emoji.service";
+import {Component, OnInit} from '@angular/core';
+import {SocketService} from "./services/socket.service";
+import {Router} from "@angular/router";
+import {Contact} from "./contact/contact";
+import {ApiService} from "./services/api.service";
+import {Message} from "./conversation/message";
+import {EmojiService} from "./services/emoji.service";
 
 @Component({
   selector: 'app-chaton',
@@ -28,9 +28,9 @@ export class ChatonComponent implements OnInit {
   formNewContactEmail: string;
 
   constructor(private router: Router,
-    private socketService: SocketService,
-    private apiService: ApiService,
-    private emojiService: EmojiService) {
+              private socketService: SocketService,
+              private apiService: ApiService,
+              private emojiService: EmojiService) {
   }
 
   logout(): void {
@@ -48,13 +48,27 @@ export class ChatonComponent implements OnInit {
     console.log("Fetching contacts...");
     this.contacts = [];
     this.apiService.getContacts(this.id, this.token).then(newContacts => {
-      //TODO: trier les contacts par ordre chronologique du dernier message
       this.contacts = newContacts;
+      this.sortContacts();
       if (this.contacts.length > 0) {
         this.selectedContact = this.contacts[0];
       }
     });
 
+  }
+
+  sortContacts(): void {
+    this.contacts.sort((a, b) => {
+      if (a.messages.length >= 0 && b.messages.length == 0) {
+        return -1;
+      } else if (a.messages.length == 0 && b.messages.length > 0) {
+        return 1;
+      } else {
+        var atime = a.lastMessage().timestamp;
+        var btime = b.lastMessage().timestamp;
+        return btime - atime;
+      }
+    });
   }
 
   ngOnInit(): void {
@@ -86,6 +100,7 @@ export class ChatonComponent implements OnInit {
         for (let c of this.contacts) {
           if (c.id === data.id) {
             c.addMessage(message);
+            this.sortContacts();
           }
         }
       });
@@ -106,7 +121,7 @@ export class ChatonComponent implements OnInit {
     if (changedData != {}) {
       this.apiService.updateUser(changedData).then(response => {
         console.log(response);
-        if(response["username"])
+        if (response["username"])
           this.username = response["username"];
       });
     }
@@ -120,6 +135,10 @@ export class ChatonComponent implements OnInit {
         this.getContacts();
       });
     }
+  }
+
+  haveNewMessage(): void {
+    this.sortContacts();
   }
 
 }

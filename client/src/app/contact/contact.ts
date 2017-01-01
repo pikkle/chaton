@@ -51,6 +51,14 @@ export class Contact {
     return this._messages;
   }
 
+  lastMessage(): Message {
+    if (this.messages.length == 0) {
+      return null;
+    } else {
+      return this.messages[this.messages.length-1];
+    }
+  }
+
   public addMessage(message: Message) {
     this._messages.push(message);
   }

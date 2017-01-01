@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Message} from './message';
 import {EmojiService} from '../services/emoji.service';
 import {Contact} from "../contact/contact";
@@ -19,6 +19,10 @@ export class ConversationComponent implements OnInit {
   nextMessage: string;
 
   emojis: Emoji[];
+
+  @Output()
+  addedNewMessage = new EventEmitter<Message>();
+
 
   constructor(private emojiService: EmojiService, private socketService: SocketService) {
   }
@@ -44,6 +48,9 @@ export class ConversationComponent implements OnInit {
       this.selectedContact.addMessage(message);
       this.socketService.sendMessage(message, this.selectedContact);
       this.nextMessage = "";
+      this.addedNewMessage.emit(message);
+    }).catch(error => {
+
     });
 
   }

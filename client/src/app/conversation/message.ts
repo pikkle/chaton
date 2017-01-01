@@ -34,7 +34,7 @@ export class Message {
         });
       }
     }
-    return null;
+    return Promise.reject("Empty message");
   }
 
 }
