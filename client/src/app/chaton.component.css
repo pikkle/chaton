@@ -76,20 +76,30 @@ header .icon-fa {
 
 
 .addUser {
-  height: 80px;
-  background-color: #124648;
+  background-color: #0a3435;
+}
+
+.addGroup {
+  background-color:  #124648;
+}
+
+.addUser, .addGroup {
+  height: 40px;
   color: white;
   text-align: center;
   font-size: 20px;
 }
 
-.addUser i {
+.addUser i, .addGroup i {
   position: absolute;
-  top: 20px;
   left: 20px;
-  font-size: 40px;
+  font-size: 30px;
 }
 
-.addUser div {
-  padding-top: 25px;
+.addUser div, .addGroup div {
+  padding-top: 5px;
+}
+
+li {
+  list-style: none;
 }

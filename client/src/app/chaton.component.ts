@@ -27,6 +27,9 @@ export class ChatonComponent implements OnInit {
 
   formNewContactEmail: string;
 
+  formGroupName: string;
+  formGroupList: string;
+
   constructor(private router: Router,
               private socketService: SocketService,
               private apiService: ApiService,
@@ -45,7 +48,6 @@ export class ChatonComponent implements OnInit {
    * Calls the Contact Service for the contact list
    */
   getContacts(): void {
-    console.log("Fetching contacts...");
     this.contacts = [];
     this.apiService.getContacts(this.id, this.token).then(newContacts => {
       this.contacts = newContacts;
@@ -87,15 +89,12 @@ export class ChatonComponent implements OnInit {
 
 
     if (!this.socketService.isAuthenticated()) {
-      console.log("You are not authenticated");
       this.router.navigateByUrl('');
       return;
     }
     this.getContacts();
 
     this.socketService.addListener("new_message", (data: any) => {
-      console.log("Received a message: ");
-      console.log(data);
       Message.parseMessage(data.content, data.id, this.emojiService).then(message => {
         for (let c of this.contacts) {
           if (c.id === data.id) {
@@ -120,7 +119,6 @@ export class ChatonComponent implements OnInit {
     }
     if (changedData != {}) {
       this.apiService.updateUser(changedData).then(response => {
-        console.log(response);
         if (response["username"])
           this.username = response["username"];
       });
@@ -128,13 +126,16 @@ export class ChatonComponent implements OnInit {
   }
 
   addNewContact(): void {
-    console.log("Adding new contact");
     if (this.formNewContactEmail != "") {
       this.apiService.addContact(this.formNewContactEmail).then(newContact => {
-        console.log("Added new contact !");
         this.getContacts();
       });
     }
+  }
+
+  createGroup(): void {
+    console.log("Creating a new group...");
+
   }
 
   haveNewMessage(): void {
