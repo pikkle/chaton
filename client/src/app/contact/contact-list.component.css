@@ -14,13 +14,10 @@ ul {
   height: 100%;
 }
 
-.listContainer img {
-  margin-right: 10px;
-  float: left;
-}
-
 .listContainer li {
-  min-height: 80px;
+  height: 80px;
+  width: 100%;
+  display: flex;
 }
 
 .listContainer h1 {
@@ -43,16 +40,27 @@ ul {
   max-width: inherit;
 }
 
-.profilePic {
-  width: 60px;
-  height: 60px;
-  text-align: left;
-  padding: 0;
-  vertical-align: middle;
-}
-
 .selected {
   background-color: #006064;
   color: white;
+}
+
+.avatar-circle {
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  margin-right: 15px;
+}
+
+.initials {
+  position: relative;
+  top: 15px;
+  font-size: 30px;
+  line-height: 30px;
+  color: #fff;
+  font-family: "Fira mono", monospace;
 }
 

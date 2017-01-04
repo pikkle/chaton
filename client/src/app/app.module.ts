@@ -17,7 +17,7 @@ import {ModalModule} from "ng2-modal";
 
 // Application components
 import {AppComponent} from './app.component';
-import {ChatonComponent} from './chaton.component';
+import {ChatonComponent} from './chaton/chaton.component';
 import {ContactListComponent} from './contact/contact-list.component';
 import {ConversationComponent} from './conversation/conversation.component';
 import {RegisterComponent} from './register/register.component';
