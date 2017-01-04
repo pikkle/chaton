@@ -1,10 +1,9 @@
 <header class="chaton">
   <div class="header-left">
-    <img class="logo" src="../assets/logo.png" (click)="this.router.navigateByUrl('');">
+    <img class="logo" src="../../assets/logo.png" (click)="this.router.navigateByUrl('');">
     <i class="icon-fa fa fa-bars" #togglemenu (click)="start.toggle()"> </i>
   </div>
   <div class="header-center" (click)="modalConfig.open()">
-    <img id="userConfig" class="img-circle" src="{{avatar}}"/>
     <h4>{{username}}</h4>
   </div>
   <div class="header-right">
