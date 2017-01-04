@@ -1,26 +1,28 @@
 import {Message} from "../conversation/message";
+import * as rand from "random-seed";
 
 export class Contact {
 
   private _id: string;
   private _username: string;
-  private _avatar: string;
   private _publickey: string;
   private _messages: Message[] = [];
+  public color: string;
 
-  constructor(id: string, username: string, avatar: string, publickey: string) {
+  constructor(id: string, username: string, publickey: string) {
     this._id = id;
     this._username = username;
-    this._avatar = avatar;
     this._publickey = publickey;
+
+    var random = rand.create(id);
+    this.color = "#" + random.range(16777215).toString(16); // 16777215 = 0xFFFFFF
   }
 
   public static contactFromJson(data: any): Contact {
     const id = data._id;
     const username = data.username;
     const publickey = data.public_key;
-    const avatar = '../assets/cat.jpg';  // TODO: download avatar as a picture and pick path here
-    return new Contact(id, username, avatar, publickey);
+    return new Contact(id, username, publickey);
   }
 
   public static contactsFromJson(data: any): Contact[] {
@@ -39,10 +41,6 @@ export class Contact {
     return this._username;
   }
 
-  get avatar(): string {
-    return this._avatar;
-  }
-
   get publickey(): string {
     return this._publickey;
   }
@@ -55,9 +53,17 @@ export class Contact {
     if (this.messages.length == 0) {
       return null;
     } else {
-      return this.messages[this.messages.length-1];
+      return this.messages[this.messages.length - 1];
     }
   }
+
+  public initials(): string {
+    if (this._username.length == 0) {
+      return "!";
+    }
+    return this._username.charAt(0).toUpperCase();
+  }
+
 
   public addMessage(message: Message) {
     this._messages.push(message);

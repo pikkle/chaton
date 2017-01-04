@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {SocketService} from "./services/socket.service";
+import {SocketService} from "../services/socket.service";
 import {Router} from "@angular/router";
-import {Contact} from "./contact/contact";
-import {ApiService} from "./services/api.service";
-import {Message} from "./conversation/message";
-import {EmojiService} from "./services/emoji.service";
+import {Contact} from "../contact/contact";
+import {ApiService} from "../services/api.service";
+import {Message} from "../conversation/message";
+import {EmojiService} from "../services/emoji.service";
 
 @Component({
   selector: 'app-chaton',
-  templateUrl: './chaton.component.html',
-  styleUrls: ['./chaton.component.css']
+  templateUrl: 'chaton.component.html',
+  styleUrls: ['chaton.component.css']
 })
 export class ChatonComponent implements OnInit {
   contacts: Contact[];
@@ -18,7 +18,6 @@ export class ChatonComponent implements OnInit {
   id: string;
   email: string;
   username: string;
-  avatar: string;
 
   formUsername: string;
   formOldPassword: string;
@@ -79,7 +78,6 @@ export class ChatonComponent implements OnInit {
     this.id = localStorage["id"];
     this.email = localStorage["email"];
     this.username = localStorage["username"];
-    this.avatar = localStorage["avatar"];
 
     this.formUsername = this.username;
     this.formOldPassword = "";

@@ -4,7 +4,9 @@
 
     <li *ngFor="let contact of contacts" [class.selected]="contact === selectedContact" (click)="onSelect(contact)"
         class="contactList">
-      <img class="img-circle profilePic" src={{contact.avatar}}>
+      <div class="avatar-circle" [ngStyle]="{'background-color': contact.color}">
+        <span class="initials">{{contact.initials()}}</span>
+      </div>
       <h1>{{contact.username}}</h1>
       <p *ngIf="contact.messages.length > 0" class="lastMessage">{{contact.lastMessage().content}}</p>
     </li>
