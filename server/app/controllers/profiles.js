@@ -115,7 +115,7 @@ exports.getContactById = function(profileId, contactId, callback) {
  * @param {String} contactEmail: The contact email
  * @param {Function} callback(err): called once finished
  */
-exports.addContact = function(profileId, contactId, callback) {
+exports.addContact = function(profileId, contactEmail, callback) {
     Profile.findById(profileId, function(err, profile) {
         if (err) {
             callback(err);

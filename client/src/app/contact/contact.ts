@@ -13,7 +13,7 @@ export class Contact {
     this._username = username;
     this._publickey = publickey;
 
-    this.color = "#" + (Math.random()*16777215).toString(16); // 16777215 = 0xFFFFFF
+    this.color = '#' + Math.random().toString(16).slice(-3);
   }
 
   public static contactFromJson(data: any): Contact {

@@ -8,6 +8,8 @@ ul {
   color: black;
   list-style: none;
   padding: 10px;
+  display: flex;
+  align-items: center;
 }
 
 .listContainer {
@@ -18,11 +20,11 @@ ul {
   height: 80px;
   width: 100%;
   display: flex;
+
 }
 
 .listContainer h1 {
-  padding-top: 8px;
-  margin: 0;
+  margin: 0 10px 0 0;
 }
 
 .listContainer p {
@@ -35,6 +37,7 @@ ul {
 
 .lastMessage {
   overflow: hidden;
+  text-overflow: ellipsis;
   max-height: 15px;
   font-size: 12px;
   max-width: inherit;
@@ -47,6 +50,7 @@ ul {
 
 .avatar-circle {
   width: 60px;
+  min-width: 60px;
   height: 60px;
   text-align: center;
   border-radius: 50%;
