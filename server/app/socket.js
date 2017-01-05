@@ -1,4 +1,3 @@
-
 /**
  * Web socket handler
  */
@@ -8,7 +7,7 @@
 var config = require("../config/config");
 var authController = require('./controllers/auth');
 var jwt = require("jsonwebtoken");
-var profileController = require('./controllers/profiles')
+var profileController = require('./controllers/profiles');
 var connected_clients = {};
 
 module.exports = function (socketio) {
@@ -23,7 +22,7 @@ module.exports = function (socketio) {
 
         // handle authentication
         var authenticate = function (data) {
-            
+
             // disable timeout
             clearTimeout(auth_timeout);
 
@@ -44,7 +43,7 @@ module.exports = function (socketio) {
                     socket.emit("authenticated");
                 }
             })
-        }
+        };
         // disconnection event
         socket.on("disconnect", function () {
             console.log("Disconnected: " + socket.profileId);
@@ -56,7 +55,7 @@ module.exports = function (socketio) {
         // message sent event
         socket.on("send_message", function (message) {
             authenticate(message);
-            
+
             // todo : one tick & two ticks
             socket.emit("message_processed");
 
@@ -66,7 +65,6 @@ module.exports = function (socketio) {
                     console.log(err);
                 }
             });
-
             // send message to destination user (if connected)
             var receiverSocket = connected_clients[message.receiver];
             if (receiverSocket) {

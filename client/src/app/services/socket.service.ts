@@ -1,9 +1,9 @@
-import {Injectable} from "@angular/core";
-import {Contact} from '../contact/contact';
+import { Injectable } from "@angular/core";
+import { Contact } from '../contact/contact';
 
 import * as io from "socket.io-client";
-import {CryptoService} from "./crypto.service";
-import {Message} from "../conversation/message";
+import { CryptoService } from "./crypto.service";
+import { Message } from "../conversation/message";
 
 @Injectable()
 export class SocketService {
@@ -35,9 +35,9 @@ export class SocketService {
     this.token = token;
     this.id = id;
     this.email = email;
-    this.socket.emit("authenticate", {token: this.token, id: this.id});
+    this.socket.emit("authenticate", { token: this.token, id: this.id });
     this.authenticated = true;
-    this.socket.on("error_authentication", function(event, data){
+    this.socket.on("error_authentication", function (event, data) {
       console.error("Received an error_authentication message from the server");
       console.error(event);
       console.error(data);
@@ -66,6 +66,11 @@ export class SocketService {
     this.socket.emit('send_message', {
       token: this.token,
       id: this.id,
+      timestamp: Date.now(),
+      state: 0,
+      type: "txt",
+      extension: "txt",
+//      group: to.id,
       sender: this.email,
       receiver: to.id,
       content: this.cryptoService.cipher(message.content, to.publickey)

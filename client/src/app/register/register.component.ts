@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { ApiService } from '../services/api.service'
+import { ApiService } from '../services/api.service';
+
 
 @Component({
   selector: 'app-register',

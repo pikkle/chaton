@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router'
-import { Http, Response } from '@angular/http';
+import {Component, OnInit} from '@angular/core';
+import {Router} from '@angular/router'
+import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
-import { ApiService } from '../services/api.service';
-import { SocketService } from '../services/socket.service';
+import {ApiService} from '../services/api.service';
+import {SocketService} from '../services/socket.service';
 
 @Component({
   selector: 'app-login',
@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
 
   // Constructor. Initializes LoginComponent's Router and Http fields
   constructor(private router: Router,
-    private apiService: ApiService,
-    private socketService: SocketService) {
+              private apiService: ApiService,
+              private socketService: SocketService) {
     this.invalidCredentials = false;
   }
 

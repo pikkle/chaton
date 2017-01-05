@@ -8,8 +8,8 @@ import {EmojiService} from "../services/emoji.service";
 
 @Component({
   selector: 'app-chaton',
-  templateUrl: 'chaton.component.html',
-  styleUrls: ['chaton.component.css']
+  templateUrl: './chaton.component.html',
+  styleUrls: ['./chaton.component.css']
 })
 export class ChatonComponent implements OnInit {
   contacts: Contact[];

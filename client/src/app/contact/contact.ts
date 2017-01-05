@@ -1,5 +1,4 @@
 import {Message} from "../conversation/message";
-import * as rand from "random-seed";
 
 export class Contact {
 
@@ -14,8 +13,7 @@ export class Contact {
     this._username = username;
     this._publickey = publickey;
 
-    var random = rand.create(id);
-    this.color = "#" + random.range(16777215).toString(16); // 16777215 = 0xFFFFFF
+    this.color = "#" + (Math.random()*16777215).toString(16); // 16777215 = 0xFFFFFF
   }
 
   public static contactFromJson(data: any): Contact {
