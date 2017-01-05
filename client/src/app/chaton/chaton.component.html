@@ -20,7 +20,7 @@
             <i class="icon-fa fa fa-plus"></i> Add a new contact
           </div>
         </li>
-        <li class="addGroup">
+        <li class="addGroup" (click)="modalNewGroup.open()">
           <div>
             <i class="icon-fa fa fa-group"></i> Create a group
           </div>
@@ -90,6 +90,41 @@
   <modal-footer>
     <button type="button" class="btn btn-default" (click)="modalNewContact.close()">Close</button>
     <button type="button" class="btn btn-primary" (click)="addNewContact(); modalNewContact.close();">Save changes
+    </button>
+  </modal-footer>
+</modal>
+
+<modal #modalNewGroup>
+  <modal-header>
+    <h1>Create a new group</h1>
+  </modal-header>
+  <modal-content>
+    <form>
+      <div class="form-group">
+        <label for="groupName">Group name:</label>
+        <input id="groupName" name="formNewGroupName" class="form-control" type="text" required>
+      </div>
+      <div class="form-group">
+        <label for="groupMembers">Group members:</label>
+        <div id="groupMembers" name="formNewGroupMembers" class="group-contacts">
+          <div *ngFor="let contact of contacts; let i = index;" class="group-contact-proposal">
+            <input type="checkbox" name="contact-{{i}}" id="contact-{{i}}" [(ngModel)]="formGroupList[contact.id]">
+            <label [attr.for]="'contact-'+i" class="label-contacts">
+              <span class="avatar-circle" [ngStyle]="{'background-color': contact.color}">
+                <span class="initials">{{contact.initials()}}</span>
+              </span>
+              <span class="contact-name">{{contact.username}}</span>
+            </label>
+
+          </div>
+
+        </div>
+      </div>
+    </form>
+  </modal-content>
+  <modal-footer>
+    <button type="button" class="btn btn-default" (click)="modalNewGroup.close()">Close</button>
+    <button type="button" class="btn btn-primary" (click)="createGroup(); modalNewGroup.close();">Save changes
     </button>
   </modal-footer>
 </modal>

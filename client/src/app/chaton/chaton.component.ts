@@ -27,7 +27,7 @@ export class ChatonComponent implements OnInit {
   formNewContactEmail: string;
 
   formGroupName: string;
-  formGroupList: string;
+  formGroupList: any;
 
   constructor(private router: Router,
               private socketService: SocketService,
@@ -85,6 +85,9 @@ export class ChatonComponent implements OnInit {
     this.formRepeatPassword = "";
     this.formNewContactEmail = "";
 
+    this.formGroupName = "";
+    this.formGroupList = [];
+
 
     if (!this.socketService.isAuthenticated()) {
       this.router.navigateByUrl('');
@@ -132,7 +135,19 @@ export class ChatonComponent implements OnInit {
   }
 
   createGroup(): void {
-    console.log("Creating a new group...");
+    var members: string[] = [];
+    for(var contactId in this.formGroupList) {
+      if (this.formGroupList[contactId]) {
+        members.push(contactId);
+      }
+    }
+    if (this.formGroupName != "" && members != []) {
+      this.apiService.createGroup(this.formGroupName, members).then(_ => {
+        this.formGroupName = "";
+        this.formGroupList = {};
+        this.getContacts();
+      });
+    }
 
   }
 

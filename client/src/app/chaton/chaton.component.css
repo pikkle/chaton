@@ -103,3 +103,50 @@ header .icon-fa {
 li {
   list-style: none;
 }
+
+.group-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-contact-proposal {
+  display: flex;
+  align-items: center;
+}
+
+.group-contact-proposal .label-contacts {
+  display: flex;
+  align-items: center;
+}
+
+.group-contact-proposal input {
+  margin-top: 0px;
+  margin-right: 10px;
+}
+
+.group-contact-proposal .avatar-circle {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  margin-right: 10px;
+}
+
+.group-contact-proposal .initials {
+  position: relative;
+  top: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  color: #fff;
+  font-family: "Fira mono", monospace;
+}
+
+
+.group-contact-proposal .contact-name {
+  font-size: 20px;
+  font-weight: lighter;
+}

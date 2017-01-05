@@ -57,11 +57,6 @@ export class ApiService {
     return this.http.post(this.config.server() + path, JSON.stringify(data), options)
       .toPromise()
       .then(response => {
-        console.log("POST RESPONSE");
-        console.log(response);
-        return response;
-      })
-      .then(response => {
         if (response.statusText == "OK") {
           return this.extractData(response);
         } else {
@@ -81,9 +76,6 @@ export class ApiService {
   private patch(options, path, data): any {
     return this.http.patch(this.config.server() + path, JSON.stringify(data), options)
       .toPromise()
-      .then(response => {
-        return response;
-      })
       .then(this.extractData)
       .catch(this.handleError);
   }
@@ -97,11 +89,6 @@ export class ApiService {
   private get(options, path): any {
     return this.http.get(this.config.server() + path, options)
       .toPromise()
-      .then(response => {
-        console.log("GET RESPONSE");
-        console.log(response);
-        return response;
-      })
       .then(this.extractData)
       .catch(this.handleError);
   }
@@ -187,5 +174,12 @@ export class ApiService {
     return this.post(options, path, {"contact_email" : contactEmail});
   }
 
+  public createGroup(groupName: string, groupMembers: string[]): Promise<any> {
+    var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"] });
+    var options = new RequestOptions({ "headers": headers });
+    var path = "/api/profile/" + localStorage["id"] + "/group";
+
+    return this.post(options, path, {"name" : groupName, "members": groupMembers});
+  }
 
 }
