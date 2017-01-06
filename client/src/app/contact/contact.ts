@@ -58,8 +58,11 @@ export class Contact {
   public initials(): string {
     if (this._username.length == 0) {
       return "!";
+    } else if (this._username.length == 1) {
+      return this._username.charAt(0).toUpperCase();
+    } else {
+      return this._username.charAt(0).toLocaleUpperCase() + this._username.charAt(1).toLocaleLowerCase();
     }
-    return this._username.charAt(0).toUpperCase();
   }
 
 

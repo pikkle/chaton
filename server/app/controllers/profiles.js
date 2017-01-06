@@ -139,6 +139,8 @@ exports.addContact = function (profileId, contactEmail, callback) {
                     if (profile.contacts.indexOf(newContact.id) === -1) {
                         profile.contacts.push(newContact.id);
                         profile.save();
+                        newContact.contacts.push(profile.id);
+                        newContact.save();
                     }
                 }
             });
