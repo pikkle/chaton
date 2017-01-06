@@ -19,7 +19,10 @@ var mongooseMessage = require("../models/message"),
 exports.findById = function (id, callback) {
     Profile.findById(id)
         .populate("contacts", "_id email username public_key avatar")
-        .populate("history.group")
+        .populate({
+            path: 'history.group',
+            populate:  {path: "members", select: "email username public_key"}  
+        })
         .populate("history.messages")
         .exec(function (err, profile) {
             if (err) {
