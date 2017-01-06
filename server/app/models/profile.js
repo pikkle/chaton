@@ -17,6 +17,7 @@ var ProfileSchema = new Schema({
     contacts: [{type: Schema.Types.ObjectId, ref: "Profile"}],
     blacklist: [{type: Schema.Types.ObjectId, ref: "Profile"}],
     history: [{
+        _id: false,
         group: {type: Schema.Types.ObjectId, ref: "Group"},
         messages: [{type: Schema.Types.ObjectId, ref: "Message"}]
     }],
