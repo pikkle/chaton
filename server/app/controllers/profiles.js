@@ -10,7 +10,7 @@ var mongooseGroup = require("../models/group"),
     Group = mongooseGroup.model("Group");
 var mongooseMessage = require("../models/message"),
     Message = mongooseMessage.model("Message");
-
+var socket = require('../socket');
 /**
  * Get profile by id * 
  * @param {String} id: The profile id
@@ -26,11 +26,9 @@ exports.findById = function (id, callback) {
         .populate("history.messages")
         .exec(function (err, profile) {
             if (err) {
-                console.log(err);
                 callback(err);
                 return;
             }
-            console.log(profile);
             callback(null, profile);
         });
 };
@@ -85,7 +83,6 @@ exports.modifyProfile = function (id, body, callback) {
             profile.password = body.password;
         }
         profile.save();
-        console.log("PROFILE UPDATED");
         callback({ "response": "OK" });
     })
 };
@@ -144,6 +141,7 @@ exports.addContact = function (profileId, contactEmail, callback) {
                         profile.save();
                         newContact.contacts.push(profile.id);
                         newContact.save();
+                        socket.notifyNewContact(newContact.id);
                     }
                 }
             });
@@ -213,7 +211,6 @@ exports.addToHistory = function (profileId, message, callback) {
     message.state = 1;
     var m = new Message(message);
     m.save();
-    console.log(m);
 
     Profile.findById(profileId, function (err, profile) {
         if (err) {

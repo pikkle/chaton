@@ -9,7 +9,6 @@ var mongoose = require("mongoose"),
     Schema = mongoose.Schema;
 
 var MessageSchema = new Schema({
-    id: { type: String, trim: true },
     timetamp: Date,
     state: Number,
     type: { type: String, trim: true },

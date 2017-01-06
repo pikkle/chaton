@@ -37,7 +37,7 @@ require("./app/routes/index")(app);
 // open web socket
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-require("./app/socket")(io);
+require("./app/socket").socket(io);
 
 // start listening for client requests
 http.listen(config.server_listen_port, function () {

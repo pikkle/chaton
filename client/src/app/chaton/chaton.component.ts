@@ -105,6 +105,10 @@ export class ChatonComponent implements OnInit {
         }
       });
     });
+    this.socketService.addListener("refresh_contact_list", (data: any) => {
+      console.log("Need to refresh contacts");
+      this.getContacts();
+    })
   }
 
   updateUserInfos(): void {
