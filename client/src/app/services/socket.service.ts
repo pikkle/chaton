@@ -70,8 +70,8 @@ export class SocketService {
       state: 0,
       type: "txt",
       extension: "txt",
-//      group: to.id,
-      sender: this.email,
+      group: to.id,
+      sender: this.id,
       receiver: to.id,
       content: this.cryptoService.cipher(message.content, to.publickey)
     });

@@ -56,6 +56,10 @@ module.exports = function (socketio) {
         socket.on("send_message", function (message) {
             authenticate(message);
 
+            console.log("=======");
+            console.log(message);
+            console.log("=======");
+
             // todo : one tick & two ticks
             socket.emit("message_processed");
 

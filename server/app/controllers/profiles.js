@@ -16,15 +16,18 @@ var mongooseMessage = require("../models/message"),
  * @param {String} id: The profile id
  * @param {Function} callback(err, profile): called once finished
  */
-exports.findById = function(id, callback) {
+exports.findById = function (id, callback) {
     Profile.findById(id)
         .populate("contacts", "_id email username public_key avatar")
-        .exec(function(err, profile) {
+        .populate("history.group")
+        .populate("history.messages")
+        .exec(function (err, profile) {
             if (err) {
+                console.log(err);
                 callback(err);
                 return;
             }
-
+            console.log(profile);
             callback(null, profile);
         });
 };
@@ -34,9 +37,9 @@ exports.findById = function(id, callback) {
  * @param {Profile} profile: The profile
  * @param {Function} callback(err, result): called once finished
  */
-exports.addProfile = function(data, callback) {
+exports.addProfile = function (data, callback) {
     var profile = new Profile(data);
-    profile.save(function(err, result) {
+    profile.save(function (err, result) {
         if (err) {
             callback(err);
             return;
@@ -51,10 +54,11 @@ exports.addProfile = function(data, callback) {
  * @param {String} id: The profile id
  * @param {Function} callback(err, contacts): called once finished
  */
-exports.getAllContacts = function(id, callback) {
+exports.getAllContacts = function (id, callback) {
     Profile.findById(id)
         .populate("contacts", "_id email username public_key avatar")
-        .exec(function(err, profile) {
+        .exec(function (err, profile) {
+
             if (err) {
                 callback(err);
                 return;
@@ -66,8 +70,8 @@ exports.getAllContacts = function(id, callback) {
         });
 };
 
-exports.modifyProfile = function(id, body, callback) {
-    Profile.findById(id, function(err, profile) {
+exports.modifyProfile = function (id, body, callback) {
+    Profile.findById(id, function (err, profile) {
         if (err) {
             callback(err);
         }
@@ -89,10 +93,10 @@ exports.modifyProfile = function(id, body, callback) {
  * @param {String} contactId: The contact id
  * @param {Function} callback(err, contact): called once finished
  */
-exports.getContactById = function(profileId, contactId, callback) {
+exports.getContactById = function (profileId, contactId, callback) {
     Profile.findById(profileId)
         .populate("contacts", "_id email username public_key avatar")
-        .exec(function(err, profile) {
+        .exec(function (err, profile) {
             if (err) {
                 callback(err);
                 return;
@@ -115,14 +119,14 @@ exports.getContactById = function(profileId, contactId, callback) {
  * @param {String} contactEmail: The contact email
  * @param {Function} callback(err): called once finished
  */
-exports.addContact = function(profileId, contactEmail, callback) {
-    Profile.findById(profileId, function(err, profile) {
+exports.addContact = function (profileId, contactEmail, callback) {
+    Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
             return;
         }
         if (profile) {
-            Profile.findOne({'email': contactEmail}, function(err2, newContact) {
+            Profile.findOne({ 'email': contactEmail }, function (err2, newContact) {
                 if (err2) {
                     callback(err2);
                     return;
@@ -148,9 +152,9 @@ exports.addContact = function(profileId, contactEmail, callback) {
  * @param {String} id: The profile id
  * @param {Function} callback(err, history): called once finished
  */
-exports.getHistory = function(id, callback) {
+exports.getHistory = function (id, callback) {
     Profile.findById(id)
-        .exec(function(err, profile) {
+        .exec(function (err, profile) {
             if (err) {
                 callback(err);
                 return;
@@ -168,16 +172,16 @@ exports.getHistory = function(id, callback) {
  * @param {String} groupId: The group id
  * @param {Function} callback(err, history): called once finished
  */
-exports.getGroupHistory = function(profileId, groupId, callback) {
+exports.getGroupHistory = function (profileId, groupId, callback) {
     Profile.findById(profileId)
-        .exec(function(err, profile) {
+        .exec(function (err, profile) {
             if (err) {
                 callback(err);
                 return;
             }
 
             if (profile) {
-                var history = profile.history.find(function(h) {
+                var history = profile.history.find(function (h) {
                     return h.group && h.group._id == groupId;
                 });
 
@@ -198,16 +202,15 @@ exports.getGroupHistory = function(profileId, groupId, callback) {
  * @param {Message} message: The message to add
  * @param {Function} callback(err): called once finished
  */
-exports.addToHistory = function(profileId, message, callback) {
+exports.addToHistory = function (profileId, message, callback) {
     // validate new message
     delete message.token;
     message.state = 1;
     var m = new Message(message);
-    console.log("ADDTOHISTORY");
+    m.save();
     console.log(m);
-    console.log("=======================");
 
-    Profile.findById(profileId, function(err, profile) {
+    Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
             return;
@@ -215,11 +218,9 @@ exports.addToHistory = function(profileId, message, callback) {
 
         if (profile) {
 
-            var history = profile.history.find(function(h) {
-                return h.group && h.group._id == message.group;
+            var history = profile.history.find(function (h) {
+                return h.group == message.group;
             });
-            console.log("HISTORY");
-            console.log(history);
             // existing history
             if (history) {
                 history.messages.push(m);
@@ -236,6 +237,7 @@ exports.addToHistory = function(profileId, message, callback) {
 
                 // update history
                 profile.history.push({ group: group, messages: [m] });
+                group.save();
             }
 
             profile.save();
@@ -252,8 +254,8 @@ exports.addToHistory = function(profileId, message, callback) {
  * @param {String} contactId: The contact id
  * @param {Function} callback(err): called once finished
  */
-exports.removeContact = function(profileId, contactId, callback) {
-    Profile.findById(profileId, function(err, profile) {
+exports.removeContact = function (profileId, contactId, callback) {
+    Profile.findById(profileId, function (err, profile) {
         if (err) {
             callback(err);
             return;
