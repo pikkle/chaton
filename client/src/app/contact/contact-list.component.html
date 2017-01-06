@@ -8,7 +8,7 @@
         <span class="initials">{{contact.initials()}}</span>
       </div>
       <div class="right-part">
-        <h1>{{contact.username}}</h1>
+        <h1>{{contact.name}}</h1>
         <span *ngIf="contact.messages.length > 0" class="lastMessage">{{contact.lastMessage().content}}</span>
       </div>
     </li>

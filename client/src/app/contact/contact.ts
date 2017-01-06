@@ -1,53 +1,19 @@
 import {Message} from "../conversation/message";
 
-export class Contact {
-
-  private _id: string;
-  private _username: string;
-  private _publickey: string;
-  private _messages: Message[] = [];
+export abstract class Contact {
+  public id: string;
+  public groupId: string;
+  public name: string;
   public color: string;
+  public messages: Message[] = [];
 
-  constructor(id: string, username: string, publickey: string) {
-    this._id = id;
-    this._username = username;
-    this._publickey = publickey;
-
+  constructor(id: string, name: string) {
+    this.id = id;
+    this.name = name;
     this.color = '#' + Math.random().toString(16).slice(-3);
   }
 
-  public static contactFromJson(data: any): Contact {
-    const id = data._id;
-    const username = data.username;
-    const publickey = data.public_key;
-    return new Contact(id, username, publickey);
-  }
-
-  public static contactsFromJson(data: any): Contact[] {
-    const contacts = [];
-    for (let c of data.contacts) {
-      contacts.push(Contact.contactFromJson(c));
-    }
-    return contacts;
-  }
-
-  get id(): string {
-    return this._id;
-  }
-
-  get username(): string {
-    return this._username;
-  }
-
-  get publickey(): string {
-    return this._publickey;
-  }
-
-  get messages(): Message[] {
-    return this._messages;
-  }
-
-  lastMessage(): Message {
+  public lastMessage(): Message {
     if (this.messages.length == 0) {
       return null;
     } else {
@@ -56,17 +22,85 @@ export class Contact {
   }
 
   public initials(): string {
-    if (this._username.length == 0) {
+    if (this.name.length == 0) {
       return "!";
-    } else if (this._username.length == 1) {
-      return this._username.charAt(0).toUpperCase();
+    } else if (this.name.length == 1) {
+      return this.name.charAt(0).toUpperCase();
     } else {
-      return this._username.charAt(0).toLocaleUpperCase() + this._username.charAt(1).toLocaleLowerCase();
+      return this.name.charAt(0).toLocaleUpperCase() + this.name.charAt(1).toLocaleLowerCase();
     }
   }
 
-
   public addMessage(message: Message) {
-    this._messages.push(message);
+    this.messages.push(message);
+  }
+
+  public static contactsFromJson(data: any): Contact[] {
+    var findSimpleContact = function (members: any[], contacts: SimpleContact[]): SimpleContact {
+      for (let c of contacts) {
+        if (c.id === members[0]._id || c.id === members[1]._id) return c;
+      }
+      return null
+    };
+
+    var simpleContacts: SimpleContact[] = [];
+    var groupContacts: GroupContact[] = [];
+    for (let c of data.contacts) { // retrieve simple contacts
+      simpleContacts.push(SimpleContact.contactFromJson(c));
+    }
+    for (let history of data.history) { // fill contacts with groups and populate all contacts with history
+      if (history.group.members.length > 2) {
+        var g: GroupContact = GroupContact.contactFromJson(history);
+        g.messages = history.messages;
+        groupContacts.push(g);
+      } else {
+        var simpleContact = findSimpleContact(history.group.members, simpleContacts);
+        if (simpleContact) {
+          simpleContact.messages = history.messages;
+          simpleContact.groupId = history.group._id;
+        }
+      }
+    }
+    return (<Contact[]> simpleContacts).concat(groupContacts);
+  }
+
+}
+
+export class SimpleContact extends Contact {
+  public username: string;
+  public publicKey: string;
+
+  constructor(id: string, username: string, publickey: string) {
+    super(id, username);
+    this.username = username;
+    this.publicKey = publickey;
+  }
+
+  public static contactFromJson(data: any): SimpleContact {
+    const id = data._id;
+    const username = data.username;
+    const publickey = data.public_key;
+    const groupId = data.group;
+    return new SimpleContact(id, username, publickey);
+  }
+
+}
+
+export class GroupContact extends Contact {
+  public contacts: SimpleContact[];
+
+  constructor(id: string, title: string, contacts: SimpleContact[]) {
+    super(id, title);
+    this.contacts = contacts;
+  }
+
+  public static contactFromJson(data: any): GroupContact {
+    const id = data.group._id;
+    const name = data.group.name;
+    var members: SimpleContact[] = [];
+    for (let member of data.group.members) {
+      members.push(new SimpleContact(member._id, member.username, member.public_key));
+    }
+    return new GroupContact(id, name, members);
   }
 }

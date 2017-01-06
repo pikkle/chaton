@@ -1,9 +1,10 @@
 import { Injectable } from "@angular/core";
-import { Contact } from '../contact/contact';
+import {Contact, SimpleContact, GroupContact} from '../contact/contact';
 
 import * as io from "socket.io-client";
 import { CryptoService } from "./crypto.service";
 import { Message } from "../conversation/message";
+import {ApiService} from "./api.service";
 
 @Injectable()
 export class SocketService {
@@ -12,12 +13,15 @@ export class SocketService {
   private token: string;
   private id: string;
   private email: string;
+  private publicKey: string;
   authenticated: boolean = false;
 
   /**
    * Singleton constructor
    */
-  constructor(private cryptoService: CryptoService) {
+  constructor(
+    private cryptoService: CryptoService,
+    private apiService: ApiService) {
   }
 
   /**
@@ -27,7 +31,7 @@ export class SocketService {
    * @param email the user's mail
    * @returns {boolean} whether the user is authenticated or not
    */
-  public authenticate(token: string, id: string, email: string) {
+  public authenticate(token: string, id: string, email: string, publicKey: string) {
     if (this.isAuthenticated()) {
       return true;
     }
@@ -35,6 +39,7 @@ export class SocketService {
     this.token = token;
     this.id = id;
     this.email = email;
+    this.publicKey = publicKey;
     this.socket.emit("authenticate", { token: this.token, id: this.id });
     this.authenticated = true;
     this.socket.on("error_authentication", function (event, data) {
@@ -63,18 +68,47 @@ export class SocketService {
    * @param to the recipient
    */
   public sendMessage(message: Message, to: Contact): void {
-    this.socket.emit('send_message', {
+    var contacts: SimpleContact[] = [];
+    if (to instanceof GroupContact) {
+      contacts = (<GroupContact> to).contacts;
+    } else if (to instanceof SimpleContact) {
+      contacts.push(<SimpleContact> to);
+    }
+
+    var date = Date.now();
+    var messageForSelf = {
       token: this.token,
-      id: this.id,
-      timestamp: Date.now(),
+      timestamp: date,
       state: 0,
       type: "txt",
       extension: "txt",
-      group: to.id,
-      sender: this.id,
-      receiver: to.id,
-      content: this.cryptoService.cipher(message.content, to.publickey)
-    });
+      group: to.groupId,
+      sender: this.email,
+      receiver: this.id,
+      content: this.cryptoService.cipher(message.content, this.publicKey)
+    };
+    if (to.groupId) {
+      messageForSelf.group = to.groupId;
+    }
+    this.apiService.saveToHistory(messageForSelf);
+
+    for(let contact of contacts) {
+      var messageForOther = {
+        token: this.token,
+        timestamp: date,
+        state: 0,
+        type: "txt",
+        extension: "txt",
+        group: contact.groupId,
+        sender: this.email,
+        receiver: contact.id,
+        content: this.cryptoService.cipher(message.content, contact.publicKey)
+      };
+      if (contact.groupId) {
+        messageForOther.group = contact.groupId;
+      }
+      this.socket.emit('send_message', messageForOther);
+    }
   }
 
   public addListener(type: string, listener: Function): void {
