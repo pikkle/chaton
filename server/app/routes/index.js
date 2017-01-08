@@ -18,8 +18,7 @@ module.exports = function (app) {
     app.use(expressJWT({ secret: config.secret }).unless(function(req) {
         return (
             req.originalUrl === '/api/auth' && req.method === 'POST' ||
-            req.originalUrl === '/api/profile' && req.method === 'POST' ||
-            req.originalUrl === '/api/group' && req.method === 'GET'
+            req.originalUrl === '/api/profile' && req.method === 'POST'
         );
     }));
 

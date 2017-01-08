@@ -83,7 +83,7 @@ export class SocketService {
       type: "txt",
       extension: "txt",
       group: to.groupId,
-      sender: this.email,
+      sender: this.id,
       receiver: this.id,
       content: this.cryptoService.cipher(message.content, this.publicKey)
     };
@@ -100,7 +100,7 @@ export class SocketService {
         type: "txt",
         extension: "txt",
         group: contact.groupId,
-        sender: this.email,
+        sender: this.id,
         receiver: contact.id,
         content: this.cryptoService.cipher(message.content, contact.publicKey)
       };

@@ -12,10 +12,14 @@ var connected_clients = {};
 
 
 module.exports = {
-    notifyNewContact: function (contactId) {
+    notifyNewContact: function (contactId, profileId, group) {
         var receiverSocket = connected_clients[contactId];
         if (receiverSocket) {
-            receiverSocket.emit("refresh_contact_list");
+            receiverSocket.emit("new_contact", group);
+        }
+        var senderSocket = connected_clients[profileId];
+        if(senderSocket) {
+            senderSocket.emit("new_contact", group);
         }
     },
     socket: function (socketio) {

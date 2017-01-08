@@ -176,7 +176,7 @@ export class ApiService {
   public createGroup(groupName: string, groupMembers: string[]): Promise<any> {
     var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"] });
     var options = new RequestOptions({ "headers": headers });
-    var path = "/api/profile/" + localStorage["id"] + "/group";
+    var path = "/api/group/";
 
     return this.post(options, path, {"name" : groupName, "members": groupMembers});
   }

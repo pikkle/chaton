@@ -1,10 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {SocketService} from "../services/socket.service";
-import {Router} from "@angular/router";
-import {Contact} from "../contact/contact";
-import {ApiService} from "../services/api.service";
-import {Message} from "../conversation/message";
-import {EmojiService} from "../services/emoji.service";
+import { Component, OnInit } from '@angular/core';
+import { SocketService } from "../services/socket.service";
+import { Router } from "@angular/router";
+import { Contact } from "../contact/contact";
+import { ApiService } from "../services/api.service";
+import { Message } from "../conversation/message";
+import { EmojiService } from "../services/emoji.service";
 
 @Component({
   selector: 'app-chaton',
@@ -30,9 +30,9 @@ export class ChatonComponent implements OnInit {
   formGroupList: any;
 
   constructor(private router: Router,
-              private socketService: SocketService,
-              private apiService: ApiService,
-              private emojiService: EmojiService) {
+    private socketService: SocketService,
+    private apiService: ApiService,
+    private emojiService: EmojiService) {
   }
 
   logout(): void {
@@ -105,9 +105,23 @@ export class ChatonComponent implements OnInit {
         }
       });
     });
-    this.socketService.addListener("refresh_contact_list", (data: any) => {
-      console.log("Need to refresh contacts");
+    this.socketService.addListener("new_contact", (data: any) => {
       this.getContacts();
+      // Go through contacts and associate to group id
+      console.log("new_contact");
+      console.log(data);
+      var newContactId;
+      if (data.members[0] === this.id) {
+        newContactId = data.members[1];
+      } else {
+        newContactId = data.members[0];
+      }
+      this.contacts.forEach(contact => {
+        if (contact.id === newContactId) {
+          contact.groupId = data._id;
+          console.log("Contact " + contact.name + " is associated to group num " + contact.groupId);
+        }
+      });
     })
   }
 
@@ -139,8 +153,9 @@ export class ChatonComponent implements OnInit {
   }
 
   createGroup(): void {
+    console.log("createGroup")
     var members: string[] = [];
-    for(var contactId in this.formGroupList) {
+    for (var contactId in this.formGroupList) {
       if (this.formGroupList[contactId]) {
         members.push(contactId);
       }

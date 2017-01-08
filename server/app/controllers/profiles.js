@@ -141,7 +141,14 @@ exports.addContact = function (profileId, contactEmail, callback) {
                         profile.save();
                         newContact.contacts.push(profile.id);
                         newContact.save();
-                        socket.notifyNewContact(newContact.id);
+
+                        var group = new Group({
+                            name: profileId + "-" + newContact.id,
+                            members: [profileId, newContact.id]
+                        });
+                        group.save();
+                        console.log(group);
+                        socket.notifyNewContact(newContact.id, profileId, group);
                     }
                 }
             });
