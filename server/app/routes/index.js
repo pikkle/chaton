@@ -31,4 +31,9 @@ module.exports = function (app) {
     var profileRouter = express.Router();
     require("./profiles.js")(profileRouter);
     app.use("/api/profile", profileRouter);
+
+    // groups
+    var groupRouter = express.Router();
+    require("./groups.js")(groupRouter);
+    app.use("/api/group", groupRouter);
 };

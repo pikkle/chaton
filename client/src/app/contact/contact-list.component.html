@@ -7,8 +7,10 @@
       <div class="avatar-circle" [ngStyle]="{'background-color': contact.color}">
         <span class="initials">{{contact.initials()}}</span>
       </div>
-      <h1>{{contact.username}}</h1>
-      <p *ngIf="contact.messages.length > 0" class="lastMessage">{{contact.lastMessage().content}}</p>
+      <div class="right-part">
+        <h1>{{contact.name}}</h1>
+        <span *ngIf="contact.messages.length > 0" class="lastMessage">{{contact.lastMessage().content}}</span>
+      </div>
     </li>
   </ul>
 </div>

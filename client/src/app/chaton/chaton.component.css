@@ -76,20 +76,77 @@ header .icon-fa {
 
 
 .addUser {
-  height: 80px;
-  background-color: #124648;
+  background-color: #0a3435;
+}
+
+.addGroup {
+  background-color:  #124648;
+}
+
+.addUser, .addGroup {
+  height: 40px;
   color: white;
   text-align: center;
   font-size: 20px;
 }
 
-.addUser i {
+.addUser i, .addGroup i {
   position: absolute;
-  top: 20px;
   left: 20px;
-  font-size: 40px;
+  font-size: 30px;
 }
 
-.addUser div {
-  padding-top: 25px;
+.addUser div, .addGroup div {
+  padding-top: 5px;
+}
+
+li {
+  list-style: none;
+}
+
+.group-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-contact-proposal {
+  display: flex;
+  align-items: center;
+}
+
+.group-contact-proposal .label-contacts {
+  display: flex;
+  align-items: center;
+}
+
+.group-contact-proposal input {
+  margin-top: 0px;
+  margin-right: 10px;
+}
+
+.group-contact-proposal .avatar-circle {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  margin-right: 10px;
+}
+
+.group-contact-proposal .initials {
+  position: relative;
+  top: 10px;
+  font-size: 20px;
+  line-height: 20px;
+  color: #fff;
+  font-family: "Fira mono", monospace;
+}
+
+
+.group-contact-proposal .contact-name {
+  font-size: 20px;
+  font-weight: lighter;
 }
