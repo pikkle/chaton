@@ -1,17 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { ConfigService } from './config.service';
-import { SocketService } from "./socket.service";
-import { CryptoService } from "./crypto.service";
-import { Contact } from "../contact/contact";
+import {Injectable} from '@angular/core';
+import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import {ConfigService} from './config.service';
+import {SocketService} from "./socket.service";
+import {CryptoService} from "./crypto.service";
+import {Contact} from "../contact/contact";
+import {EmojiService} from "./emoji.service";
 
 @Injectable()
 export class ApiService {
-  private static readonly jsonHeader = new Headers({ 'Content-Type': 'application/json' });
+  private static readonly jsonHeader = new Headers({'Content-Type': 'application/json'});
 
   constructor(private http: Http,
-    private config: ConfigService,
-    private cryptoService: CryptoService) {
+              private config: ConfigService,
+              private cryptoService: CryptoService,
+              private emojiService: EmojiService) {
   }
 
   /**
@@ -99,7 +101,7 @@ export class ApiService {
    * @returns {any} the body response
    */
   public login(email: string, password: string): Promise<any> {
-    var options = new RequestOptions({ headers: ApiService.jsonHeader });
+    var options = new RequestOptions({headers: ApiService.jsonHeader});
     var path = '/api/auth';
     var data = {
       "email": email,
@@ -121,7 +123,7 @@ export class ApiService {
     localStorage["privateKey"] = keypair.private;
     localStorage["publicKey"] = keypair.public;
 
-    var options = new RequestOptions({ headers: ApiService.jsonHeader });
+    var options = new RequestOptions({headers: ApiService.jsonHeader});
     var path = "/api/profile";
     var data = {
       "email": email,
@@ -140,25 +142,27 @@ export class ApiService {
    * @returns {Promise<ContactComponent[]>} the body response
    */
   public getContacts(userId: string, token: string): Promise<Contact[]> {
-    var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + token });
-    var options = new RequestOptions({ headers: headers });
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + token});
+    var options = new RequestOptions({headers: headers});
     var path = '/api/profile/' + userId;
     return this.get(options, path).then(response => {
       localStorage["username"] = response.username;
       localStorage["avatar"] = '../assets/cat.jpg';
       return response;
-    }).then(Contact.contactsFromJson);
+    }).then(response => {
+      return Contact.contactsFromJson(response, this.emojiService)
+    });
   }
 
-/**
- * Requests a user information update on server side
- * @param data The data to update (can contain username, password or both)
- * @returns {Promise<any>} Server Response
- */
+  /**
+   * Requests a user information update on server side
+   * @param data The data to update (can contain username, password or both)
+   * @returns {Promise<any>} Server Response
+   */
   public updateUser(data: Object) {
     // TODO: une fois que le serveur permet d'updater les infos
-    var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"] });
-    var options = new RequestOptions({ "headers": headers });
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"]});
+    var options = new RequestOptions({"headers": headers});
     var path = "/api/profile/" + localStorage["id"];
 
     return this.patch(options, path, data);
@@ -166,24 +170,24 @@ export class ApiService {
 
   public addContact(contactEmail: string): Promise<any> {
     // TODO: une fois que le serveur permet d'ajouter un contact à partir d'un mail et pas d'un id
-    var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"] });
-    var options = new RequestOptions({ "headers": headers });
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"]});
+    var options = new RequestOptions({"headers": headers});
     var path = "/api/profile/" + localStorage["id"] + "/contact";
 
-    return this.post(options, path, {"contact_email" : contactEmail});
+    return this.post(options, path, {"contact_email": contactEmail});
   }
 
   public createGroup(groupName: string, groupMembers: string[]): Promise<any> {
-    var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"] });
-    var options = new RequestOptions({ "headers": headers });
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"]});
+    var options = new RequestOptions({"headers": headers});
     var path = "/api/group/";
 
-    return this.post(options, path, {"name" : groupName, "members": groupMembers});
+    return this.post(options, path, {"name": groupName, "members": groupMembers});
   }
 
-  public saveToHistory(message: any) : Promise<any> {
-    var headers = new Headers({ 'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"] });
-    var options = new RequestOptions({ "headers": headers });
+  public saveToHistory(message: any): Promise<any> {
+    var headers = new Headers({'Content-Type': 'application/json', Authorization: "Bearer " + localStorage["token"]});
+    var options = new RequestOptions({"headers": headers});
     var path = "/api/profile/" + localStorage["id"] + "/history";
 
     return this.post(options, path, message);

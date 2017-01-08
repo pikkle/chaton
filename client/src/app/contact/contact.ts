@@ -1,4 +1,5 @@
 import {Message} from "../conversation/message";
+import {EmojiService} from "../services/emoji.service";
 
 export abstract class Contact {
   public id: string;
@@ -35,7 +36,7 @@ export abstract class Contact {
     this.messages.push(message);
   }
 
-  public static contactsFromJson(data: any): Contact[] {
+  public static contactsFromJson(data: any, emojiService: EmojiService): Contact[] {
     var findSimpleContact = function (members: any[], contacts: SimpleContact[]): SimpleContact {
       for (let c of contacts) {
         if (c.id === members[0]._id || c.id === members[1]._id) return c;
@@ -52,15 +53,24 @@ export abstract class Contact {
       if (history.group) {
         if (history.group.members.length > 2) {
           var g: GroupContact = GroupContact.contactFromJson(history);
-          g.messages = history.messages;
+          for (let m of history.messages) {
+            Message.parseMessage(m.content, m.sender, emojiService).then(message =>{
+              g.messages.push(message);
+            });
+          }
           groupContacts.push(g);
         } else {
           var simpleContact = findSimpleContact(history.group.members, simpleContacts);
           if (simpleContact) {
-            simpleContact.messages = history.messages;
+            for (let m of history.messages) {
+              Message.parseMessage(m.content, m.sender, emojiService).then(message =>{
+                simpleContact.messages.push(message);
+              });
+            }
             simpleContact.groupId = history.group._id;
           }
         }
+
       }
     }
     return (<Contact[]> simpleContacts).concat(groupContacts);
