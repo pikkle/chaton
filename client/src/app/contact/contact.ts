@@ -37,43 +37,46 @@ export abstract class Contact {
   }
 
   public static contactsFromJson(data: any, emojiService: EmojiService): Contact[] {
-    var findSimpleContact = function (members: any[], contacts: SimpleContact[]): SimpleContact {
-      for (let c of contacts) {
-        if (c.id === members[0]._id || c.id === members[1]._id) return c;
-      }
-      return null
-    };
 
     var simpleContacts: SimpleContact[] = [];
     var groupContacts: GroupContact[] = [];
     for (let c of data.contacts) { // retrieve simple contacts
       simpleContacts.push(SimpleContact.contactFromJson(c));
     }
+
     for (let history of data.history) { // fill contacts with groups and populate all contacts with history
       if (history.group) {
         if (history.group.members.length > 2) {
           var g: GroupContact = GroupContact.contactFromJson(history);
           for (let m of history.messages) {
-            Message.parseMessage(m.content, m.sender, emojiService).then(message =>{
+            Message.parseMessage(m.content, m.sender, g.groupId, emojiService).then(message => {
               g.messages.push(message);
             });
           }
           groupContacts.push(g);
         } else {
-          var simpleContact = findSimpleContact(history.group.members, simpleContacts);
+          var simpleContact = simpleContacts.find(c =>
+            c.id === history.group.members[0]._id ||
+            c.id === history.group.members[1]._id
+          );
           if (simpleContact) {
+            simpleContact.groupId = history.group._id;
             for (let m of history.messages) {
-              Message.parseMessage(m.content, m.sender, emojiService).then(message =>{
-                simpleContact.messages.push(message);
+              var saveMessage = function(contact: SimpleContact, message: Message) {
+                contact.messages.push(message);
+              };
+              Message.parseMessage(m.content, m.sender, simpleContact.groupId, emojiService).then(message => {
+                simpleContacts.find(c => c.groupId === message.groupId).messages.push(message);
               });
             }
-            simpleContact.groupId = history.group._id;
+
           }
         }
 
       }
     }
-    return (<Contact[]> simpleContacts).concat(groupContacts);
+    var contacts = (<Contact[]> simpleContacts).concat(groupContacts);
+    return contacts;
   }
 
 }
@@ -92,7 +95,6 @@ export class SimpleContact extends Contact {
     const id = data._id;
     const username = data.username;
     const publickey = data.public_key;
-    const groupId = data.group;
     return new SimpleContact(id, username, publickey);
   }
 

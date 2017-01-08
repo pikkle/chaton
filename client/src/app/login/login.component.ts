@@ -52,8 +52,6 @@ export class LoginComponent implements OnInit {
     this.invalidCredentials = false;
     this.apiService.login(this.email, this.password)
       .then(data => { // authenticate to server to open websocket
-        console.log("Received");
-        console.log(data);
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
         localStorage["email"] = this.email;

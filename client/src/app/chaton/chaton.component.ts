@@ -96,20 +96,14 @@ export class ChatonComponent implements OnInit {
     this.getContacts();
 
     this.socketService.addListener("new_message", (data: any) => {
-      Message.parseMessage(data.content, data.id, this.emojiService).then(message => {
-        for (let c of this.contacts) {
-          if (c.id === data.id) {
-            c.addMessage(message);
-            this.sortContacts();
-          }
-        }
+      Message.parseMessage(data.content, data.sender, data.group, this.emojiService).then(message => {
+        this.contacts.find(c => c.id === data.sender).addMessage(message);
+        this.sortContacts();
       });
     });
     this.socketService.addListener("new_contact", (data: any) => {
       this.getContacts();
       // Go through contacts and associate to group id
-      console.log("new_contact");
-      console.log(data);
       var newContactId;
       if (data.members[0] === this.id) {
         newContactId = data.members[1];
@@ -119,7 +113,6 @@ export class ChatonComponent implements OnInit {
       this.contacts.forEach(contact => {
         if (contact.id === newContactId) {
           contact.groupId = data._id;
-          console.log("Contact " + contact.name + " is associated to group num " + contact.groupId);
         }
       });
     })

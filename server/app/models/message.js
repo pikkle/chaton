@@ -9,7 +9,7 @@ var mongoose = require("mongoose"),
     Schema = mongoose.Schema;
 
 var MessageSchema = new Schema({
-    timetamp: Date,
+    timestamp: Date,
     state: Number,
     type: { type: String, trim: true },
     extension: { type: String, trim: true },

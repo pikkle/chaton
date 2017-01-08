@@ -44,7 +44,7 @@ export class ConversationComponent implements OnInit {
    * and sent to every concerned contact through the server
    */
   sendMessage(): void {
-    Message.parseMessage(this.nextMessage, this.id, this.emojiService).then(message => {
+    Message.parseMessage(this.nextMessage, this.id, this.selectedContact.groupId, this.emojiService).then(message => {
       this.selectedContact.addMessage(message);
       this.socketService.sendMessage(message, this.selectedContact);
       this.nextMessage = "";
