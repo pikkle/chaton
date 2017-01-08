@@ -13,7 +13,7 @@ exports.addGroup = function (data, callback) {
         }
         callback(null, result);
     })
-}
+};
 
 exports.findById = function(id, callback) {
     Group.findById(id)
@@ -25,4 +25,4 @@ exports.findById = function(id, callback) {
             }
             callback(null, group);
         })
-}
+};
