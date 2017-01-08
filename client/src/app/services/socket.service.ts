@@ -75,22 +75,9 @@ export class SocketService {
       contacts.push(<SimpleContact> to);
     }
 
+    var messages: any[] = [];
+
     var date = Date.now();
-    var messageForSelf = {
-      token: this.token,
-      timestamp: date,
-      state: 0,
-      type: "txt",
-      extension: "txt",
-      group: to.groupId,
-      sender: this.id,
-      receiver: this.id,
-      content: this.cryptoService.cipher(message.content, this.publicKey)
-    };
-    if (to.groupId) {
-      messageForSelf.group = to.groupId;
-    }
-    this.apiService.saveToHistory(messageForSelf);
 
     for(let contact of contacts) {
       var messageForOther = {
@@ -104,11 +91,25 @@ export class SocketService {
         receiver: contact.id,
         content: this.cryptoService.cipher(message.content, contact.publicKey)
       };
-      if (contact.groupId) {
-        messageForOther.group = contact.groupId;
-      }
-      this.socket.emit('send_message', messageForOther);
+      messages.push(messageForOther);
     }
+    var messageForSelf = {
+      token: this.token,
+      timestamp: date,
+      state: 0,
+      type: "txt",
+      extension: "txt",
+      group: to.groupId,
+      sender: this.id,
+      receiver: this.id,
+      content: this.cryptoService.cipher(message.content, this.publicKey)
+    };
+
+    messages.push(messageForSelf);
+    for (let message of messages) {
+      this.socket.emit('send_message', message);
+    }
+
   }
 
   public addListener(type: string, listener: Function): void {

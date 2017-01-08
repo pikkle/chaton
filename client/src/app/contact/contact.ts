@@ -49,15 +49,17 @@ export abstract class Contact {
       simpleContacts.push(SimpleContact.contactFromJson(c));
     }
     for (let history of data.history) { // fill contacts with groups and populate all contacts with history
-      if (history.group.members.length > 2) {
-        var g: GroupContact = GroupContact.contactFromJson(history);
-        g.messages = history.messages;
-        groupContacts.push(g);
-      } else {
-        var simpleContact = findSimpleContact(history.group.members, simpleContacts);
-        if (simpleContact) {
-          simpleContact.messages = history.messages;
-          simpleContact.groupId = history.group._id;
+      if (history.group) {
+        if (history.group.members.length > 2) {
+          var g: GroupContact = GroupContact.contactFromJson(history);
+          g.messages = history.messages;
+          groupContacts.push(g);
+        } else {
+          var simpleContact = findSimpleContact(history.group.members, simpleContacts);
+          if (simpleContact) {
+            simpleContact.messages = history.messages;
+            simpleContact.groupId = history.group._id;
+          }
         }
       }
     }

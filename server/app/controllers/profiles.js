@@ -138,16 +138,24 @@ exports.addContact = function (profileId, contactEmail, callback) {
                 if (newContact) {
                     if (profile.contacts.indexOf(newContact.id) === -1) {
                         profile.contacts.push(newContact.id);
-                        profile.save();
                         newContact.contacts.push(profile.id);
-                        newContact.save();
 
                         var group = new Group({
                             name: profileId + "-" + newContact.id,
                             members: [profileId, newContact.id]
                         });
+
+                        var history = {
+                            group: group._id,
+                            members: group.members,
+                            messages: []
+                        };
+                        profile.history.push(history);
+                        newContact.history.push(history);
+
+                        newContact.save();
+                        profile.save();
                         group.save();
-                        console.log(group);
                         socket.notifyNewContact(newContact.id, profileId, group);
                     }
                 }
