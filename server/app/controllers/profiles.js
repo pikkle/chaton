@@ -141,6 +141,7 @@ exports.addContact = function (profileId, contactEmail, callback) {
                         newContact.contacts.push(profile.id);
 
                         var group = new Group({
+                            isCreatedGroup: false,
                             name: newContact.username,
                             members: [profileId, newContact.id]
                         });

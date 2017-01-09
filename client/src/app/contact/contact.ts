@@ -1,5 +1,5 @@
-import {Message} from "../conversation/message";
-import {EmojiService} from "../services/emoji.service";
+import { Message } from "../conversation/message";
+import { EmojiService } from "../services/emoji.service";
 
 export abstract class Contact {
   public id: string;
@@ -8,8 +8,9 @@ export abstract class Contact {
   public color: string;
   public messages: Message[] = [];
 
-  constructor(id: string, name: string) {
+  constructor(id: string, groupId: string, name: string) {
     this.id = id;
+    this.groupId = groupId;
     this.name = name;
     this.color = '#' + Math.random().toString(16).slice(-3);
   }
@@ -40,13 +41,13 @@ export abstract class Contact {
 
     var simpleContacts: SimpleContact[] = [];
     var groupContacts: GroupContact[] = [];
-    for (let c of data.contacts) { // retrieve simple contacts
+    /*for (let c of data.contacts) { // retrieve simple contacts
       simpleContacts.push(SimpleContact.contactFromJson(c));
-    }
+    }*/
 
     for (let history of data.history) { // fill contacts with groups and populate all contacts with history
       if (history.group) {
-        if (history.group.members.length > 2) {
+        if (history.group.isCreatedGroup) {
           var g: GroupContact = GroupContact.contactFromJson(history);
           for (let m of history.messages) {
             Message.parseMessage(m.content, m.sender, g.groupId, emojiService).then(message => {
@@ -55,27 +56,23 @@ export abstract class Contact {
           }
           groupContacts.push(g);
         } else {
-          var simpleContact = simpleContacts.find(c =>
-            c.id === history.group.members[0]._id ||
-            c.id === history.group.members[1]._id
-          );
+          var simpleContact = SimpleContact.contactFromJson(history);
+          simpleContacts.push(simpleContact);
           if (simpleContact) {
             simpleContact.groupId = history.group._id;
             for (let m of history.messages) {
-              var saveMessage = function(contact: SimpleContact, message: Message) {
+              var saveMessage = function (contact: SimpleContact, message: Message) {
                 contact.messages.push(message);
               };
               Message.parseMessage(m.content, m.sender, simpleContact.groupId, emojiService).then(message => {
                 simpleContacts.find(c => c.groupId === message.groupId).messages.push(message);
               });
             }
-
           }
         }
-
       }
     }
-    var contacts = (<Contact[]> simpleContacts).concat(groupContacts);
+    var contacts = (<Contact[]>simpleContacts).concat(groupContacts);
     return contacts;
   }
 
@@ -85,8 +82,8 @@ export class SimpleContact extends Contact {
   public username: string;
   public publicKey: string;
 
-  constructor(id: string, username: string, publickey: string) {
-    super(id, username);
+  constructor(id: string, groupId: string, username: string, publickey: string) {
+    super(id, groupId, username);
     this.username = username;
     this.publicKey = publickey;
   }
@@ -95,7 +92,7 @@ export class SimpleContact extends Contact {
     const id = data._id;
     const username = data.username;
     const publickey = data.public_key;
-    return new SimpleContact(id, username, publickey);
+    return new SimpleContact(id, null, username, publickey);
   }
 
 }
@@ -103,8 +100,8 @@ export class SimpleContact extends Contact {
 export class GroupContact extends Contact {
   public contacts: SimpleContact[];
 
-  constructor(id: string, title: string, contacts: SimpleContact[]) {
-    super(id, title);
+  constructor(id: string, groupId: string, title: string, contacts: SimpleContact[]) {
+    super(id, groupId, title);
     this.contacts = contacts;
   }
 
@@ -115,6 +112,6 @@ export class GroupContact extends Contact {
     for (let member of data.group.members) {
       members.push(new SimpleContact(member._id, member.username, member.public_key));
     }
-    return new GroupContact(id, name, members);
+    return new GroupContact(id, id, name, members);
   }
 }

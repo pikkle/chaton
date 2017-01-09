@@ -22,6 +22,12 @@ module.exports = {
             senderSocket.emit("new_contact", group);
         }
     },
+    notifyNewGroup: function(contactId, group) {
+        var receiverSocket = connected_clients[contactId];
+        if(receiverSocket) {
+            receiverSocket.emit("new_group", group);
+        }
+    },
     socket: function (socketio) {
 
         // connection event
@@ -67,6 +73,7 @@ module.exports = {
             // message sent event
             socket.on("send_message", function (message) {
                 authenticate(message);
+                console.log(message);
 
                 // todo : one tick & two ticks
                 socket.emit("message_processed");
