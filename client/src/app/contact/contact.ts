@@ -89,10 +89,17 @@ export class SimpleContact extends Contact {
   }
 
   public static contactFromJson(data: any): SimpleContact {
-    const id = data._id;
-    const username = data.username;
-    const publickey = data.public_key;
-    return new SimpleContact(id, null, username, publickey);
+    var selfId = localStorage['id'];
+    var c;
+    if (data.group.members[0]._id === selfId) {
+      c = data.group.members[1];
+    } else {
+      c = data.group.members[0];
+    }
+    const id = c._id;
+    const username = c.username;
+    const publickey = c.public_key;
+    return new SimpleContact(id, data.group._id, username, publickey);
   }
 
 }
@@ -110,7 +117,7 @@ export class GroupContact extends Contact {
     const name = data.group.name;
     var members: SimpleContact[] = [];
     for (let member of data.group.members) {
-      members.push(new SimpleContact(member._id, member.username, member.public_key));
+      members.push(new SimpleContact(member._id, id, member.username, member.public_key));
     }
     return new GroupContact(id, id, name, members);
   }
