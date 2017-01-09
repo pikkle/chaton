@@ -18,8 +18,7 @@ module.exports = function (router) {
             groupController.findById(id, function (err, group) {
                 if (err) {
                     res.sendStatus(404);
-                }
-                if (group) {
+                } else if (group) {
                     res.send(group);
                 }
             })
@@ -34,8 +33,9 @@ module.exports = function (router) {
                 if (err) {
                     console.log(err);
                     res.status(500).send(err);
+                } else {
+                    res.status(201).send(req.body);
                 }
-                res.status(201).send(req.body);
             })
         })
 }

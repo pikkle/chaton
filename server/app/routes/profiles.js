@@ -4,7 +4,7 @@
 
 "use strict";
 
-module.exports = function(router) {
+module.exports = function (router) {
 
     var profileController = require('../controllers/profiles');
 
@@ -13,9 +13,9 @@ module.exports = function(router) {
      * @param {String} id: The profile id
      */
     router.route("/:id")
-        .get(function(req, res, next) {
+        .get(function (req, res, next) {
             var id = req.params.id;
-            profileController.findById(id, function(err, profile) {
+            profileController.findById(id, function (err, profile) {
                 if (err) {
                     res.sendStatus(404);
                 }
@@ -28,28 +28,26 @@ module.exports = function(router) {
      * @param {String} id: The profile id
      */
     router.route("/:id")
-        .patch(function(req, res, next) {
-            console.log("HEllo from the other side")
+        .patch(function (req, res, next) {
             var id = req.params.id;
-            profileController.modifyProfile(id, req.body, function(response) {
-                console.log("CONTROLLER: ");
-                console.log(response);
+            profileController.modifyProfile(id, req.body, function (response) {
                 res.send(req.body);
             })
-        })
+        });
 
     /**
      * Add new profile
      */
     router.route("/")
-        .post(function(req, res, next) {
+        .post(function (req, res, next) {
             var profile = req.body;
-            profileController.addProfile(profile, function(err, result) {
+            profileController.addProfile(profile, function (err, result) {
                 if (err) {
                     console.log(err);
                     res.status(500).send(err);
+                } else {
+                    res.status(201).send(req.body);
                 }
-                res.status(201).send(req.body);
             });
         });
 
@@ -58,13 +56,14 @@ module.exports = function(router) {
      * @param {String} id: The profile id
      */
     router.route("/:id/history")
-        .get(function(req, res, next) {
+        .get(function (req, res, next) {
             var id = req.params.id;
-            profileController.getHistory(id, function(err, history) {
+            profileController.getHistory(id, function (err, history) {
                 if (err) {
                     res.sendStatus(404);
+                } else {
+                    res.send(history);
                 }
-                res.send(history);
             });
         });
 
@@ -73,14 +72,15 @@ module.exports = function(router) {
      * @param {String} id: The profile id
      */
     router.route("/:id/history")
-        .post(function(req, res, next) {
+        .post(function (req, res, next) {
             var id = req.params.id;
             var message = req.body;
-            profileController.addToHistory(id, message, function(err) {
+            profileController.addToHistory(id, message, function (err) {
                 if (err) {
                     res.sendStatus(404);
+                } else {
+                    res.sendStatus(201);
                 }
-                res.sendStatus(201);
             });
         });
 
@@ -90,14 +90,15 @@ module.exports = function(router) {
      * @param {String} groupId: The group id
      */
     router.route("/:profileId/history/:groupId")
-        .get(function(req, res, next) {
+        .get(function (req, res, next) {
             var profileId = req.params.profileId;
             var groupId = req.params.groupId;
-            profileController.getGroupHistory(profileId, groupId, function(err, history) {
+            profileController.getGroupHistory(profileId, groupId, function (err, history) {
                 if (err) {
                     res.sendStatus(404);
+                } else {
+                    res.send(history);
                 }
-                res.send(history);
             });
         });
 
@@ -106,13 +107,14 @@ module.exports = function(router) {
      * @param {String} id: The profile id
      */
     router.route("/:id/contact")
-        .get(function(req, res, next) {
+        .get(function (req, res, next) {
             var id = req.params.id;
-            profileController.getAllContacts(id, function(err, contacts) {
+            profileController.getAllContacts(id, function (err, contacts) {
                 if (err) {
                     res.sendStatus(404);
+                } else {
+                    res.send(contacts);
                 }
-                res.send(contacts);
             });
         });
 
@@ -122,14 +124,15 @@ module.exports = function(router) {
      * @param {String} contactId: The contact id
      */
     router.route("/:profileId/contact/:contactId")
-        .get(function(req, res, next) {
+        .get(function (req, res, next) {
             var profileId = req.params.profileId;
             var contactId = req.params.contactId;
-            profileController.getContactById(profileId, contactId, function(err, contact) {
+            profileController.getContactById(profileId, contactId, function (err, contact) {
                 if (err) {
                     res.sendStatus(404);
+                } else {
+                    res.send(contact);
                 }
-                res.send(contact);
             });
         });
 
@@ -138,14 +141,15 @@ module.exports = function(router) {
      * @param {String} id: The profile id
      */
     router.route("/:id/contact")
-        .post(function(req, res, next) {
+        .post(function (req, res, next) {
             var id = req.params.id;
             var body = req.body;
-            profileController.addContact(id, body.contact_email, function(err) {
+            profileController.addContact(id, body.contact_email, function (err) {
                 if (err) {
                     res.status(500).send(err);
+                } else {
+                    res.sendStatus(204);
                 }
-                res.sendStatus(204);
             });
         });
 
@@ -155,14 +159,15 @@ module.exports = function(router) {
      * @param {String} contactId: The contact id
      */
     router.route("/:profileId/contact/:contactId")
-        .delete(function(req, res, next) {
+        .delete(function (req, res, next) {
             var profileId = req.params.profileId;
             var contactId = req.params.contactId;
-            profileController.removeContact(profileId, contactId, function(err) {
+            profileController.removeContact(profileId, contactId, function (err) {
                 if (err) {
                     res.status(500).send(err);
+                } else {
+                    res.sendStatus(204);
                 }
-                res.sendStatus(204);
             });
         });
 };
