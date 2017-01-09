@@ -86,7 +86,7 @@ module.exports = {
                 });
                 // send message to destination user (if connected)
                 var receiverSocket = connected_clients[message.receiver];
-                if (receiverSocket) {
+                if (receiverSocket && message.receiver !== message.sender) {
                     receiverSocket.emit("new_message", message);
                 }
             });
