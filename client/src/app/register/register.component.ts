@@ -33,6 +33,8 @@ export class RegisterComponent implements OnInit {
   }
 
   register(): Promise<any> {
-    return this.apiService.register(this.email, this.username, this.password);
+    var ret: Promise<any> = this.apiService.register(this.email, this.username, this.password);
+    this.router.navigateByUrl('');
+    return ret;
   }
 }

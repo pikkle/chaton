@@ -1,5 +1,5 @@
 import {Component, OnInit, EventEmitter, Output, Input} from '@angular/core';
-import {Contact} from './contact';
+import {Contact, SimpleContact, GroupContact} from './contact';
 import {ContactService} from '../services/contact.service';
 import {EmojiService} from '../services/emoji.service';
 import {Emoji} from '../services/emoji';
@@ -25,6 +25,7 @@ export class ContactListComponent implements OnInit {
 
   emojis: Emoji[]; // All emojis
   nextMessage: string;
+  selfId: string;
 
 
   /**
@@ -47,13 +48,17 @@ export class ContactListComponent implements OnInit {
    * Called on component instanciation
    */
   ngOnInit(): void {
-
+    this.selfId = localStorage['id'];
   }
 
   sender(contact: Contact): string {
-    if(contact.id === contact.lastMessage().sender)
-      return contact.name + ": ";
-    return  "You : ";
+    if (contact.lastMessage().sender === this.selfId)
+      return "You: ";
+    var simpleContact: SimpleContact = <SimpleContact> contact;
+    if (contact instanceof GroupContact) {
+      simpleContact = (<GroupContact> contact).contacts.find(c => c.id === contact.lastMessage().sender);
+    }
+    return simpleContact.username + ": ";
   }
 
 }

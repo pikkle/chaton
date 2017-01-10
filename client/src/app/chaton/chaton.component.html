@@ -102,12 +102,13 @@
     <form>
       <div class="form-group">
         <label for="groupName">Group name:</label>
-        <input id="groupName" name="formNewGroupName" class="form-control" type="text" required>
+        <input id="groupName" name="formNewGroupName" [(ngModel)]="formGroupName" class="form-control" type="text" required>
       </div>
       <div class="form-group">
         <label for="groupMembers">Group members:</label>
         <div id="groupMembers" name="formNewGroupMembers" class="group-contacts">
           <div *ngFor="let contact of contacts; let i = index;" class="group-contact-proposal">
+            <div *ngIf="isSimpleContact(contact)">
             <input type="checkbox" name="contact-{{i}}" id="contact-{{i}}" [(ngModel)]="formGroupList[contact.id]">
             <label [attr.for]="'contact-'+i" class="label-contacts">
               <span class="avatar-circle" [ngStyle]="{'background-color': contact.color}">
@@ -115,7 +116,7 @@
               </span>
               <span class="contact-name">{{contact.username}}</span>
             </label>
-
+            </div>
           </div>
 
         </div>

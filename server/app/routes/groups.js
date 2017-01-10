@@ -34,7 +34,7 @@ module.exports = function (router) {
                     console.log(err);
                     res.status(500).send(err);
                 } else {
-                    res.status(201).send(req.body);
+                    res.status(201).send(result);
                 }
             })
         })

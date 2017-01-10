@@ -1,14 +1,14 @@
 import { Injectable } from "@angular/core";
-import {Contact, SimpleContact, GroupContact} from '../contact/contact';
+import { Contact, SimpleContact, GroupContact } from '../contact/contact';
 
 import * as io from "socket.io-client";
 import { CryptoService } from "./crypto.service";
 import { Message } from "../conversation/message";
-import {ApiService} from "./api.service";
+import { ApiService } from "./api.service";
+import {ConfigService} from "./config.service";
 
 @Injectable()
 export class SocketService {
-  private host: string = "http://localhost:3030";
   private socket: SocketIOClient.Socket;
   private token: string;
   private id: string;
@@ -21,6 +21,7 @@ export class SocketService {
    */
   constructor(
     private cryptoService: CryptoService,
+    private configService: ConfigService,
     private apiService: ApiService) {
   }
 
@@ -35,7 +36,7 @@ export class SocketService {
     if (this.isAuthenticated()) {
       return true;
     }
-    this.socket = io.connect(this.host);
+    this.socket = io.connect(this.configService.server());
     this.token = token;
     this.id = id;
     this.email = email;
@@ -70,23 +71,24 @@ export class SocketService {
   public sendMessage(message: Message, to: Contact): void {
     var contacts: SimpleContact[] = [];
     if (to instanceof GroupContact) {
-      contacts = (<GroupContact> to).contacts;
+      contacts = (<GroupContact>to).contacts;
     } else if (to instanceof SimpleContact) {
-      contacts.push(<SimpleContact> to);
+      contacts.push(<SimpleContact>to);
     }
 
     var messages: any[] = [];
 
     var date = Date.now();
-
-    for(let contact of contacts) {
+    console.log("TOGROUPID")
+    console.log(to);
+    for (let contact of contacts) {
       var messageForOther = {
         token: this.token,
         timestamp: date,
         state: 0,
         type: "txt",
         extension: "txt",
-        group: contact.groupId,
+        group: to.groupId,
         sender: this.id,
         receiver: contact.id,
         content: this.cryptoService.cipher(message.content, contact.publicKey)
@@ -104,7 +106,7 @@ export class SocketService {
       receiver: this.id,
       content: this.cryptoService.cipher(message.content, this.publicKey)
     };
-
+    console.log(messageForSelf);
     messages.push(messageForSelf);
     for (let message of messages) {
       this.socket.emit('send_message', message);

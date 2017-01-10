@@ -9,7 +9,15 @@
       </div>
       <div class="right-part">
         <h1>{{contact.name}}</h1>
-        <span *ngIf="contact.messages.length > 0" class="lastMessage">{{sender(contact) + contact.lastMessage().content}}</span>
+        <span *ngIf="contact.messages.length > 0" class="lastMessage">
+          <span *ngIf="contact.lastMessage().type === 'text'">
+            {{sender(contact) + contact.lastMessage().content}}
+          </span>
+          <span *ngIf="contact.lastMessage().type === 'image'">
+            {{sender(contact)}}
+            <img class="imagePreview" src={{contact.lastMessage().path}}>
+          </span>
+        </span>
       </div>
     </li>
   </ul>
