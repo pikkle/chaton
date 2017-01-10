@@ -70,17 +70,28 @@ export class SocketService {
    */
   public sendMessage(message: Message, to: Contact): void {
     var contacts: SimpleContact[] = [];
-    if (to instanceof GroupContact) {
-      contacts = (<GroupContact>to).contacts;
-    } else if (to instanceof SimpleContact) {
-      contacts.push(<SimpleContact>to);
-    }
-
     var messages: any[] = [];
 
+    if (to instanceof GroupContact) {
+      contacts = (<GroupContact>to).contacts; // contacts contains already self
+    } else if (to instanceof SimpleContact) {
+      contacts.push(<SimpleContact>to);
+      messages.push({ // message for self
+        token: this.token,
+        timestamp: date,
+        state: 0,
+        type: "txt",
+        extension: "txt",
+        group: to.groupId,
+        sender: this.id,
+        receiver: this.id,
+        content: this.cryptoService.cipher(message.content, this.publicKey)
+      });
+    }
+
+
+
     var date = Date.now();
-    console.log("TOGROUPID")
-    console.log(to);
     for (let contact of contacts) {
       var messageForOther = {
         token: this.token,
@@ -95,19 +106,7 @@ export class SocketService {
       };
       messages.push(messageForOther);
     }
-    var messageForSelf = {
-      token: this.token,
-      timestamp: date,
-      state: 0,
-      type: "txt",
-      extension: "txt",
-      group: to.groupId,
-      sender: this.id,
-      receiver: this.id,
-      content: this.cryptoService.cipher(message.content, this.publicKey)
-    };
-    console.log(messageForSelf);
-    messages.push(messageForSelf);
+
     for (let message of messages) {
       this.socket.emit('send_message', message);
     }

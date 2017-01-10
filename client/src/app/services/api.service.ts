@@ -55,6 +55,10 @@ export class ApiService {
    * @returns {Promise<TResult|TResult>} the body response of the server
    */
   private post(options, path, data): any {
+    console.log("SENDING POST");
+    console.log(options);
+    console.log(path);
+    console.log(data);
     return this.http.post(this.config.server() + path, JSON.stringify(data), options)
       .toPromise()
       .then(response => {
@@ -105,7 +109,7 @@ export class ApiService {
     var path = '/api/auth';
     var data = {
       "email": email,
-      "password": this.cryptoService.hash(password)
+      "password": password
     };
 
     return this.post(options, path, data);
