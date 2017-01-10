@@ -1,5 +1,5 @@
-<div class="conversationCanvas">
-  <div id="selectedConversation">
+<div class="conversationCanvas" [ngStyle]="{'background-image': 'url(' + background + ')'}">
+  <div id="selectedConversation" style="background-color:rgba(0, 0, 0, 0.4);">
     <div *ngIf="selectedContact != null">
       <div class="message" *ngFor="let message of selectedContact.messages">
         <div [ngSwitch]="message.sender">
@@ -25,26 +25,23 @@
   </div>
   <div *ngIf="selectedContact != null">
     <div class="userInput" ng-submit="sendMessage()">
-				<textarea autosize id="userTextArea" [(ngModel)]="nextMessage" (keyup.enter)="sendMessage()" autofocus
-                  placeholder="Enter message...">
+      <textarea autosize id="userTextArea" [(ngModel)]="nextMessage" (keyup.enter)="sendMessage()" autofocus placeholder="Enter message...">
         </textarea>
       <img src="../../assets/emojis/1f60a.png" class="emoji" (click)="modalEmojis.open()">
-      <!--<img src="../../assets/attach.jpg" class="attach" (click)="secondModal.open()">-->
     </div>
   </div>
 </div>
 
 <div style="position: relative">
-  <modal #modalEmojis>
-    <modal-header>
-      <h1>Choose emoji</h1>
-    </modal-header>
-    <modal-content>
-      <img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji"
-           (click)="changeMessage(emoji.text); modalEmojis.close();">
-    </modal-content>
-    <modal-footer>
-      <button class="btn btn-primary" (click)="modalEmojis.close()">Changed my mind</button>
-    </modal-footer>
-  </modal>
+<modal #modalEmojis>
+  <modal-header>
+    <h1>Choose emoji</h1>
+  </modal-header>
+  <modal-content>
+    <img *ngFor="let emoji of this.emojis" src={{emoji.path}} class="modalEmoji" (click)="changeMessage(emoji.text); modalEmojis.close();">
+  </modal-content>
+  <modal-footer>
+    <button class="btn btn-primary" (click)="modalEmojis.close()">Changed my mind</button>
+  </modal-footer>
+</modal>
 </div>

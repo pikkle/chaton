@@ -8,7 +8,7 @@ import { ApiService } from "./api.service";
 
 @Injectable()
 export class SocketService {
-  private host: string = "http://localhost:3030";
+  private host: string = "https://api.chaton.pro";
   private socket: SocketIOClient.Socket;
   private token: string;
   private id: string;
