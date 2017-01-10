@@ -5,10 +5,10 @@ import * as io from "socket.io-client";
 import { CryptoService } from "./crypto.service";
 import { Message } from "../conversation/message";
 import { ApiService } from "./api.service";
+import {ConfigService} from "./config.service";
 
 @Injectable()
 export class SocketService {
-  private host: string = "http://localhost:3030";
   private socket: SocketIOClient.Socket;
   private token: string;
   private id: string;
@@ -21,6 +21,7 @@ export class SocketService {
    */
   constructor(
     private cryptoService: CryptoService,
+    private configService: ConfigService,
     private apiService: ApiService) {
   }
 
@@ -35,7 +36,7 @@ export class SocketService {
     if (this.isAuthenticated()) {
       return true;
     }
-    this.socket = io.connect(this.host);
+    this.socket = io.connect(this.configService.server());
     this.token = token;
     this.id = id;
     this.email = email;

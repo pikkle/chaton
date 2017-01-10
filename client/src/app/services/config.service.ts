@@ -7,7 +7,7 @@ export class ConfigService {
   private _debug: boolean;
 
   constructor() {
-    this._server = "http://localhost:3030";
+    this._server = "https://api.chaton.pro";
     this._debug = false;
   }
 
