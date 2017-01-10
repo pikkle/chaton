@@ -1,5 +1,5 @@
 <div class="conversationCanvas">
-  <div id="selectedConversation">
+  <div id="selectedConversation" #list class="list" [scrollTop]="list.scrollHeight">
     <div *ngIf="selectedContact != null">
       <div class="message" *ngFor="let message of selectedContact.messages">
         <div [ngSwitch]="message.sender">
