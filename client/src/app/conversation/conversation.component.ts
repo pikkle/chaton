@@ -1,9 +1,9 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {Message} from './message';
-import {EmojiService} from '../services/emoji.service';
-import {Contact} from "../contact/contact";
-import {SocketService} from "../services/socket.service";
-import {Emoji} from "../services/emoji";
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Message } from './message';
+import { EmojiService } from '../services/emoji.service';
+import { Contact } from "../contact/contact";
+import { SocketService } from "../services/socket.service";
+import { Emoji } from "../services/emoji";
 
 @Component({
   selector: 'app-conversation',
@@ -18,7 +18,12 @@ export class ConversationComponent implements OnInit {
   id: string;
   nextMessage: string;
 
+  @Input()
+  background: string;
+
   emojis: Emoji[];
+
+
 
   @Output()
   addedNewMessage = new EventEmitter<Message>();
@@ -28,6 +33,7 @@ export class ConversationComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.background = "../../assets/backgrounds/b1.jpg";
     this.email = localStorage['email'];
     this.id = localStorage['id'];
     this.emojiService.getEmojis().then(emojis => this.emojis = emojis);

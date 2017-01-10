@@ -12,18 +12,18 @@
         <div class="container">
             <div class="profile">
                 <button class="profile__avatar" id="toggleProfile">
-          <img src="../../assets/default_avatar.png" alt="Avatar" /> 
-        </button>
+                    <img src="../../assets/default_avatar.png" alt="Avatar" /> 
+                </button>
                 <div class="profile__form">
                     <div class="alert alert-danger" *ngIf="invalidCredentials">Invalid credentials</div>
                     <div class="profile__fields">
                         <div class="field">
-                            <input type="text" class="input" [(ngModel)]="email" required pattern=.*\S.* />
-                            <label for="fieldEmail" class="label">Email address</label>
+                            <input type="text" class="input" (click)="invalidCredentials = false;" placeholder="Email address" [(ngModel)]="email" required pattern=.*\S.* />
+                            <!--<label for="fieldEmail" class="label">Email address</label>-->
                         </div>
                         <div class="field">
-                            <input type="password" class="input" [(ngModel)]="password" required pattern=.*\S.* />
-                            <label for="fieldPassword" class="label">Password</label>
+                            <input type="password" class="input" (click)="invalidCredentials = false;" placeholder="Enter password" [(ngModel)]="password" required pattern=.*\S.* />
+                            <!--<label for="fieldPassword" class="label">Password</label>-->
                         </div>
                         <div class="profile__footer" style="float: left; margin-bottom: 10px;">
                             <button class="btn" (click)="login()">Login</button>
