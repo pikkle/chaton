@@ -51,9 +51,9 @@ export class ContactListComponent implements OnInit {
   }
 
   sender(contact: Contact): string {
-    if(contact.id === contact.lastMessage().sender)
-      return contact.name + ": ";
-    return  "You : ";
+    if(contact.id !== contact.lastMessage().sender)
+      return "You : ";
+    return  contact.name + ": ";
   }
 
 }

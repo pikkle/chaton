@@ -46,32 +46,31 @@ export abstract class Contact {
     }*/
 
     for (let history of data.history) { // fill contacts with groups and populate all contacts with history
-      if (history.group) {
-        if (history.group.isCreatedGroup) {
-          var g: GroupContact = GroupContact.contactFromJson(history);
+      if (history.group.isCreatedGroup) {
+        var g: GroupContact = GroupContact.contactFromJson(history);
+        for (let m of history.messages) {
+          Message.parseMessage(m.content, m.sender, g.groupId, emojiService).then(message => {
+            g.messages.push(message);
+          });
+        }
+        groupContacts.push(g);
+      } else {
+        var simpleContact = SimpleContact.contactFromJson(history);
+        simpleContacts.push(simpleContact);
+        if (simpleContact) {
+          simpleContact.groupId = history.group._id;
           for (let m of history.messages) {
-            Message.parseMessage(m.content, m.sender, g.groupId, emojiService).then(message => {
-              g.messages.push(message);
+            var saveMessage = function (contact: SimpleContact, message: Message) {
+              contact.messages.push(message);
+            };
+            Message.parseMessage(m.content, m.sender, simpleContact.groupId, emojiService).then(message => {
+              simpleContacts.find(c => c.groupId === message.groupId).messages.push(message);
             });
-          }
-          groupContacts.push(g);
-        } else {
-          var simpleContact = SimpleContact.contactFromJson(history);
-          simpleContacts.push(simpleContact);
-          if (simpleContact) {
-            simpleContact.groupId = history.group._id;
-            for (let m of history.messages) {
-              var saveMessage = function (contact: SimpleContact, message: Message) {
-                contact.messages.push(message);
-              };
-              Message.parseMessage(m.content, m.sender, simpleContact.groupId, emojiService).then(message => {
-                simpleContacts.find(c => c.groupId === message.groupId).messages.push(message);
-              });
-            }
           }
         }
       }
     }
+
     var contacts = (<Contact[]>simpleContacts).concat(groupContacts);
     return contacts;
   }
@@ -107,8 +106,8 @@ export class SimpleContact extends Contact {
 export class GroupContact extends Contact {
   public contacts: SimpleContact[];
 
-  constructor(id: string, groupId: string, title: string, contacts: SimpleContact[]) {
-    super(id, groupId, title);
+  constructor(id: string, title: string, contacts: SimpleContact[]) {
+    super(id, id, title);
     this.contacts = contacts;
   }
 
@@ -119,6 +118,6 @@ export class GroupContact extends Contact {
     for (let member of data.group.members) {
       members.push(new SimpleContact(member._id, id, member.username, member.public_key));
     }
-    return new GroupContact(id, id, name, members);
+    return new GroupContact(id, name, members);
   }
 }
