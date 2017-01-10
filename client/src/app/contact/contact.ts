@@ -1,5 +1,5 @@
-import { Message } from "../conversation/message";
-import { EmojiService } from "../services/emoji.service";
+import {Message} from "../conversation/message";
+import {EmojiService} from "../services/emoji.service";
 
 export abstract class Contact {
   public id: string;
@@ -41,20 +41,17 @@ export abstract class Contact {
 
     var simpleContacts: SimpleContact[] = [];
     var groupContacts: GroupContact[] = [];
-    /*for (let c of data.contacts) { // retrieve simple contacts
-      simpleContacts.push(SimpleContact.contactFromJson(c));
-    }*/
 
     for (let history of data.history) { // fill contacts with groups and populate all contacts with history
-      if (history.group.isCreatedGroup) {
+      if (history.group.isCreatedGroup) { // history concerns a group
         var g: GroupContact = GroupContact.contactFromJson(history);
         for (let m of history.messages) {
           Message.parseMessage(m.content, m.sender, g.groupId, emojiService).then(message => {
-            g.messages.push(message);
+            groupContacts.find(g => g.groupId === message.groupId).addMessage(message);
           });
         }
         groupContacts.push(g);
-      } else {
+      } else { // history concerns a simple contact
         var simpleContact = SimpleContact.contactFromJson(history);
         simpleContacts.push(simpleContact);
         if (simpleContact) {
@@ -64,7 +61,7 @@ export abstract class Contact {
               contact.messages.push(message);
             };
             Message.parseMessage(m.content, m.sender, simpleContact.groupId, emojiService).then(message => {
-              simpleContacts.find(c => c.groupId === message.groupId).messages.push(message);
+              simpleContacts.find(c => c.groupId === message.groupId).addMessage(message);
             });
           }
         }

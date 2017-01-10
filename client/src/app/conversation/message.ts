@@ -1,6 +1,7 @@
 import {EmojiService} from '../services/emoji.service';
 
 export class Message {
+  private path: string;
 
   constructor(private emojiService: EmojiService,
               public timestamp: number,
@@ -10,11 +11,11 @@ export class Message {
               public sender: string,
               public groupId: string) {
     if (this.type === 'image') {
-      this.emojiService.getEmoji(content).then(emoji => this.content = emoji.path);
+      this.emojiService.getEmoji(content).then(emoji => this.path = emoji.path);
     }
   }
 
-  static parseMessage(content: string, from: string, groupId: string, emojiService: EmojiService) : Promise<Message> {
+  static parseMessage(content: string, from: string, groupId: string, emojiService: EmojiService): Promise<Message> {
     if (content !== null && content.length > 0) {
       if (/\S/.test(content)) {
         // string is not empty and not just whitespace
@@ -29,5 +30,6 @@ export class Message {
     }
     return Promise.reject("Empty message");
   }
+
 
 }

@@ -1,11 +1,12 @@
+
 <div class="conversationCanvas" [ngStyle]="{'background-image': 'url(' + background + ')'}">
-  <div id="selectedConversation" style="background-color:rgba(0, 0, 0, 0.4);">
+  <div id="selectedConversation" style="background-color:rgba(0, 0, 0, 0.4);" #list class="list" [scrollTop]="list.scrollHeight">
     <div *ngIf="selectedContact != null">
       <div class="message" *ngFor="let message of selectedContact.messages">
         <div [ngSwitch]="message.sender">
           <div *ngSwitchCase="id">
             <div *ngIf="message.type==='image'" class="thisSender">
-              <img class="imageMessage" src={{message.content}}>
+              <img class="imageMessage" src={{message.path}}>
             </div>
             <div *ngIf="message.type==='text'" class="bubble thisSender">
               {{message.content}}
@@ -13,7 +14,7 @@
           </div>
           <div *ngSwitchDefault>
             <div *ngIf="message.type==='image'" class="otherSender">
-              <img class="imageMessage" src={{message.content}}>
+              <img class="imageMessage" src={{message.path}}>
             </div>
             <div *ngIf="message.type==='text'" class="bubble otherSender">
               {{message.content}}
