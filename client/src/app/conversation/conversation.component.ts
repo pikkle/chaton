@@ -4,6 +4,7 @@ import {EmojiService} from '../services/emoji.service';
 import {Contact} from "../contact/contact";
 import {SocketService} from "../services/socket.service";
 import {Emoji} from "../services/emoji";
+import {CryptoService} from "../services/crypto.service";
 
 @Component({
   selector: 'app-conversation',
@@ -24,7 +25,11 @@ export class ConversationComponent implements OnInit {
   addedNewMessage = new EventEmitter<Message>();
 
 
-  constructor(private emojiService: EmojiService, private socketService: SocketService) {
+  constructor(
+    private emojiService: EmojiService,
+    private socketService: SocketService,
+    private cryptoService: CryptoService
+  ) {
   }
 
   ngOnInit() {
@@ -53,6 +58,14 @@ export class ConversationComponent implements OnInit {
 
     });
 
+
+
+
+  }
+
+  TEST_CRYPTO(): void {
+    console.log("test");
+    this.cryptoService.generateKeypair();
   }
 
 }

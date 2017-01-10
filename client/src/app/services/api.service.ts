@@ -105,7 +105,7 @@ export class ApiService {
     var path = '/api/auth';
     var data = {
       "email": email,
-      "password": this.cryptoService.hashPassword(password)
+      "password": this.cryptoService.hash(password)
     };
 
     return this.post(options, path, data);
@@ -116,23 +116,23 @@ export class ApiService {
    * @param email the new account's email
    * @param username the new account's username
    * @param password the new account's password
-   * @returns {Promise<any>} the body response
+   * @returns {PromiseLike<any>} the body response
    */
-  public register(email: string, username: string, password: string): Promise<any> {
-    var keypair = this.cryptoService.generateKeypair();
-    localStorage["privateKey"] = keypair.private;
-    localStorage["publicKey"] = keypair.public;
+  public register(email: string, username: string, password: string): PromiseLike<any> {
+    return this.cryptoService.generateKeypair().then(keypair => {
+      var options = new RequestOptions({headers: ApiService.jsonHeader});
+      var path = "/api/profile";
+      var data = {
+        "email": email,
+        "username": username,
+        "password": password,
+        "public_key": keypair.publicKey,
+        "private_key": keypair.privateKey
+      };
+      return this.post(options, path, data);
+    });
 
-    var options = new RequestOptions({headers: ApiService.jsonHeader});
-    var path = "/api/profile";
-    var data = {
-      "email": email,
-      "username": username,
-      "password": password,
-      "public_key": keypair.public
-    };
 
-    return this.post(options, path, data);
   }
 
   /**
