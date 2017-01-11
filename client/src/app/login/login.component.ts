@@ -4,6 +4,7 @@ import {Http, Response} from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import {ApiService} from '../services/api.service';
 import {SocketService} from '../services/socket.service';
+import {CryptoService} from "../services/crypto.service";
 
 @Component({
   selector: 'app-login',
@@ -23,7 +24,8 @@ export class LoginComponent implements OnInit {
   // Constructor. Initializes LoginComponent's Router and Http fields
   constructor(private router: Router,
               private apiService: ApiService,
-              private socketService: SocketService) {
+              private socketService: SocketService,
+              private cryptoService: CryptoService) {
     this.invalidCredentials = false;
   }
 
@@ -55,13 +57,14 @@ export class LoginComponent implements OnInit {
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
         localStorage["email"] = this.email;
-        localStorage["publicKey"] = data.publickey;
-        this.socketService.authenticate(data.token, data.id, this.email, data.publickey);
+        localStorage["password"] = this.password;
+        this.socketService.authenticate(data.token, data.id, this.email);
       })
       .then(_ => {
         this.router.navigateByUrl('chat')
       })
       .catch(err => {
+        console.log(err);
         this.invalidCredentials = true;
         this.email = "";
         this.password = "";
@@ -71,5 +74,6 @@ export class LoginComponent implements OnInit {
   redirectToRegister(): void {
     this.router.navigateByUrl('register');
   }
+
 
 }

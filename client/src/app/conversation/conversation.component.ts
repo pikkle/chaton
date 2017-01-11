@@ -1,9 +1,10 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Message } from './message';
-import { EmojiService } from '../services/emoji.service';
-import { Contact } from "../contact/contact";
-import { SocketService } from "../services/socket.service";
-import { Emoji } from "../services/emoji";
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Message} from './message';
+import {EmojiService} from '../services/emoji.service';
+import {Contact} from "../contact/contact";
+import {SocketService} from "../services/socket.service";
+import {Emoji} from "../services/emoji";
+import {CryptoService} from "../services/crypto.service";
 
 @Component({
   selector: 'app-conversation',
@@ -29,7 +30,9 @@ export class ConversationComponent implements OnInit {
   addedNewMessage = new EventEmitter<Message>();
 
 
-  constructor(private emojiService: EmojiService, private socketService: SocketService) {
+  constructor(private emojiService: EmojiService,
+              private socketService: SocketService,
+              private cryptoService: CryptoService) {
   }
 
   ngOnInit() {
@@ -50,7 +53,12 @@ export class ConversationComponent implements OnInit {
    * and sent to every concerned contact through the server
    */
   sendMessage(): void {
-    Message.parseMessage(this.nextMessage, this.id, this.selectedContact.groupId, this.emojiService).then(message => {
+    Message.parseMessage(this.nextMessage,
+      this.id,
+      this.selectedContact.groupId,
+      this.emojiService,
+      this.cryptoService
+    ).then(message => {
       this.selectedContact.addMessage(message);
       this.socketService.sendMessage(message, this.selectedContact);
       this.nextMessage = "";
@@ -60,5 +68,6 @@ export class ConversationComponent implements OnInit {
     });
 
   }
+
 
 }

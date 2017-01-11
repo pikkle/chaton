@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { SocketService } from "../services/socket.service";
-import { Router } from "@angular/router";
-import { Contact } from "../contact/contact";
-import { ApiService } from "../services/api.service";
-import { Message } from "../conversation/message";
-import { EmojiService } from "../services/emoji.service";
-import { SimpleContact } from "../contact/contact";
+import {Component, OnInit} from '@angular/core';
+import {SocketService} from "../services/socket.service";
+import {Router} from "@angular/router";
+import {Contact} from "../contact/contact";
+import {ApiService} from "../services/api.service";
+import {Message} from "../conversation/message";
+import {EmojiService} from "../services/emoji.service";
+import {SimpleContact} from "../contact/contact";
+import {CryptoService} from "../services/crypto.service";
 @Component({
   selector: 'app-chaton',
   templateUrl: './chaton.component.html',
@@ -18,6 +19,7 @@ export class ChatonComponent implements OnInit {
   id: string;
   email: string;
   username: string;
+  password: string;
 
   formUsername: string;
   formOldPassword: string;
@@ -39,15 +41,18 @@ export class ChatonComponent implements OnInit {
 
   selectedImage: any;
   constructor(private router: Router,
-    private socketService: SocketService,
-    private apiService: ApiService,
-    private emojiService: EmojiService) {
+              private socketService: SocketService,
+              private apiService: ApiService,
+              private emojiService: EmojiService,
+              private cryptoService: CryptoService) {
   }
 
   logout(): void {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
     localStorage.removeItem("email");
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
     this.socketService.disconnect();
     this.router.navigateByUrl('');
   }
@@ -86,6 +91,7 @@ export class ChatonComponent implements OnInit {
     this.token = localStorage["token"];
     this.id = localStorage["id"];
     this.email = localStorage["email"];
+    this.password = localStorage["password"];
     this.username = localStorage["username"];
 
     this.formUsername = this.username;
@@ -104,29 +110,21 @@ export class ChatonComponent implements OnInit {
     this.getContacts();
 
     this.socketService.addListener("new_message", (data: any) => {
-      console.log(data);
-      Message.parseMessage(data.content, data.sender, data.group, this.emojiService).then(message => {
+      Message.parseEncryptedMessage(data.content,
+        data.sender,
+        data.group,
+        this.emojiService,
+        this.cryptoService
+      ).then(message => {
         this.contacts.find(c => c.groupId === data.group).addMessage(message);
         this.sortContacts();
       });
     });
     this.socketService.addListener("new_group", (data: any) => {
       this.getContacts();
-    })
+    });
     this.socketService.addListener("new_contact", (data: any) => {
       this.getContacts();
-      // Go through contacts and associate to group id
-      /*var newContactId;
-      if (data.members[0] === this.id) {
-        newContactId = data.members[1];
-      } else {
-        newContactId = data.members[0];
-      }
-      this.contacts.forEach(contact => {
-        if (contact.id === newContactId) {
-          contact.groupId = data._id;
-        }
-    });*/
     })
   }
 
@@ -176,7 +174,7 @@ export class ChatonComponent implements OnInit {
 
   }
 
-  haveNewMessage(): void {
+  haveNewMessage(message: Message): void {
     this.sortContacts();
   }
 

@@ -9,6 +9,7 @@ import {EmojiService} from "./emoji.service";
 @Injectable()
 export class ApiService {
   private static readonly jsonHeader = new Headers({'Content-Type': 'application/json'});
+  public static password: string;
 
   constructor(private http: Http,
               private config: ConfigService,
@@ -55,6 +56,10 @@ export class ApiService {
    * @returns {Promise<TResult|TResult>} the body response of the server
    */
   private post(options, path, data): any {
+    console.log("SENDING POST");
+    console.log(options);
+    console.log(path);
+    console.log(data);
     return this.http.post(this.config.server() + path, JSON.stringify(data), options)
       .toPromise()
       .then(response => {
@@ -105,9 +110,10 @@ export class ApiService {
     var path = '/api/auth';
     var data = {
       "email": email,
-      "password": this.cryptoService.hashPassword(password)
+      "password": password
     };
-
+    ApiService.password = password;
+    console.log("PASSWORD HAS BEEN UPDATED");
     return this.post(options, path, data);
   }
 
@@ -116,23 +122,23 @@ export class ApiService {
    * @param email the new account's email
    * @param username the new account's username
    * @param password the new account's password
-   * @returns {Promise<any>} the body response
+   * @returns {PromiseLike<any>} the body response
    */
-  public register(email: string, username: string, password: string): Promise<any> {
-    var keypair = this.cryptoService.generateKeypair();
-    localStorage["privateKey"] = keypair.private;
-    localStorage["publicKey"] = keypair.public;
-
-    var options = new RequestOptions({headers: ApiService.jsonHeader});
-    var path = "/api/profile";
-    var data = {
-      "email": email,
-      "username": username,
-      "password": password,
-      "public_key": keypair.public
-    };
-
-    return this.post(options, path, data);
+  public register(email: string, username: string, password: string): PromiseLike<any> {
+    return this.cryptoService.generateKeypair(password).then(keypair => {
+      console.log(keypair);
+      var options = new RequestOptions({headers: ApiService.jsonHeader});
+      var path = "/api/profile";
+      var data = {
+        "email": email,
+        "username": username,
+        "password": password,
+        "public_key": keypair.publicKey,
+        "private_key": keypair.encryptedPrivateKey
+      };
+      ApiService.password = password;
+      return this.post(options, path, data);
+    });
   }
 
   /**
@@ -148,9 +154,16 @@ export class ApiService {
     return this.get(options, path).then(response => {
       localStorage["username"] = response.username;
       localStorage["avatar"] = '../assets/cat.jpg';
-      return response;
-    }).then(response => {
-      return Contact.contactsFromJson(response, this.emojiService)
+
+      if (!this.cryptoService.privateKey) {
+        this.cryptoService.privateKey = this.cryptoService.decrypt(response.private_key, ApiService.password).then(decryptedRaw => {
+          return CryptoService.jsonWebKeyToPromiseLikeCryptoKey(<JsonWebKey> JSON.parse(decryptedRaw));
+        });
+      }
+      if (!this.cryptoService.publicKey) {
+        this.cryptoService.publicKey = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(<JsonWebKey> response.public_key);
+      }
+      return Contact.contactsFromJson(response, this.emojiService, this.cryptoService)
     });
   }
 
