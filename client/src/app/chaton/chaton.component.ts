@@ -31,6 +31,15 @@ export class ChatonComponent implements OnInit {
   formGroupName: string;
   formGroupList: any;
 
+  imageList = [
+    "../../assets/backgrounds/b1.jpg",
+    "../../assets/backgrounds/b2.jpg",
+    "../../assets/backgrounds/b3.jpg",
+    "../../assets/backgrounds/b4.jpg",
+    "../../assets/backgrounds/b5.jpg"
+  ]
+
+  selectedImage: any;
   constructor(private router: Router,
               private socketService: SocketService,
               private apiService: ApiService,
@@ -93,7 +102,6 @@ export class ChatonComponent implements OnInit {
 
     this.formGroupName = "";
     this.formGroupList = [];
-
 
     if (!this.socketService.isAuthenticated()) {
       this.router.navigateByUrl('');
@@ -172,6 +180,11 @@ export class ChatonComponent implements OnInit {
 
   isSimpleContact(contact: Contact): boolean {
     return contact instanceof SimpleContact;
+  }
+
+  onSelect(image): void {
+    console.log(image);
+    this.selectedImage = image;
   }
 
 }

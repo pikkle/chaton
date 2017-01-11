@@ -30,7 +30,7 @@
     </md-sidenav>
 
     <div class="conversation">
-      <app-conversation [(selectedContact)]="selectedContact" (addedNewMessage)="haveNewMessage()"></app-conversation>
+      <app-conversation [(selectedContact)]="selectedContact" [background]="selectedImage" (addedNewMessage)="haveNewMessage()"></app-conversation>
 
     </div>
   </md-sidenav-layout>
@@ -64,6 +64,7 @@
         <input id="repeatPassword" name="formRepeatPassword" class="form-control" type="text"
                [(ngModel)]="formRepeatPassword" placeholder="Repeat new password"/>
       </div>
+      <button type="button" class="btn btn-default" (click)="modalConfig.close(); modalBackground.open()">Change chat background</button>
     </form>
   </modal-content>
   <modal-footer>
@@ -72,7 +73,16 @@
     </button>
   </modal-footer>
 </modal>
-
+<modal #modalBackground>
+  <modal-header>
+    <h1>Change your background</h1>
+  </modal-header>
+  <modal-content>
+    <li *ngFor="let image of imageList" [class.selected]="image === selectedImage" (click)="onSelect(image)">
+      <img src={{image}} style="width: 80px; height: 80px; float: left">
+    </li>
+  </modal-content>
+</modal>
 <modal #modalNewContact>
   <modal-header>
     <h1>Add a new contact</h1>

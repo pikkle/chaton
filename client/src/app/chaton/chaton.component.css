@@ -77,10 +77,12 @@ header .icon-fa {
 
 .addUser {
   background-color: #0a3435;
+  cursor: pointer;
 }
 
 .addGroup {
   background-color:  #124648;
+  cursor: pointer;
 }
 
 .addUser, .addGroup {
