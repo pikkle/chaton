@@ -113,6 +113,10 @@
   word-wrap: break-word;
 }
 
+.senderSignature{
+  color:white;
+}
+
 .imageMessage {}
 
 .attach {

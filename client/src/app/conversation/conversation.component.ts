@@ -1,7 +1,7 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
 import {Message} from './message';
 import {EmojiService} from '../services/emoji.service';
-import {Contact} from "../contact/contact";
+import {Contact, SimpleContact, GroupContact} from "../contact/contact";
 import {SocketService} from "../services/socket.service";
 import {Emoji} from "../services/emoji";
 import {CryptoService} from "../services/crypto.service";
@@ -67,6 +67,14 @@ export class ConversationComponent implements OnInit {
 
     });
 
+  }
+
+  findSender(message: Message): SimpleContact {
+    if (this.selectedContact instanceof SimpleContact){
+      return this.selectedContact;
+    } else {
+      return (<GroupContact> this.selectedContact).contacts.find(c => c.id === message.sender);
+    }
   }
 
 

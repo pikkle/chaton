@@ -13,6 +13,9 @@
             </div>
           </div>
           <div *ngSwitchDefault>
+            <div class="senderSignature">
+              {{findSender(message).username}} says:
+            </div>
             <div *ngIf="message.type==='image'" class="otherSender">
               <img class="imageMessage" src={{message.path}}>
             </div>
