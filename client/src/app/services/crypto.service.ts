@@ -2,6 +2,9 @@ import {Injectable} from '@angular/core';
 
 @Injectable()
 export class CryptoService {
+  public privateKey: PromiseLike<CryptoKey>;
+  public publicKey: PromiseLike<CryptoKey>;
+
   private RSAKey: PromiseLike<CryptoKeyPair>;
   private existingAESKeys: {
     key: string,
@@ -17,50 +20,6 @@ export class CryptoService {
       },
       true,
       ["encrypt", "decrypt"]
-    );
-  }
-
-  /**
-   * Encrypt symmetrically data with a string key
-   * @param clear the data to encrypt
-   * @param key the key to encrypt the data (also used for decryption)
-   * @returns {PromiseLike<string>} the encrypted data
-   */
-  encrypt(clear: string, key: string): PromiseLike<string> {
-    return this.generateSymmetricCryptoKey(key).then(aesKey => {
-        return crypto.subtle.encrypt({
-            name: "AES-CTR",
-            counter: new Uint8Array(16),
-            length: 128
-          },
-          aesKey,
-          CryptoService.stringToArrayBuffer(clear)
-        ).then(encrypted => {
-          return CryptoService.arrayBufferToString(encrypted);
-        });
-      }
-    );
-  }
-
-  /**
-   * Decrypt symmetrically data with a string key
-   * @param clear the encrypted data to decrypt
-   * @param key the key to decrypt the data (also used for encryption)
-   * @returns {PromiseLike<string>} the decrypted data
-   */
-  decrypt(hash: string, key: string): PromiseLike <string> {
-    return this.generateSymmetricCryptoKey(key).then(aesKey => {
-        return crypto.subtle.decrypt({
-            name: "AES-CTR",
-            counter: new ArrayBuffer(16),
-            length: 128
-          },
-          aesKey,
-          CryptoService.stringToArrayBuffer(hash)
-        ).then(encrypted => {
-          return CryptoService.arrayBufferToString(encrypted);
-        });
-      }
     );
   }
 
@@ -95,10 +54,55 @@ export class CryptoService {
   }
 
   /**
+   * Encrypt symmetrically data with a string key
+   * @param clear the data to encrypt
+   * @param key the key to encrypt the data (also used for decryption)
+   * @returns {PromiseLike<string>} the encrypted data
+   */
+  encrypt(clear: string, key: string): PromiseLike<string> {
+    return this.generateSymmetricCryptoKey(key).then(aesKey => {
+        return crypto.subtle.encrypt({
+            name: "AES-CTR",
+            counter: new Uint8Array(16),
+            length: 64
+          },
+          aesKey,
+          CryptoService.stringToArrayBuffer(clear)
+        );
+      }
+    ).then(encrypted => {
+      console.log(new Uint8Array(encrypted));
+      return CryptoService.arrayBufferToString(encrypted);
+    });
+  }
+
+  /**
+   * Decrypt symmetrically data with a string key
+   * @param hash the encrypted data to decrypt
+   * @param key the key to decrypt the data (also used for encryption)
+   * @returns {PromiseLike<string>} the decrypted data
+   */
+  decrypt(hash: string, key: string): PromiseLike<string> {
+    return this.generateSymmetricCryptoKey(key).then(aesKey => {
+        return crypto.subtle.decrypt({
+            name: "AES-CTR",
+            counter: new ArrayBuffer(16),
+            length: 64
+          },
+          aesKey,
+          CryptoService.stringToArrayBuffer(hash)
+        ).then(decrypted => {
+          return CryptoService.arrayBufferToString(decrypted);
+        });
+      }
+    );
+  }
+
+  /**
    * Generates a key pair
    * @returns {{private: string, public: string}} the object containing both keys
    */
-  generateKeypair(): PromiseLike<Keypair> {
+  generateKeypair(password: string): PromiseLike<Keypair> {
     return this.RSAKey.then(k => {
         return Promise.all([
           crypto.subtle.exportKey("jwk", k.publicKey),
@@ -107,7 +111,10 @@ export class CryptoService {
           var keypair = new Keypair();
           keypair.publicKey = pub;
           keypair.privateKey = priv;
-          return keypair;
+          return this.encrypt(JSON.stringify(priv), password).then(encryptedPrivateKey => {
+            keypair.encryptedPrivateKey = encryptedPrivateKey;
+            return keypair;
+          });
         });
       }
     );
@@ -121,7 +128,7 @@ export class CryptoService {
    * @param publicKey the public key used in the encrypt algorithm
    * @returns {string} the encrypted message
    */
-  cipher(message: string, publicKey: PromiseLike<CryptoKey>) {
+  cipher(message: string, publicKey: PromiseLike<CryptoKey>): PromiseLike<string> {
     return publicKey.then(pub => {
       return crypto.subtle.encrypt({
           name: "RSA-OAEP"
@@ -136,11 +143,11 @@ export class CryptoService {
 
   /**
    * Decrypt a message using a given key
-   * @param message the message to be decrypted
-   * @param key the key used in the encrypt algorithm (generally a private key)
+   * @param encryptedMessage the message to be decrypted
+   * @param privateKey the key used in the encrypt algorithm (generally a private key)
    * @returns {string} the decrypted message
    */
-  decipher(encryptedMessage: string, privateKey: PromiseLike<CryptoKey>) {
+  decipher(encryptedMessage: string, privateKey: PromiseLike<CryptoKey>): PromiseLike<string> {
     return privateKey.then(pub => {
       return crypto.subtle.decrypt({
           name: "RSA-OAEP"
@@ -153,23 +160,20 @@ export class CryptoService {
     });
   }
 
-  private static
-  arrayBufferToString(buffer: ArrayBuffer): string {
-    return String.fromCharCode.apply(null, new Uint16Array(buffer));
+  private static arrayBufferToString(buffer: ArrayBuffer): string {
+    return String.fromCharCode.apply(null, new Uint8Array(buffer));
   }
 
-  private static
-  stringToArrayBuffer(str: string): ArrayBuffer {
-    var buf = new ArrayBuffer(str.length * 2);
-    var bufView = new Uint16Array(buf);
+  private static stringToArrayBuffer(str: string): ArrayBuffer {
+    var buf = new ArrayBuffer(str.length); // 2 bytes for each char
+    var bufView = new Uint8Array(buf);
     for (var i = 0, strLen = str.length; i < strLen; i++) {
       bufView[i] = str.charCodeAt(i);
     }
     return buf;
   }
 
-  public static jsonWebKeyToPromiseLikeCryptoKey(json: JsonWebKey, isPrivateKey: boolean): PromiseLike<CryptoKey> {
-    var usage: string = isPrivateKey ? "decrypt" : "encrypt";
+  public static jsonWebKeyToPromiseLikeCryptoKey(json: JsonWebKey): PromiseLike<CryptoKey> {
     return crypto.subtle.importKey(
       "jwk",
       json,
@@ -178,7 +182,7 @@ export class CryptoService {
         hash: {name: "SHA-256"}
       },
       false,
-      [usage]
+      json.key_ops
     );
   }
 }
@@ -186,4 +190,5 @@ export class CryptoService {
 export class Keypair {
   public publicKey: JsonWebKey;
   public privateKey: JsonWebKey;
+  public encryptedPrivateKey: string;
 }

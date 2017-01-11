@@ -43,11 +43,8 @@ export class Message {
                                groupId: string,
                                emojiService: EmojiService,
                                cryptoService: CryptoService): PromiseLike<Message> {
-    if (!Message.privateKey) {
-      Message.privateKey = JSON.parse(localStorage['privateKey']);
-    }
-    var privateKey: PromiseLike<CryptoKey> = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(Message.privateKey, true);
-    return cryptoService.decipher(encryptedContent, privateKey).then(decrypted => {
+
+    return cryptoService.decipher(encryptedContent, cryptoService.privateKey).then(decrypted => {
       return Message.parseMessage(decrypted, from, groupId, emojiService, cryptoService);
     });
   }

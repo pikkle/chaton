@@ -48,7 +48,7 @@ export abstract class Contact {
       if (history.group.isCreatedGroup) { // history concerns a group
         var g: GroupContact = GroupContact.contactFromJson(history);
         for (let m of history.messages) {
-          Message.parseMessage(m.content, m.sender, g.groupId, emojiService, cryptoService).then(message => {
+          Message.parseEncryptedMessage(m.content, m.sender, g.groupId, emojiService, cryptoService).then(message => {
             groupContacts.find(g => g.groupId === message.groupId).addMessage(message);
           });
         }
@@ -59,10 +59,7 @@ export abstract class Contact {
         if (simpleContact) {
           simpleContact.groupId = history.group._id;
           for (let m of history.messages) {
-            var saveMessage = function (contact: SimpleContact, message: Message) {
-              contact.messages.push(message);
-            };
-            Message.parseMessage(m.content, m.sender, simpleContact.groupId, emojiService, cryptoService).then(message => {
+            Message.parseEncryptedMessage(m.content, m.sender, simpleContact.groupId, emojiService, cryptoService).then(message => {
               simpleContacts.find(c => c.groupId === message.groupId).addMessage(message);
             });
           }
@@ -80,10 +77,10 @@ export class SimpleContact extends Contact {
   public username: string;
   public publicKey: JsonWebKey;
 
-  constructor(id: string, groupId: string, username: string, publickey: string) {
+  constructor(id: string, groupId: string, username: string, publicKey: JsonWebKey) {
     super(id, groupId, username);
     this.username = username;
-    this.publicKey = JSON.parse(publickey);
+    this.publicKey = publicKey;
   }
 
   public static contactFromJson(data: any): SimpleContact {
@@ -96,8 +93,7 @@ export class SimpleContact extends Contact {
     }
     const id = c._id;
     const username = c.username;
-    console.log(c);
-    const publickey = c.public_key;
+    const publickey = <JsonWebKey> c.public_key;
     return new SimpleContact(id, data.group._id, username, publickey);
   }
 

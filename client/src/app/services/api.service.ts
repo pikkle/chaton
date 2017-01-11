@@ -9,6 +9,7 @@ import {EmojiService} from "./emoji.service";
 @Injectable()
 export class ApiService {
   private static readonly jsonHeader = new Headers({'Content-Type': 'application/json'});
+  public static password: string;
 
   constructor(private http: Http,
               private config: ConfigService,
@@ -111,7 +112,8 @@ export class ApiService {
       "email": email,
       "password": password
     };
-
+    ApiService.password = password;
+    console.log("PASSWORD HAS BEEN UPDATED");
     return this.post(options, path, data);
   }
 
@@ -123,7 +125,8 @@ export class ApiService {
    * @returns {PromiseLike<any>} the body response
    */
   public register(email: string, username: string, password: string): PromiseLike<any> {
-    return this.cryptoService.generateKeypair().then(keypair => {
+    return this.cryptoService.generateKeypair(password).then(keypair => {
+      console.log(keypair);
       var options = new RequestOptions({headers: ApiService.jsonHeader});
       var path = "/api/profile";
       var data = {
@@ -131,12 +134,11 @@ export class ApiService {
         "username": username,
         "password": password,
         "public_key": keypair.publicKey,
-        "private_key": this.cryptoService.encrypt(keypair.privateKey.toString(), password)
+        "private_key": keypair.encryptedPrivateKey
       };
+      ApiService.password = password;
       return this.post(options, path, data);
     });
-
-
   }
 
   /**
@@ -152,8 +154,15 @@ export class ApiService {
     return this.get(options, path).then(response => {
       localStorage["username"] = response.username;
       localStorage["avatar"] = '../assets/cat.jpg';
-      return response;
-    }).then(response => {
+
+      if (!this.cryptoService.privateKey) {
+        this.cryptoService.privateKey = this.cryptoService.decrypt(response.private_key, ApiService.password).then(decryptedRaw => {
+          return CryptoService.jsonWebKeyToPromiseLikeCryptoKey(<JsonWebKey> JSON.parse(decryptedRaw));
+        });
+      }
+      if (!this.cryptoService.publicKey) {
+        this.cryptoService.publicKey = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(<JsonWebKey> response.public_key);
+      }
       return Contact.contactsFromJson(response, this.emojiService, this.cryptoService)
     });
   }

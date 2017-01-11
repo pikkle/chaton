@@ -19,6 +19,7 @@ export class ChatonComponent implements OnInit {
   id: string;
   email: string;
   username: string;
+  password: string;
 
   formUsername: string;
   formOldPassword: string;
@@ -41,6 +42,8 @@ export class ChatonComponent implements OnInit {
     localStorage.removeItem("token");
     localStorage.removeItem("id");
     localStorage.removeItem("email");
+    localStorage.removeItem("username");
+    localStorage.removeItem("password");
     this.socketService.disconnect();
     this.router.navigateByUrl('');
   }
@@ -79,6 +82,7 @@ export class ChatonComponent implements OnInit {
     this.token = localStorage["token"];
     this.id = localStorage["id"];
     this.email = localStorage["email"];
+    this.password = localStorage["password"];
     this.username = localStorage["username"];
 
     this.formUsername = this.username;
@@ -98,8 +102,12 @@ export class ChatonComponent implements OnInit {
     this.getContacts();
 
     this.socketService.addListener("new_message", (data: any) => {
-      console.log(data);
-      Message.parseEncryptedMessage(data.content, data.sender, data.group, this.emojiService, this.cryptoService).then(message => {
+      Message.parseEncryptedMessage(data.content,
+        data.sender,
+        data.group,
+        this.emojiService,
+        this.cryptoService
+      ).then(message => {
         this.contacts.find(c => c.groupId === data.group).addMessage(message);
         this.sortContacts();
       });
@@ -158,7 +166,7 @@ export class ChatonComponent implements OnInit {
 
   }
 
-  haveNewMessage(): void {
+  haveNewMessage(message: Message): void {
     this.sortContacts();
   }
 

@@ -13,7 +13,6 @@ export class SocketService {
   private token: string;
   private id: string;
   private email: string;
-  private publicKey: JsonWebKey;
   authenticated: boolean = false;
 
   /**
@@ -75,41 +74,39 @@ export class SocketService {
       contacts = (<GroupContact>to).contacts; // contacts contains already self
     } else if (to instanceof SimpleContact) {
       contacts.push(<SimpleContact> to);
-      var publicKey: PromiseLike<CryptoKey> = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(this.publicKey, true);
-      messages.push({ // message for self
-        token: this.token,
-        timestamp: date,
-        state: 0,
-        type: "txt",
-        extension: "txt",
-        group: to.groupId,
-        sender: this.id,
-        receiver: this.id,
-        content: this.cryptoService.cipher(message.content, publicKey)
-      });
+      this.cryptoService.cipher(message.content, this.cryptoService.publicKey).then(m => {
+        this.socket.emit('send_message', { // message for self
+          token: this.token,
+          timestamp: date,
+          state: 0,
+          type: "txt",
+          extension: "txt",
+          group: to.groupId,
+          sender: this.id,
+          receiver: this.id,
+          content: m
+        });
+      })
     }
-
 
     var date = Date.now();
     for (let contact of contacts) {
-      var publicKey: PromiseLike<CryptoKey> = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(contact.publicKey, true);
-      var messageForOther = {
-        token: this.token,
-        timestamp: date,
-        state: 0,
-        type: "txt",
-        extension: "txt",
-        group: to.groupId,
-        sender: this.id,
-        receiver: contact.id,
-        content: this.cryptoService.cipher(message.content, publicKey)
-      };
-      messages.push(messageForOther);
+      var publicKey: PromiseLike<CryptoKey> = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(contact.publicKey);
+      this.cryptoService.cipher(message.content, publicKey).then(m => {
+        this.socket.emit('send_message', {
+          token: this.token,
+          timestamp: date,
+          state: 0,
+          type: "txt",
+          extension: "txt",
+          group: to.groupId,
+          sender: this.id,
+          receiver: contact.id,
+          content: m
+        });
+      });
     }
 
-    for (let message of messages) {
-      this.socket.emit('send_message', message);
-    }
 
   }
 
