@@ -1,10 +1,10 @@
-import { Injectable } from "@angular/core";
-import { Contact, SimpleContact, GroupContact } from '../contact/contact';
+import {Injectable} from "@angular/core";
+import {Contact, SimpleContact, GroupContact} from '../contact/contact';
 
 import * as io from "socket.io-client";
-import { CryptoService } from "./crypto.service";
-import { Message } from "../conversation/message";
-import { ApiService } from "./api.service";
+import {CryptoService} from "./crypto.service";
+import {Message} from "../conversation/message";
+import {ApiService} from "./api.service";
 import {ConfigService} from "./config.service";
 
 @Injectable()
@@ -13,16 +13,15 @@ export class SocketService {
   private token: string;
   private id: string;
   private email: string;
-  private publicKey: string;
+  private publicKey: JsonWebKey;
   authenticated: boolean = false;
 
   /**
    * Singleton constructor
    */
-  constructor(
-    private cryptoService: CryptoService,
-    private configService: ConfigService,
-    private apiService: ApiService) {
+  constructor(private cryptoService: CryptoService,
+              private configService: ConfigService,
+              private apiService: ApiService) {
   }
 
   /**
@@ -32,7 +31,7 @@ export class SocketService {
    * @param email the user's mail
    * @returns {boolean} whether the user is authenticated or not
    */
-  public authenticate(token: string, id: string, email: string, publicKey: string) {
+  public authenticate(token: string, id: string, email: string) {
     if (this.isAuthenticated()) {
       return true;
     }
@@ -40,8 +39,8 @@ export class SocketService {
     this.token = token;
     this.id = id;
     this.email = email;
-    this.publicKey = publicKey;
-    this.socket.emit("authenticate", { token: this.token, id: this.id });
+    //this.publicKey = JSON.parse(publicKey);
+    this.socket.emit("authenticate", {token: this.token, id: this.id});
     this.authenticated = true;
     this.socket.on("error_authentication", function (event, data) {
       console.error("Received an error_authentication message from the server");
@@ -75,7 +74,8 @@ export class SocketService {
     if (to instanceof GroupContact) {
       contacts = (<GroupContact>to).contacts; // contacts contains already self
     } else if (to instanceof SimpleContact) {
-      contacts.push(<SimpleContact>to);
+      contacts.push(<SimpleContact> to);
+      var publicKey: PromiseLike<CryptoKey> = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(this.publicKey, true);
       messages.push({ // message for self
         token: this.token,
         timestamp: date,
@@ -85,14 +85,14 @@ export class SocketService {
         group: to.groupId,
         sender: this.id,
         receiver: this.id,
-        content: this.cryptoService.cipher(message.content, this.publicKey)
+        content: this.cryptoService.cipher(message.content, publicKey)
       });
     }
 
 
-
     var date = Date.now();
     for (let contact of contacts) {
+      var publicKey: PromiseLike<CryptoKey> = CryptoService.jsonWebKeyToPromiseLikeCryptoKey(contact.publicKey, true);
       var messageForOther = {
         token: this.token,
         timestamp: date,
@@ -102,7 +102,7 @@ export class SocketService {
         group: to.groupId,
         sender: this.id,
         receiver: contact.id,
-        content: this.cryptoService.cipher(message.content, contact.publicKey)
+        content: this.cryptoService.cipher(message.content, publicKey)
       };
       messages.push(messageForOther);
     }

@@ -55,13 +55,13 @@ export class LoginComponent implements OnInit {
         localStorage["token"] = data.token;
         localStorage["id"] = data.id;
         localStorage["email"] = this.email;
-        localStorage["publicKey"] = data.publickey;
-        this.socketService.authenticate(data.token, data.id, this.email, data.publickey);
+        this.socketService.authenticate(data.token, data.id, this.email);
       })
       .then(_ => {
         this.router.navigateByUrl('chat')
       })
       .catch(err => {
+        console.log(err);
         this.invalidCredentials = true;
         this.email = "";
         this.password = "";

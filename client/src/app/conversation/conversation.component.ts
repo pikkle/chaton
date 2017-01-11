@@ -25,11 +25,9 @@ export class ConversationComponent implements OnInit {
   addedNewMessage = new EventEmitter<Message>();
 
 
-  constructor(
-    private emojiService: EmojiService,
-    private socketService: SocketService,
-    private cryptoService: CryptoService
-  ) {
+  constructor(private emojiService: EmojiService,
+              private socketService: SocketService,
+              private cryptoService: CryptoService) {
   }
 
   ngOnInit() {
@@ -49,7 +47,12 @@ export class ConversationComponent implements OnInit {
    * and sent to every concerned contact through the server
    */
   sendMessage(): void {
-    Message.parseMessage(this.nextMessage, this.id, this.selectedContact.groupId, this.emojiService).then(message => {
+    Message.parseMessage(this.nextMessage,
+      this.id,
+      this.selectedContact.groupId,
+      this.emojiService,
+      this.cryptoService
+    ).then(message => {
       this.selectedContact.addMessage(message);
       this.socketService.sendMessage(message, this.selectedContact);
       this.nextMessage = "";
@@ -58,14 +61,7 @@ export class ConversationComponent implements OnInit {
 
     });
 
-
-
-
   }
 
-  TEST_CRYPTO(): void {
-    console.log("test");
-    this.cryptoService.generateKeypair();
-  }
 
 }

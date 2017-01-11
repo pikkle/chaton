@@ -131,7 +131,7 @@ export class ApiService {
         "username": username,
         "password": password,
         "public_key": keypair.publicKey,
-        "private_key": keypair.privateKey
+        "private_key": this.cryptoService.encrypt(keypair.privateKey.toString(), password)
       };
       return this.post(options, path, data);
     });
@@ -154,7 +154,7 @@ export class ApiService {
       localStorage["avatar"] = '../assets/cat.jpg';
       return response;
     }).then(response => {
-      return Contact.contactsFromJson(response, this.emojiService)
+      return Contact.contactsFromJson(response, this.emojiService, this.cryptoService)
     });
   }
 
